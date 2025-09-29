@@ -162,6 +162,97 @@ We will categorize requirements into the following groups:
 
 ---
 
+
 # Requirements Validation
+
 We will validate requirements through building wireframes and mock workflows to check usability and getting feedback from early users.
 
+## Functional Requirements
+
+### FR-01: Sign up & Sign in
+- **Verifiability:** Yes, can test by creating accounts, logging in, resetting passwords.  
+- **Comprehensibility:** Clear—requirements specify flows and outcomes.  
+- **Traceability:** Originates from core need to store user progress.  
+- **Adaptability:** Can add more sign-in methods or 2FA later.  
+
+### FR-02: Create and Manage a Portfolio Project
+- **Verifiability:** Test with new, rename, delete actions.  
+- **Comprehensibility:** Straightforward, includes MVP scope.  
+- **Traceability:** Comes from user need to manage portfolios.  
+- **Adaptability:** Scales to multiple portfolios or premium tier.  
+
+### FR-03: Dashboard page
+- **Verifiability:** Test visibility of portfolio items, tutorial, settings.  
+- **Comprehensibility:** Clear features listed.  
+- **Traceability:** From usability needs.  
+- **Adaptability:** Dashboard can evolve to support new features.  
+
+### FR-04: Add Experiences (Content input)
+- **Verifiability:** Test CRUD operations and reordering.  
+- **Comprehensibility:** Explicit fields and actions make it clear.  
+- **Traceability:** Derived from portfolio content creation need.  
+- **Adaptability:** Can extend with richer input types later.  
+
+### FR-05: YourOwn watermark
+- **Verifiability:** Can test watermark visibility and payment removal.  
+- **Comprehensibility:** Clear paywall logic.  
+- **Traceability:** Businesses need to monetize.  
+- **Adaptability:** Could expand to subscription tiers.  
+
+### FR-0: Upload Media
+- **Verifiability:** Test file upload success and error cases.  
+- **Comprehensibility:** Clear acceptance criteria.  
+- **Traceability:** From user need for visuals.  
+- **Adaptability:** Extendable to video or cloud integrations.  
+
+### FR-0: Upload Links
+- **Verifiability:** Test CRUD links and embedding.  
+- **Comprehensibility:** Clear.  
+- **Traceability:** From need to show external presence.  
+- **Adaptability:** Could support custom icons or analytics.  
+
+### FR-05: Choose a template
+- **Verifiability:** Test template selection and preview change.  
+- **Comprehensibility:** Clear and simple.  
+- **Traceability:** From design customization needs.  
+- **Adaptability:** Can add more templates later.  
+
+### FR-06: Live Preview
+- **Verifiability:** Test preview correctness and responsiveness.  
+- **Comprehensibility:** Clear “without delivering full code.”  
+- **Traceability:** From user need for feedback before publishing.  
+- **Adaptability:** Could expand to real-time previews.  
+
+### FR-07: Export a ZIP
+- **Verifiability:** Test by downloading and running the portfolio.  
+- **Comprehensibility:** Straightforward.  
+- **Traceability:** From requirement for usable output.  
+- **Adaptability:** Could support GitHub Pages or Netlify export.  
+
+### FR-08: Automate publishing template in AWS
+- **Verifiability:** Test AWS setup success (S3, ELB, Route 66).  
+- **Comprehensibility:** Some complexity, but clear.  
+- **Traceability:** From deployment convenience goal.  
+- **Adaptability:** Could later add support for Azure or GCP.  
+
+---
+
+## Non-Functional Requirements
+
+### NFR-01: Easy Sign-Up
+- **Verifiability:** Test sign-up duration and failure messages.  
+- **Comprehensibility:** Clear time and step limits.  
+- **Traceability:** From UX design goals.  
+- **Adaptability:** Can be adjusted for new flows like social login.  
+
+### NFR-02: Clarity & Simplicity in Experience Creation
+- **Verifiability:** Usability testing, measuring time to add experience.  
+- **Comprehensibility:** Clear plain-language requirement.  
+- **Traceability:** From UX needs.  
+- **Adaptability:** Can be refined based on user testing feedback.  
+
+### NFR-03: Responsiveness (Perceived Speed)
+- **Verifiability:** Test preview delay and export duration.  
+- **Comprehensibility:** Clear quantitative measures.  
+- **Traceability:** From performance goals.  
+- **Adaptability:** Benchmarks can be adjusted as portfolio sizes grow.  
