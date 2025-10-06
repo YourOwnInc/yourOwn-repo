@@ -1,0 +1,222 @@
+project:
+  # GitHub Project (new Projects) owner and number:
+  owner: your-org-or-user
+  number: 1
+
+defaults:
+  # Default repo to create/link issues later (if you enable that step)
+  repo: yourorg/yourown
+  # Set to your current sprint/iteration if you use Iterations
+  iteration: "2025-10-06 -> 2025-10-19"
+
+items:
+  # =========================
+  # EPIC: Templates (MVP)
+  # =========================
+  - type: Epic
+    title: "Templates vertical slice (MVP)"
+    slice: Templates
+    priority: P0
+    body: |
+      Goal: Users can choose and preview a template tied to their session.
+      Outcome: A user can select a template and see a live preview based on sample experience data.
+
+  - type: Story
+    title: "Template selection modal (FE)"
+    slice: Templates
+    area: Frontend
+    priority: P0
+    points: 3
+    body: |
+      **Acceptance Criteria**
+      - User are shown a modal listing available templates.
+      - Selecting a template updates the selected state.
+      - Modal can be closed/cancelled without side effects.
+
+  - type: Story
+    title: "Template preview with mock data "
+    slice: Templates
+    area: Frontend
+    priority: P0
+    points: 5
+    body: |
+      **Acceptance Criteria**
+      - Preview renders selected template with mock user experience data.
+      - Changing the selection updates the preview immediately.
+      - Graceful fallback if preview fails.
+
+  - type: Story
+    title: "Template schema & CRUD "
+    slice: Templates
+    area: Backend
+    priority: P1
+    points: 5
+    body: |
+      **Acceptance Criteria**
+      - Define minimal Template model: { id, name, variant, previewUrl? }.
+      - CRUD endpoints for templates with validation.
+      - Return list of templates for FE modal.
+
+  - type: Story
+    title: "Persist selected template in session (FE/BE)"
+    slice: Templates
+    area: Full-stack
+    priority: P1
+    points: 3
+    body: |
+      **Acceptance Criteria**
+      - FE stores selected template in session context.
+      - Endpoint to save/read selectedTemplate in session.
+      - Reloading the app restores the previously selected template.
+
+  # =========================
+  # EPIC: Export (MVP)
+  # =========================
+  - type: Epic
+    title: "Export vertical slice (MVP)"
+    slice: Export
+    priority: P0
+    body: |
+      Goal: Provide a simple export flow to ZIP or GitHub with a single click.
+      Outcome: A user can export their portfolio (using the selected template + sample data).
+
+  - type: Story
+    title: "Export options UI (ZIP / GitHub)"
+    slice: Export
+    area: Frontend
+    priority: P0
+    points: 3
+    body: |
+      **Acceptance Criteria**
+      - UI presents two options: Download ZIP and Export to GitHub.
+      - Disabled state when no template is selected.
+      - Clear success/error toasts.
+
+  - type: Story
+    title: "ZIP generator endpoint (BE worker)"
+    slice: Export
+    area: Backend
+    priority: P0
+    points: 5
+    body: |
+      **Acceptance Criteria**
+      - Endpoint builds a ZIP archive based on selected template + sample data.
+      - Stream ZIP to client with correct headers.
+      - Basic error handling & logging.
+
+  - type: Story
+    title: "GitHub export via PAT (BE) + error handling"
+    slice: Export
+    area: Backend
+    priority: P1
+    points: 5
+    body: |
+      **Acceptance Criteria**
+      - Use a Personal Access Token (securely) to create a repo or push to an existing one.
+      - Commit the generated template output.
+      - Return commit/repo URL to FE; handle auth/permission errors gracefully.
+
+  - type: Story
+    title: "Link export to selected template + sample data"
+    slice: Export
+    area: Full-stack
+    priority: P1
+    points: 3
+    body: |
+      **Acceptance Criteria**
+      - Export uses the currently selected template from session.
+      - Sample data used if real experiences are not yet implemented.
+      - FE shows which template version was exported.
+
+  # =========================
+  # EPIC: Session & Minimal Models
+  # =========================
+  - type: Epic
+    title: "Session & minimal models"
+    slice: Session
+    priority: P0
+    body: |
+      Goal: Establish bare User/Session to support template selection and export.
+      Outcome: Minimal schema and endpoints that unblock vertical slices.
+
+  - type: Story
+    title: "Minimal User & Session schemas"
+    slice: Session
+    area: Backend
+    priority: P0
+    points: 3
+    body: |
+      **Acceptance Criteria**
+      - User: { id, email? } (placeholder for now).
+      - Session: { id, userId, selectedTemplate?, experiences? }.
+      - Migrations/schemas created with basic validation.
+
+  - type: Story
+    title: "Session write/read endpoints"
+    slice: Session
+    area: Backend
+    priority: P0
+    points: 3
+    body: |
+      **Acceptance Criteria**
+      - POST/PUT to save session fields (selectedTemplate).
+      - GET to fetch session by userId or sessionId.
+      - Returns minimal JSON used by FE.
+
+  - type: Story
+    title: "FE session context + autosave"
+    slice: Session
+    area: Frontend
+    priority: P1
+    points: 3
+    body: |
+      **Acceptance Criteria**
+      - React context storing session state.
+      - Debounced autosave to backend when selectedTemplate changes.
+      - Handles 401/403 by clearing context (for future auth).
+
+  # =========================
+  # EPIC: Infra Foundation
+  # =========================
+  - type: Epic
+    title: "Infra foundation"
+    slice: Infra
+    priority: P1
+    body: |
+      Goal: Ensure basic dev experience, consistency, and preview deploys.
+      Outcome: Faster onboarding and reliable PR checks.
+
+  - type: Story
+    title: "CI for lint/test"
+    slice: Infra
+    area: DevOps
+    priority: P1
+    points: 2
+    body: |
+      **Acceptance Criteria**
+      - GitHub Actions workflow for lint & unit tests on PRs.
+      - Status required for merge (branch protection optional).
+
+  - type: Story
+    title: "Shared env config (client/server)"
+    slice: Infra
+    area: Full-stack
+    priority: P2
+    points: 2
+    body: |
+      **Acceptance Criteria**
+      - Centralized env handling (e.g., Vite + server .env).
+      - Example .env.example committed.
+      - README notes for local setup.
+
+  - type: Story
+    title: "Preview deploy (Vercel/Netlify) + health check"
+    slice: Infra
+    area: DevOps
+    priority: P2
+    points: 3
+    body: |
+      **Acceptance Criteria**
+      - Auto preview deploys per PR.
+      - Health endpoint for server checked on deploy.
+      - Link surfaced in PR checks.
