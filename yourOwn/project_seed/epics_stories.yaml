@@ -1,0 +1,269 @@
+project:
+  # GitHub Project (new Projects) owner and number:
+  owner: UTD-CS-Classroom
+  number: 7
+
+defaults:
+  repo: UTD-CS-Classroom/group-projects-team7
+  iteration: "2025-10-10 -> 2025-10-19"
+
+items:
+  # =====================================================
+  # EPIC 0 — FOUNDATION & GUEST-FIRST ACCOUNT (MVP)
+  # Purpose: skeleton app, routing, minimal models, guest-first flow
+  # Ties to: FR-01, FR-03, NFR-01, NFR-02
+  # =====================================================
+  - type: Epic
+    title: "Foundation & Guest-first account (skeleton)"
+    slice: Infra
+    priority: P0
+    body: |
+      Goal: Ship the app skeleton with guest-first flow (no sign-up wall),
+      minimal User/Portfolio/Session models, routing, and autosave.
+
+  - type: Story
+    title: "App skeleton: routes, layout, state containers"
+    slice: Infra
+    area: Frontend
+    priority: P0
+    points: 3
+    body: |
+      **Acceptance Criteria**
+      - Base routes exist: / (home), /dashboard, /editor, /settings, /preview.
+      - Global providers for theme, query/fetch, and app state are wired.
+      - Error boundary + loading states present (NFR-03).
+
+  - type: Story
+    title: "Guest-first flow with autosave (no sign-up wall)"
+    slice: Session
+    area: Full-stack
+    priority: P0
+    points: 5
+    body: |
+      **Acceptance Criteria (FR-03, NFR-01, NFR-02)**
+      - User can start a portfolio as a guest (no auth required).
+      - Draft saved locally (localStorage) under guestSessionId with debounce.
+      - 'Save my progress' CTA triggers auth prompt (email/password or Google).
+      - After sign-in, guest draft is claimed to the user account (same data appears on dashboard).
+
+  - type: Story
+    title: "Minimal models & endpoints (User, Portfolio, Session)"
+    slice: Session
+    area: Backend
+    priority: P0
+    points: 5
+    body: |
+      **Acceptance Criteria (FR-01, FR-02, FR-03)**
+      - User: { id, email? }
+      - Portfolio: { id, userId?, title, selectedTemplate?, experiences[], media[], links[] }
+      - Session (lightweight): { id, userId?, portfolioId? }
+      - Endpoints: get/save Portfolio (auth optional: guest gets 401 on server save until they sign in).
+      - Basic validation + 4xx/5xx errors.
+
+  - type: Story
+    title: "Auth shell (email/password + Google OAuth)"
+    slice: Session
+    area: Backend
+    priority: P1
+    points: 5
+    body: |
+      **Acceptance Criteria (FR-01, NFR-01)**
+      - Email/password & Google sign-in available.
+      - Password reset flow (email link mock OK for MVP).
+      - Post sign-in redirect to /dashboard.
+      - Sign-up ≤ 2 screens; capture failure reasons (NFR-01).
+
+  - type: Story
+    title: "Dashboard (single portfolio view for MVP)"
+    slice: Session
+    area: Frontend
+    priority: P1
+    points: 3
+    body: |
+      **Acceptance Criteria (FR-02, FR-03)**
+      - Shows one portfolio (MVP) with Rename/Delete.
+      - 'New Portfolio' creates a blank project.
+      - 1–2 minute click-through tutorial available for first-time users.
+
+  # =====================================================
+  # EPIC 1 — EXPERIENCES CRUD (CONTENT INPUT)
+  # Ties to: FR-04, NFR-02, NFR-03(partial: perceived speed)
+  # =====================================================
+  - type: Epic
+    title: "Experiences CRUD (content input)"
+    slice: Experiences
+    priority: P0
+    body: |
+      Goal: Users can add, edit, delete, and reorder experience entries with autosave.
+
+  - type: Story
+    title: "Experience form + autosave"
+    slice: Experiences
+    area: Frontend
+    priority: P0
+    points: 5
+    body: |
+      **Acceptance Criteria (FR-04, NFR-02, NFR-03)**
+      - Form fields: role, org, dates, bullets[], etc.
+      - Autosave (debounced); clear saved/unsaved indicator.
+      - Plain language labels; one clear primary action per screen.
+      - First-time users can add one experience ≤ 10 minutes (NFR-02).
+
+  - type: Story
+    title: "Reorder & delete experiences"
+    slice: Experiences
+    area: Frontend
+    priority: P1
+    points: 3
+    body: |
+      **Acceptance Criteria (FR-04)**
+      - Drag & drop (or up/down controls) reorders experiences.
+      - Delete with confirm.
+      - Order persists after refresh.
+
+  # =====================================================
+  # EPIC 2 — TEMPLATES & LIVE PREVIEW
+  # Ties to: FR-05, FR-06, NFR-03
+  # =====================================================
+  - type: Epic
+    title: "Templates & Live preview"
+    slice: Templates
+    priority: P0
+    body: |
+      Goal: Choose a template and see a live preview reflecting current content.
+
+  - type: Story
+    title: "Template picker & screenshots"
+    slice: Templates
+    area: Frontend
+    priority: P0
+    points: 3
+    body: |
+      **Acceptance Criteria (FR-05)**
+      - Picker shows 1–2 templates with screenshots.
+      - Selecting a template updates selectedTemplate on portfolio.
+
+  - type: Story
+    title: "Live preview pipeline"
+    slice: Templates
+    area: Full-stack
+    priority: P0
+    points: 5
+    body: |
+      **Acceptance Criteria (FR-06, NFR-03)**
+      - Preview renders current portfolio data in selected template.
+      - Preview updates within ~0.5s of an edit (perceived speed).
+      - Graceful fallback + loading/progress states.
+
+  # =====================================================
+  # EPIC 3 — EXPORT (ZIP) (MVP)
+  # Ties to: FR-07, NFR-03
+  # =====================================================
+  - type: Epic
+    title: "Export ZIP (MVP)"
+    slice: Export
+    priority: P0
+    body: |
+      Goal: User can download a working static site (HTML/CSS/assets) as a ZIP.
+
+  - type: Story
+    title: "Export UI (ZIP)"
+    slice: Export
+    area: Frontend
+    priority: P0
+    points: 2
+    body: |
+      **Acceptance Criteria (FR-07)**
+      - 'Export' button available in preview/editor.
+      - Disabled state when template missing.
+
+  - type: Story
+    title: "ZIP generator endpoint"
+    slice: Export
+    area: Backend
+    priority: P0
+    points: 5
+    body: |
+      **Acceptance Criteria (FR-07, NFR-03)**
+      - Generates ZIP from selected template + portfolio data.
+      - Streams download with correct headers.
+      - Small portfolios complete under ~10s with progress/loader.
+
+  # =====================================================
+  # EPIC 4 — MEDIA & LINKS (BACKLOG → POST-MVP)
+  # Ties to: FR-Upload Media, FR-Upload Links
+  # =====================================================
+  - type: Epic
+    title: "Media & Links (post-MVP)"
+    slice: Assets
+    priority: P2
+    body: |
+      Goal: Upload images, add profile photo, and attach social/external links.
+
+  - type: Story
+    title: "Upload media with errors & limits"
+    slice: Assets
+    area: Full-stack
+    priority: P2
+    points: 5
+    body: |
+      **Acceptance Criteria**
+      - Upload images from device with size/type validation.
+      - Friendly error for large/unsupported files.
+      - Store references on Portfolio.assets[].
+
+  - type: Story
+    title: "CRUD external links"
+    slice: Assets
+    area: Frontend
+    priority: P2
+    points: 3
+    body: |
+      **Acceptance Criteria**
+      - Add/edit/delete links.
+      - Links embedded nicely in UI and stored in Portfolio.links[].
+
+  # =====================================================
+  # EPIC 5 — WATERMARK & PAYWALL (BACKLOG → POST-MVP)
+  # Ties to: FR-05 YourOwn watermark
+  # =====================================================
+  - type: Epic
+    title: "Watermark & paywall (post-MVP)"
+    slice: Monetization
+    priority: P3
+    body: |
+      Goal: Discreet watermark by default; payment removes it.
+
+  - type: Story
+    title: "Watermark default & paywall toggle"
+    slice: Monetization
+    area: Full-stack
+    priority: P3
+    points: 3
+    body: |
+      **Acceptance Criteria**
+      - Watermark visible in preview/export by default.
+      - Purchasing toggles watermark off (placeholder payment OK for now).
+
+  # =====================================================
+  # EPIC 6 — AWS PUBLISHING TOOL (OPTIONAL LATER)
+  # Ties to: FR-08
+  # =====================================================
+  - type: Epic
+    title: "AWS publishing tool (optional later)"
+    slice: Deployment
+    priority: P3
+    body: |
+      Goal: Optional tool that sets up S3 + CloudFront/ALB and Route 53 for hosting.
+
+  - type: Story
+    title: "Prototype publish-to-AWS path"
+    slice: Deployment
+    area: DevOps
+    priority: P3
+    points: 8
+    body: |
+      **Acceptance Criteria (FR-08)**
+      - Setup script or guided steps to create S3 bucket + static website hosting or CloudFront.
+      - Route 53 config documented; security considerations documented.
+      - Clear: optional for users; never store AWS creds server-side.
