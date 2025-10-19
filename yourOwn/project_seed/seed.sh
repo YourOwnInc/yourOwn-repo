@@ -20,8 +20,8 @@ set -euo pipefail
 # -----------------------------
 
 # --- defaults
-OWNER=""
-PROJECT_NUMBER=""
+OWNER="LuisAlar"
+PROJECT_NUMBER="2"
 YAML_PATH="./epics_stories.yaml"
 CONVERT_ISSUES=false
 
@@ -52,15 +52,7 @@ if ! gh auth status >/dev/null 2>&1; then
   exit 1
 fi
 
-if ! command -v jq >/dev/null; then
-  echo "❌ jq not installed."
-  exit 1
-fi
 
-if ! command -v yq >/dev/null; then
-  echo "❌ yq not installed."
-  exit 1
-fi
 
 echo "➡️  Loading project meta…"
 PROJECT_ID=$(gh project view "$PROJECT_NUMBER" --owner "$OWNER" --format json | jq -r '.id')
