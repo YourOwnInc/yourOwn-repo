@@ -365,7 +365,7 @@ sequenceDiagram
 The Session begins in Active upon creation and cycles between Active and Error based on validation outcomes. If the user goes idle or navigates away, the Session may become Paused and later Resumed. The Session enters Completed when the user exports a portfolio or links the Session to their account and saves. Modeling behavior at this level clarifies edge cases (timeouts, retries) and ensures the API supports resuming work without data loss.
 
 ---
-title: Behavioral Model
+title: Class diagram 
 ---
 ```mermaid
 %% direction LR for horizontal readability
