@@ -1,8 +1,12 @@
-const express = require('express');
-const router = express.Router();
+import * as UC from "../controller/user.controller";
+import { Router } from "express";
+const router = Router();
 
-// area where well fetch conrtroller function
-// const { ... } = requre('../controllers/user.countroller')
+//import { requireAuth } from "../middleware/";
+// Where we will import controller functions for user routes
+// follow this pattern for rest of objects 
+router.post("/register", UC.register);
+router.post("/login", UC.login);
+router.get("/me",  UC.me);
 
-
-//router.get();
+export default router;

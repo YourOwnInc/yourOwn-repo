@@ -2,6 +2,11 @@ import 'dotenv/config';
 import express from "express"
 import cors from "cors";
 import { z} from 'zod';
+import userRoutes from "./routes/user.routes";
+// Where we will import routes for our app
+
+// const ... = require("./routes/....");
+
 
 
 const app = express();
@@ -16,24 +21,10 @@ const CORS_ORIGIN =   'http://localhost:5000';
 app.use(cors({origin: CORS_ORIGIN, credentials: true}));
 app.use(express.json());
 
+app.use('/api/users', userRoutes);
+
 app.get('/api/health', (_req, res) => {
     res.json({ok: true , service: 'server',} )
-})
-
-// Example: input validation with zod
-app.post('/api/users', (req, res, next) => {
-  const schema = z.object({
-    email: z.string().email(),
-    name: z.string().min(1)
-  })
-
-  const parse = schema.safeParse(req.body)
-  if (!parse.success) {
-    return res.status(400).json({ error: parse.error.flatten() })
-  }
-
-  // TODO: persist user
-  res.status(201).json({ user: parse.data })
 })
 
 // Not found
