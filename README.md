@@ -307,8 +307,10 @@ flowchart LR
   U5 -- "Yes" --> F5 --> B6 --> B7 --> U7
   U5 -- "No" --> U7
 ```
+
   This workflow emphasizes a frictionless guest experience: a user can create a portfolio without registering. The Session object captures form inputs and preview state while the user remains anonymous. Validation runs on each submit cycle and feeds back to the client for quick correction.
 When the user wants to export or save progress, the system branches. Export proceeds directly using the Session, while saving requires linking the Session to a User (new or existing). At that point, Session data is persisted under the user account, preserving continuity for future edits.
+
 
 ---
 title: Behavioral Model
@@ -359,7 +361,9 @@ sequenceDiagram
     API-->>FE: 200 { userId, sessionId }
     FE-->>User: Progress saved to account
 ```
+
 The Session begins in Active upon creation and cycles between Active and Error based on validation outcomes. If the user goes idle or navigates away, the Session may become Paused and later Resumed. The Session enters Completed when the user exports a portfolio or links the Session to their account and saves. Modeling behavior at this level clarifies edge cases (timeouts, retries) and ensures the API supports resuming work without data loss.
+
 ---
 title: Behavioral Model
 ---
