@@ -360,3 +360,174 @@ sequenceDiagram
     FE-->>User: Progress saved to account
 ```
 The Session begins in Active upon creation and cycles between Active and Error based on validation outcomes. If the user goes idle or navigates away, the Session may become Paused and later Resumed. The Session enters Completed when the user exports a portfolio or links the Session to their account and saves. Modeling behavior at this level clarifies edge cases (timeouts, retries) and ensures the API supports resuming work without data loss.
+---
+title: Behavioral Model
+---
+%% direction LR for horizontal readability
+classDiagram
+direction LR
+    class User {
+	    +UUID id
+	    +String email
+	    +String name
+	    +String authProvider
+	    +String role
+	    +UUID settingsId
+	    +Date createdAt
+	    +Date updatedAt
+	    +requestAccountDeletion()
+	    +own(resourceId)
+    }
+
+    class Settings {
+	    +UUID id
+	    +UUID userId
+	    +Boolean privacy_shareAnalytics
+	    +String privacy_defaultVisibility
+	    +String export_formatDefaults
+	    +Boolean export_includeSourceCode
+	    +String ui_theme
+	    +String ui_language
+	    +updatePrivacy(policy)
+	    +setExportDefaults(opts)
+    }
+
+    class Session {
+	    +UUID id
+	    +UUID userId
+	    +SessionStatus status
+	    +UUID promptFlowId
+	    +Date startedAt
+	    +Date completedAt
+	    +Date lastSavedAt
+	    +addEntry(entryDraft)
+	    +reorderEntry(entryId, newIndex)
+	    +complete()
+    }
+
+    class ExperienceEntry {
+	    +UUID id
+	    +UUID userId
+	    +UUID sessionId
+	    +String title
+	    +String summary
+	    +Block[] contentBlocks
+	    +AssetRef[] media
+	    +UUID templateVariantId
+	    +String[] tags
+	    +EntryStatus status
+	    +applyTemplate(template)
+	    +attachAsset(assetRef)
+	    +detachAsset(assetId)
+	    +markReady()
+    }
+
+    class TemplateVariant {
+	    +UUID id
+	    +String key
+	    +JSON schema
+	    +JSON renderConfig
+	    +String[] allowedBlocks
+	    +String[] allowedMedia
+	    +validate(entry)
+	    +transform(entry)
+    }
+
+    class Asset {
+	    +UUID id
+	    +UUID userId
+	    +String type
+	    +String mime
+	    +String uri
+	    +JSON metadata
+	    +String hash
+	    +Number size
+	    +AssetStatus status
+	    +markProcessed()
+	    +recalculateHash()
+    }
+
+    class Preview {
+	    +UUID id
+	    +UUID userId
+	    +UUID sessionId
+	    +String snapshotRef
+	    +Date expiresAt
+	    +render(sessionId)
+    }
+
+    class ExportJob {
+	    +UUID id
+	    +UUID userId
+	    +UUID sessionId
+	    +String format
+	    +JobStatus status
+	    +String artifactUri
+	    +String repoUrl
+	    +JSON log
+	    +Date createdAt
+	    +Date updatedAt
+	    +enqueue(jobSpec)
+	    +run(jobId)
+    }
+
+    class PublishingJob {
+	    +UUID id
+	    +UUID userId
+	    +UUID sessionId
+	    +String awsAccountRef
+	    +String stackId
+	    +JobStatus status
+	    +Date createdAt
+	    +Date updatedAt
+	    +provision()
+	    +deploy()
+	    +teardown()
+    }
+
+    class AuditLog {
+	    +UUID id
+	    +UUID userId
+	    +String actor
+	    +String action
+	    +String resource
+	    +JSON metadata
+	    +Date at
+    }
+
+    class SessionStatus { <<enumeration>>
+	    +active
+	    +paused
+	    +completed
+    }
+
+    class EntryStatus { <<enumeration>>
+	    +draft
+	    +ready
+    }
+
+    class AssetStatus { <<enumeration>>
+	    +uploaded
+	    +processed
+    }
+
+    class JobStatus { <<enumeration>>
+	    +queued
+	    +running
+	    +succeeded
+	    +failed
+    }
+
+    User "1" -- "1" Settings : has >
+    User "1" -- "0..*" Session : owns >
+    Session "1" *-- "0..*" ExperienceEntry : contains >
+    ExperienceEntry "0..*" -- "1" TemplateVariant : uses >
+    ExperienceEntry "0..*" o-- "0..*" Asset : references >
+    Preview "1" --> "1" Session : snapshotOf >
+    ExportJob "0..*" --> "1" User : for >
+    ExportJob "0..*" --> "1" Session : exportsOf >
+    PublishingJob "0..*" --> "1" User : for >
+    PublishingJob "0..*" --> "1" Session : deploysOf >
+    AuditLog "0..*" --> "1" User : actor/owner >
+
+
