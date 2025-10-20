@@ -274,15 +274,15 @@ flowchart LR
     U7([Done])
   end
 
-  subgraph FE[Frontend (React)]
-    F1([Create/Load Session (guest)])
+  subgraph FE[Frontend ]
+    F1([Create/Load Session ])
     F2([Collect form data])
     F3([Render preview])
     F4([Request Export])
     F5([Request Save])
   end
 
-  subgraph BE[Backend (Express + Services)]
+  subgraph BE[Backend Express + Services]
     B1([Create Session])
     B2([Validate with Zod])
     B3{Valid?}
