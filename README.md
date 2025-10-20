@@ -535,3 +535,6 @@ direction LR
     PublishingJob "0..*" --> "1" Session : deploysOf >
     AuditLog "0..*" --> "1" User : actor/owner >
 ```
+
+Each class is separated in such a way to allign the export without account structure. the session holds the experiance from user while the user remains a guest. Those entries can later be lined to a User upone account creation or login. TemplateVariant will conatin how each entry should render. ExportJob and Publishjob are asynchrnous model operations that will assits user in getting and publishing porfolio.
+
