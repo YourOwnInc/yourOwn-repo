@@ -255,3 +255,105 @@ We will validate requirements through building wireframes and mock workflows to 
 - **Comprehensibility:** Clear quantitative measures.
 - **Traceability:** From performance goals.
 - **Adaptability:** Benchmarks can be adjusted as portfolio sizes grow.
+
+
+---
+title: Process Model — YourOwn (Guest Session → Optional Account)
+---
+flowchart LR
+  %% Lanes (visual only)
+  subgraph U[User]
+    U0([Open YourOwn])
+    U1{Has Account?}
+    U2([Provide portfolio info])
+    U3([Review Preview])
+    U4{Export or Save?}
+    U5{Wants to Save Progress?}
+    U6([Create / Login Account])
+    U7([Done])
+  end
+
+  subgraph FE[Frontend (React)]
+    F1([Create/Load Session (guest)])
+    F2([Collect form data])
+    F3([Render preview])
+    F4([Request Export])
+    F5([Request Save])
+  end
+
+  subgraph BE[Backend (Express + Services)]
+    B1([Create Session])
+    B2([Validate with Zod])
+    B3{Valid?}
+    B4([Store in Session])
+    B5([Generate Export Artifact])
+    B6([Link Session → User])
+    B7([Persist User-owned data])
+  end
+
+  %% Flow
+  U0 --> U1
+  U1 -- "No" --> F1 --> B1
+  U1 -- "Yes" --> U6 --> F1 --> B1
+
+  U2 --> F2 --> B2 --> B3
+  B3 -- "No" --> U2
+  B3 -- "Yes" --> B4 --> F3 --> U3
+
+  U3 --> U4
+  U4 -- "Export" --> F4 --> B5 --> U7
+  U4 -- "Save/Return Later" --> U5
+  U5 -- "Yes" --> F5 --> B6 --> B7 --> U7
+  U5 -- "No" --> U7
+
+  This workflow emphasizes a frictionless guest experience: a user can create a portfolio without registering. The Session object captures form inputs and preview state while the user remains anonymous. Validation runs on each submit cycle and feeds back to the client for quick correction.
+When the user wants to export or save progress, the system branches. Export proceeds directly using the Session, while saving requires linking the Session to a User (new or existing). At that point, Session data is persisted under the user account, preserving continuity for future edits.
+
+---
+title: Behavioral Model
+---
+sequenceDiagram
+    autonumber
+    actor User
+    participant FE as Frontend (React)
+    participant API as Backend (Express API)
+    participant SVC as SessionService
+    participant USVC as UserService
+    participant REPO as Repositories
+
+    User->>FE: Open app (no account)
+    FE->>API: POST /api/sessions (create guest session)
+    API->>SVC: createSession()
+    SVC->>REPO: persist(session)
+    REPO-->>SVC: session
+    SVC-->>API: sessionId
+    API-->>FE: { sessionId }
+
+    User->>FE: Enter portfolio data
+    FE->>API: POST /api/sessions/:id/data (JSON)
+    API->>SVC: validate(data) via Zod
+    alt Invalid
+      SVC-->>API: errors
+      API-->>FE: 400 { issues }
+      FE-->>User: Show validation errors
+    else Valid
+      SVC->>REPO: upsert(sessionData)
+      REPO-->>SVC: ok
+      SVC-->>API: ok
+      API-->>FE: 200 { preview }
+      FE-->>User: Render preview
+    end
+
+    User->>FE: Click "Save Progress"
+    FE->>API: POST /api/users/link-session { email, password, sessionId }
+    API->>USVC: ensureUser(email, password)
+    USVC->>REPO: createOrFetchUser()
+    REPO-->>USVC: user
+    USVC-->>API: user
+    API->>SVC: linkSessionToUser(sessionId, userId)
+    SVC->>REPO: persist linkage
+    REPO-->>SVC: ok
+    SVC-->>API: ok
+    API-->>FE: 200 { userId, sessionId }
+    FE-->>User: Progress saved to account
+
