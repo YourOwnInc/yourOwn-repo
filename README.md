@@ -363,6 +363,7 @@ The Session begins in Active upon creation and cycles between Active and Error b
 ---
 title: Behavioral Model
 ---
+```mermaid
 %% direction LR for horizontal readability
 classDiagram
 direction LR
@@ -529,5 +530,4 @@ direction LR
     PublishingJob "0..*" --> "1" User : for >
     PublishingJob "0..*" --> "1" Session : deploysOf >
     AuditLog "0..*" --> "1" User : actor/owner >
-
-
+```
