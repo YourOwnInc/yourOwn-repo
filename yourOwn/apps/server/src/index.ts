@@ -4,6 +4,7 @@ import cors from "cors";
 import { z} from 'zod';
 // Where we will import routes for our apps
 import userRoutes from "./routes/user.routes";
+import sessionRoutes from "./routes/session.routes"
 
 //import ... from "./routes/..."
 
@@ -19,6 +20,7 @@ app.use(express.json());
 
 // where routes will live
 app.use('/api/users', userRoutes);
+app.use('/api/sessions', sessionRoutes);
 app.get('/api/health', (_req, res) => {
     res.json({ok: true , service: 'server',} )
 })

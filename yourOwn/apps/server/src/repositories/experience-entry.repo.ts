@@ -31,6 +31,12 @@ export interface ExperienceEntryRepo {
   findBySession(sessionId: string): Promise<ExperienceEntry[]>;
   // optional:
   findById(id: string): Promise<ExperienceEntry | null>;
-  update(id: string, patch: Partial<Omit<ExperienceEntry, "id"|"sessionId"|"createdAt">>): Promise<ExperienceEntry>;
+  update(id: string, patch: Partial<{ 
+    metadata: Record<string, unknown>;
+    templateVariantId: string | null; 
+    userId: string | null;
+    completedAt: Date | null; 
+    lastSavedAt: Date
+     }>): Promise<ExperienceEntry>;
   delete(id: string): Promise<void>;
 }

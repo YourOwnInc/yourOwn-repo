@@ -1,8 +1,8 @@
 // import domain, schema, repo
 // src/services/session.service.ts
-import { SessionRepo } from "../repositories/session.repo";
-import { ExperienceEntryRepo } from "../repositories/experiEnce-entry.repo";
-import { LinkSessionToUserBody, SaveSessionBody, SelectTemplateBody, AddExperienceEntryBody } from "../schemas/session.schema";
+import { SessionRepo, SessionUpdate } from "../repositories/session.repo";
+import { ExperienceEntryRepo } from "../repositories/experience-entry.repo";
+import { LinkSessionToUserBody,StartSessionBody, SaveSessionBody, SelectTemplateBody, AddExperienceEntryBody } from "../schemas/session.schema";
 
 export function makeSessionService(deps: {
   sessions: SessionRepo;
@@ -16,17 +16,16 @@ export function makeSessionService(deps: {
     },
 
     saveSession: async (id: string, body: SaveSessionBody) => {
-      return sessions.update(id, { ...body });
+      const patch: SessionUpdate = {};
+  if (body.status !== undefined) patch.status = body.status as any; // ideally same enum type
+  if (body.userId !== undefined) patch.userId = body.userId;        // only if you allow this
+
+  return sessions.update(id, patch);
     },
 
-    addExperienceEntry: async (sessionId: string, userId: string | null, body: AddExperienceEntryBody) => {
-      return entries.create({ sessionId, userId, ...body });
-    },
-
-    selectTemplate: async (sessionId: string, body: SelectTemplateBody) => {
-      return sessions.update(sessionId, { templateVariantId: body.templateVariantId });
-    },
-
+    //addExperienceEntry: async (sessionId: string, userId: string | null, body: AddExperienceEntryBody) => {
+      //return entries.create({ sessionId, userId, ...body });
+    //},
     linkSessionToUser: async (sessionId: string, userId: string) => {
       return sessions.linkToUser(sessionId, userId);
     },

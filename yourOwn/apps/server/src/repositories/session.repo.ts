@@ -1,5 +1,9 @@
 // src/repositories/session.repo.ts
+import { $ZodNullParams } from "zod/v4/core";
 import { Session, SessionId, UserId, SessionStatus } from "../domain/session";
+
+
+export type SessionUpdate = Partial<Pick<Session, "status" | "userId">>;
 
 export interface SessionRepo {
   create(params: {
@@ -7,7 +11,7 @@ export interface SessionRepo {
     startedAt: Date;
   }): Promise<Session>;
 
-  update(id: SessionId, patch: Partial<Omit<Session, "id" | "startedAt">>): Promise<Session>;
+  update(id: SessionId, patch: SessionUpdate): Promise<Session>;
 
   findById(id: SessionId): Promise<Session | null>;
 
