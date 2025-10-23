@@ -553,6 +553,7 @@ Design Decision:
  Introduce client-side caching for static assets and asynchronous background processing for heavy tasks like experience preview generation or export.
 Justification:
  Client-side caching reduces load times by reusing previously downloaded resources, while background task processing ensures that long-running operations don’t block the main interface. These approaches improve the system’s perceived speed and maintain responsiveness, even as user-generated content or portfolio sizes increase over time.
+ 
 ---
 title: Logical view:
 ---
