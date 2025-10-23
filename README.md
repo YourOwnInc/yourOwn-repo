@@ -367,6 +367,7 @@ The Session begins in Active upon creation and cycles between Active and Error b
 ---
 title: Class diagram 
 ---
+
 ```mermaid
 %% direction LR for horizontal readability
 classDiagram
@@ -537,4 +538,94 @@ direction LR
 ```
 
 Each class is separated in such a way to allign the export without account structure. the session holds the experiance from user while the user remains a guest. Those entries can later be lined to a User upone account creation or login. TemplateVariant will conatin how each entry should render. ExportJob and Publishjob are asynchrnous model operations that will assits user in getting and publishing porfolio.
+
+
+---
+4:
+---
+
+Requirement 1: NFR-01 – Easy Sign-Up
+Design Decision
+
+Implement an OAuth 2.0-based authentication system with support for social logins (e.g., Google, Apple) and client-side form validation before submission.
+
+Justification
+
+Using OAuth reduces the number of steps a user must take during sign-up, improving both speed and reliability.
+Client-side validation ensures that users receive immediate feedback on incorrect inputs, minimizing frustration and failed attempts.
+Together, these design choices align with the system’s goal of making the sign-up process fast, smooth, and easily adaptable to new authentication flows in the future.
+
+Requirement 2: NFR-03 – Responsiveness (Perceived Speed)
+Design Decision
+
+Introduce client-side caching for static assets and asynchronous background processing for heavy tasks like experience preview generation or export.
+
+Justification
+
+Client-side caching reduces load times by reusing previously downloaded resources.
+
+Background task processing ensures that long-running operations don’t block the main interface.
+
+These approaches improve the system’s perceived speed and maintain responsiveness, even as user-generated content or portfolio sizes increase over time.
+
+
+---
+5: Logical View
+---
+
+This view shows the core modules of YourOwn:
+
+Users interact through the UI, which guides them through the Experience Builder.
+
+Their input is used by the Portfolio Generator to create a structured portfolio.
+
+The Export Manager handles output formats.
+
+The AWS Deployment Module optionally sets up hosting.
+
+2. Process View
+
+At runtime:
+
+The user begins by entering information via the UI.
+
+The system processes this through the Experience Builder.
+
+It then generates a portfolio.
+
+The user can export it or deploy it to AWS.
+
+Each module interacts with external services (GitHub, AWS) as needed.
+
+---
+6: Use of Architectural Patterns (Client–Server)
+---
+
+
+We went with a client-server-based architectural pattern because naturally, the features we implement split into a rich, guided web client (reflection flow, template selection, live preview) and a server that owns portfolio generation, export, auth, and the optional AWS automation.
+
+How this would work for YourOwn:
+
+Client (Browser/App): Onboarding wizard, content forms, drag-and-drop reorder, template picker, live preview.
+
+Internet: Auth (email/OAuth), experience CRUD, preview rendering, ZIP/GitHub export, watermark/paywall, AWS deployer (S3 + ALB + Route 53* automation).
+
+Server (API): DB for user/projects/assets, object storage for uploaded images, GitHub API, AWS APIs.
+
+One Strength (for YourOwn):
+
+Clear separation of concerns and deployment boundaries → helps validate NFR-02 Clarity and NFR-03 Responsiveness independently (e.g., client performance vs. server performance).
+It also simplifies security (tokens, roles) for FR-01.
+
+One Limitation (and Mitigation):
+
+Limitation: Network round-trips can hurt preview snappiness.
+
+Mitigation: Use optimistic UI updates, client caching, and batched endpoints for preview.
+Push pre-rendered diffs rather than full HTML when possible.
+
+
+
+
+
 
