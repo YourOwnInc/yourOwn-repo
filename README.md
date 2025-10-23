@@ -573,6 +573,8 @@ These approaches improve the system’s perceived speed and maintain responsiven
 5: Logical View
 ---
 
+ ![logical view ](./README-Images/logical%20view.pdf )
+
 This view shows the core modules of YourOwn:
 
 Users interact through the UI, which guides them through the Experience Builder.
@@ -583,7 +585,11 @@ The Export Manager handles output formats.
 
 The AWS Deployment Module optionally sets up hosting.
 
-2. Process View
+---
+Process View
+---
+
+ ![process view](./README-Images/process%20view.pdf )
 
 At runtime:
 
@@ -601,6 +607,7 @@ Each module interacts with external services (GitHub, AWS) as needed.
 6: Use of Architectural Patterns (Client–Server)
 ---
 
+![architecutral pattern](./README-Images/Use%20of%20architectural%20patterns%20(client-server)-%20.pdf)
 
 We went with a client-server-based architectural pattern because naturally, the features we implement split into a rich, guided web client (reflection flow, template selection, live preview) and a server that owns portfolio generation, export, auth, and the optional AWS automation.
 
