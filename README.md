@@ -558,7 +558,7 @@ Justification:
 title: Logical view:
 ---
 
-
+![Alt Text]([https://example.com/path/to/diagram.png](https://docs.google.com/document/d/1CAl-UFseiyohQAE6ZjtknuDqRFIZDTS3owR51abIaqo/edit?tab=t.0#heading=h.ilqt6nngy10j))
 This view shows the core modules of YourOwn. Users interact through the UI, which guides them through the Experience Builder. Their input is used by the Portfolio Generator to create a structured portfolio. The Export Manager handles output formats, and the AWS Deployment Module optionally sets up hosting.
 2. Process view:
 
