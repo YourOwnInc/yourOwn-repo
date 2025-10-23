@@ -623,3 +623,9 @@ Limitation: Network round-trips can hurt preview snappiness.
 
 Mitigation: Use optimistic UI updates, client caching, and batched endpoints for preview.
 Push pre-rendered diffs rather than full HTML when possible.
+
+
+
+
+
+
