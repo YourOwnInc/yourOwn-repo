@@ -538,6 +538,9 @@ direction LR
 
 Each class is separated in such a way to allign the export without account structure. the session holds the experiance from user while the user remains a guest. Those entries can later be lined to a User upone account creation or login. TemplateVariant will conatin how each entry should render. ExportJob and Publishjob are asynchrnous model operations that will assits user in getting and publishing porfolio.
 
+---
+title: 4 
+---
 
 Requirement 1: NFR-01 – Easy Sign-Up
 Design Decision:
@@ -550,9 +553,10 @@ Design Decision:
  Introduce client-side caching for static assets and asynchronous background processing for heavy tasks like experience preview generation or export.
 Justification:
  Client-side caching reduces load times by reusing previously downloaded resources, while background task processing ensures that long-running operations don’t block the main interface. These approaches improve the system’s perceived speed and maintain responsiveness, even as user-generated content or portfolio sizes increase over time.
+---
+title: Logical view:
+---
 
-5:
-Logical view:
 
 This view shows the core modules of YourOwn. Users interact through the UI, which guides them through the Experience Builder. Their input is used by the Portfolio Generator to create a structured portfolio. The Export Manager handles output formats, and the AWS Deployment Module optionally sets up hosting.
 2. Process view:
@@ -561,10 +565,10 @@ This view shows the core modules of YourOwn. Users interact through the UI, whic
 At runtime, the user begins by entering information via the UI. The system processes this through the Experience Builder, then generates a portfolio. The user can export it or deploy it to AWS. Each module interacts with external services (GitHub, AWS) as needed.
 
 
-6: Use of architectural patterns (client-server):
 
-
-
+---
+title: Use of architectural patterns (client-server):
+---
 
 We went with a client-server based architectural pattern because naturally, the features we implement splits into a rich, guided web client (reflection flow, template selection, live preview) and a server that owns portfolio generation, export, auth, and the optional AWS automation.
 
