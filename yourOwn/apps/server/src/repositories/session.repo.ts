@@ -8,7 +8,9 @@ export type SessionUpdate = Partial<Pick<Session, "status" | "userId">>;
 export interface SessionRepo {
   create(params: {
     userId: UserId;
+    metadata: any;
     startedAt: Date;
+    updatedAt: Date;
   }): Promise<Session>;
 
   update(id: SessionId, patch: SessionUpdate): Promise<Session>;
