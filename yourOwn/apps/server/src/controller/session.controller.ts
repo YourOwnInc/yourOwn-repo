@@ -20,7 +20,7 @@ const service = makeSessionService({
 /**
  * Helper to wrap async route handlers and forward errors.
  */
-const ah =
+export const ah =
   <T extends (req: Request, res: Response) => Promise<any>>(fn: T) =>
   (req: Request, res: Response) =>
     fn(req, res).catch((err) => {

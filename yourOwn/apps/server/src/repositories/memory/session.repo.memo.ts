@@ -2,6 +2,7 @@
 import { Session, SessionId, SessionStatus } from "../../domain/session";
 import { SessionRepo } from "../session.repo";
 import crypto from "node:crypto";
+import { linkEntriesToUser } from "./experience-entry.repo.memo";
 
 const sessions = new Map<string, Session>();
 const sessionEntriesCount = new Map<string, number>(); // quick count cache
@@ -49,6 +50,8 @@ export function makeInMemorySessionRepo(): SessionRepo {
       if (!s) throw new Error("SESSION_NOT_FOUND");
       const updated = { ...s, userId, lastSavedAt: new Date() };
       sessions.set(id, updated);
+      // Link all of the entries of this session to the user too
+      linkEntriesToUser(id, userId);
       return updated;
     },
 
