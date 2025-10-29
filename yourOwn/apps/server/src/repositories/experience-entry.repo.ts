@@ -31,12 +31,12 @@ export interface ExperienceEntry {
 
 export const AddExperienceEntryBody = z.object({
   sessionId: z.uuid(),
-  userId: z.uuid().nullable(), 
+  userId: z.uuid().nullable(), // Not necessary for body
   title: z.string(), 
   summary: z.string(), 
   contentBlocks: z.array(z.any()),
   media: z.array(z.any()),
-  templateVariantId: z.uuid().nullable(),
+  templateVariantId: z.uuid().nullable(), // Not necessary for body
   tags: z.array(z.string())
 })
 
@@ -44,12 +44,13 @@ export const AddExperienceEntryBody = z.object({
 export type AddExperienceEntryBody = z.infer<typeof AddExperienceEntryBody>
 
 export const SaveExperienceEntryBody = z.object({
-  // Are we allowed to update the userId and templateVariantId
   userId: z.uuid().nullable().optional(), 
+  title: z.string().optional(), 
+  summary: z.string().optional(), 
+  contentBlocks: z.array(z.any()).optional(),
+  media: z.array(z.any()).optional(),
   templateVariantId: z.uuid().nullable().optional(),
-  metadata: z.record(z.string(), z.unknown()).optional(),
-  completedAt: z.date().nullable().optional(),
-  lastSavedAt: z.date().optional(),
+  tags: z.array(z.string()).optional()
 })
 
 // Body of the request to save the experience entry

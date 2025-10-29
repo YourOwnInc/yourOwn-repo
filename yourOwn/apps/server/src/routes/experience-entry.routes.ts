@@ -1,10 +1,10 @@
 import {Router} from 'express';
 import * as EC from "../controller/experience-entry.controller"
 
-const entryRouter = Router();
+const router = Router();
 
-entryRouter.get('/:id', EC.getExperienceEntry)
-entryRouter.patch('/:id', EC.saveExperienceEntry)
-entryRouter.delete('/:id', EC.deleteExperienceEntry)
+router.get('/:id', EC.getExperienceEntry)
+router.patch('/:id', EC.saveExperienceEntry)
+router.delete('/:id', EC.deleteExperienceEntry)
 
-export default entryRouter;
+export default router;

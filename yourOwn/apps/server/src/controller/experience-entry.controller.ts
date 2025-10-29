@@ -1,13 +1,9 @@
-import { 
-  makeInMemoryExperienceEntryRepo 
-} from "../repositories/memory/experience-entry.repo.memo";
-import { 
-  makeExperienceEntryService 
-} from "../services/experience-entry.service";
+import { makeInMemoryExperienceEntryRepo } from "../repositories/memory/experience-entry.repo.memo";
+import { makeExperienceEntryService } from "../services/experience-entry.service";
 import { ah } from "./session.controller";
 import { 
   AddExperienceEntryBody, 
-  SaveExperienceEntryBody
+  SaveExperienceEntryBody 
 } from "../repositories/experience-entry.repo";
 
 const entryService = makeExperienceEntryService(
@@ -21,11 +17,18 @@ const entryService = makeExperienceEntryService(
  */
 export const addExperienceEntry = ah(async (req, res) => {
   const sessionId = req.params.id;
-  const body = AddExperienceEntryBody.parse({
-    sessionId: sessionId, 
+  // Body of request from title -> tags
+  // Coalese the id references to null, not necessary for entry
+  const parsed = AddExperienceEntryBody.safeParse({
+    sessionId: sessionId,
+    userId: req.body.userId ?? null, 
+    templateVariantId: req.body.templateVariantId ?? null,
     ...req.body,
   });
-  const newEntry = await entryService.startExperienceEntry(body);
+  if (!parsed.success) {
+    res.status(400).json(parsed.error)
+  }
+  const newEntry = await entryService.startExperienceEntry(parsed.data!);
   res.status(201).json(newEntry);
 });
 
@@ -59,8 +62,13 @@ export const getExperienceEntry = ah(async (req, res) => {
  */
 export const saveExperienceEntry = ah(async (req, res) => {
   const id = req.params.id;
-  const body = SaveExperienceEntryBody.parse(req.body);
-  const updated = await entryService.saveExperienceEntry(id, body);
+  const parsed = SaveExperienceEntryBody.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json(parsed.error)
+  }
+  const updated = await entryService.saveExperienceEntry(
+    id, parsed.data!
+  );
   res.json(updated);
 });
 

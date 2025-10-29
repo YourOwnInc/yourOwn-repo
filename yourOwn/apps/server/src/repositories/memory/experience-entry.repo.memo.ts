@@ -5,7 +5,10 @@ import {
   AddExperienceEntryBody 
 } from "../experience-entry.repo";
 import crypto from "node:crypto";
-import { incrementSessionEntryCount } from "./session.repo.memo";
+import { 
+  incrementSessionEntryCount,
+  decrementSessionEntryCount
+} from "./session.repo.memo";
 
 const entries = new Map<string, ExperienceEntry>();
 
@@ -54,22 +57,9 @@ export function makeInMemoryExperienceEntryRepo(): ExperienceEntryRepo {
 
     // Delete the entry with given id
     async delete(id) {
+      const sessionId = entries.get(id)?.sessionId;
+      if (sessionId) decrementSessionEntryCount(sessionId)
       entries.delete(id);
     }
   };
-}
-
-// Dummy helper to link the list of entries to the user with session
-// Brute-force bs
-export function linkEntriesToUser(sessionId: string, userId: string) {
-  const sessionEntries = [...entries.values()].filter(entry => 
-    entry.sessionId === sessionId
-  );
-  for (const entry of sessionEntries) {
-    const linkedEntry = {
-      ...entry, 
-      userId, updatedAt: new Date()
-    };
-    entries.set(entry.id, linkedEntry);
-  }
 }

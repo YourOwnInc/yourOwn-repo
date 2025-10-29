@@ -2,7 +2,6 @@
 import { Session, SessionId, SessionStatus } from "../../domain/session";
 import { SessionRepo } from "../session.repo";
 import crypto from "node:crypto";
-import { linkEntriesToUser } from "./experience-entry.repo.memo";
 
 const sessions = new Map<string, Session>();
 const sessionEntriesCount = new Map<string, number>(); // quick count cache
@@ -50,8 +49,6 @@ export function makeInMemorySessionRepo(): SessionRepo {
       if (!s) throw new Error("SESSION_NOT_FOUND");
       const updated = { ...s, userId, lastSavedAt: new Date() };
       sessions.set(id, updated);
-      // Link all of the entries of this session to the user too
-      linkEntriesToUser(id, userId);
       return updated;
     },
 
@@ -71,5 +68,18 @@ export function makeInMemorySessionRepo(): SessionRepo {
 
 // helper for entry repo to increment counts
 export function incrementSessionEntryCount(sessionId: string) {
-  sessionEntriesCount.set(sessionId, (sessionEntriesCount.get(sessionId) ?? 0) + 1);
+  sessionEntriesCount.set(
+    sessionId, 
+    (sessionEntriesCount.get(sessionId) ?? 0) + 1
+  );
+}
+
+// decrements counts 
+// (used for when an experience entry is deleted)
+export function decrementSessionEntryCount(sessionId: string) {
+  const count = sessionEntriesCount.get(sessionId) ?? 0;
+  sessionEntriesCount.set(
+    sessionId, 
+    count - 1 < 0 ? 0 : count - 1
+  );
 }
