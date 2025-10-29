@@ -7,7 +7,7 @@ export const StartSessionBody = z.object({
 export type StartSessionBody = z.infer<typeof StartSessionBody>;
 
 export const SaveSessionBody = z.object({
-  userId: z.uuid(),
+  userId: z.uuid().optional().nullable(), // make it not required 
   title: z.string().min(1).optional(),
   status: z.string().min(1),
   metadata: z.record(z.any(),z.unknown()).optional(),
