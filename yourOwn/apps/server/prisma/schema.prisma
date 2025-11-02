@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+DATABASE_URL="file:./dev.db"
+
+
+generator client {
+  provider = "prisma-client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+// --------- Models (tables) ----------
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  // optional profile fields you might add later
+  name      String? 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions  Session[]
+  entries   ExperienceEntry[]  // entries created after sign-up (optional)
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  status       SessionStatus @default(DRAFT)
+  meta         Json?         // JSONB in Postgres
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  // if you support choosing a template while editing:
+  templateVariantId String? 
+  templateVariant   TemplateVariant? @relation(fields: [templateVariantId], references: [id], onDelete: SetNull)
+
+  experienceEntries ExperienceEntry[]
+  @@index([userId])
+  @@index([templateVariantId])
+}
+
+model ExperienceEntry {
+  id           String   @id @default(cuid())
+  sessionId    String
+  session      Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  // if user signs up later, you can stamp ownership:
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  title        String
+  organization String?
+  startDate    DateTime?
+  endDate      DateTime?
+  description  String?
+  data         Json?
+  orderIndex   Int       @default(0)
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([sessionId])
+  @@index([userId])
+  @@index([orderIndex])
+}
+
+// Optional: store preset layout/content options
+model TemplateVariant {
+  id        String   @id @default(cuid())
+  key       String   @unique   // e.g., "classic", "grid-v2"
+  label     String
+  config    Json?               // theme, fonts, layout knobs
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions  Session[]
+}
