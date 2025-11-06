@@ -68,5 +68,18 @@ export function makeInMemorySessionRepo(): SessionRepo {
 
 // helper for entry repo to increment counts
 export function incrementSessionEntryCount(sessionId: string) {
-  sessionEntriesCount.set(sessionId, (sessionEntriesCount.get(sessionId) ?? 0) + 1);
+  sessionEntriesCount.set(
+    sessionId, 
+    (sessionEntriesCount.get(sessionId) ?? 0) + 1
+  );
+}
+
+// decrements counts 
+// (used for when an experience entry is deleted)
+export function decrementSessionEntryCount(sessionId: string) {
+  const count = sessionEntriesCount.get(sessionId) ?? 0;
+  sessionEntriesCount.set(
+    sessionId, 
+    count - 1 < 0 ? 0 : count - 1
+  );
 }

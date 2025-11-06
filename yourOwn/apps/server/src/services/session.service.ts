@@ -50,5 +50,8 @@ export function makeSessionService(deps: {
       return sessions.complete(sessionId, new Date());
     },
 
+    getNumberEntries: async (sessionId: string) => {
+      return sessions.countEntries(sessionId);
+    }
   };
 }

@@ -20,7 +20,7 @@ const service = makeSessionService({
 /**
  * Helper to wrap async route handlers and forward errors.
  */
-const ah =
+export const ah =
   <T extends (req: Request, res: Response) => Promise<any>>(fn: T) =>
   (req: Request, res: Response) =>
     fn(req, res).catch((err) => {
@@ -54,7 +54,7 @@ export const getSession = ah(async (req, res) => {
   const id = req.params.id;
   const s = await service.getSession(id);
   if (!s) return res.status(404).json({ error: "Session not found" });
-  res.json(safeSessionWithCounts(s));
+  res.json(await safeSessionWithCounts(s));
 });
 
 /**
@@ -114,10 +114,13 @@ function safeSession(s: any) {
   return { id, userId, startedAt, updatedAt, metadata, templateVariantId };
 }
 
-function safeSessionWithCounts(s: any) {
+async function safeSessionWithCounts(s: any) {
   const base = safeSession(s);
   // If service decorates with counts, include them. Otherwise default 0.
-  return { ...base, entriesCount: s.entriesCount ?? 0 };
+  return { 
+    ...base, 
+    entriesCount: await service.getNumberEntries(s.id)
+  };
 }
 
 /**
