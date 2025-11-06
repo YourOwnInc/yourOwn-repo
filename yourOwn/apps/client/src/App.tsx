@@ -1,19 +1,26 @@
-import { useState } from 'react'
-import { SkeletonPage } from './portfolio'
+// apps/client/src/App.tsx
 
+import { useState } from "react";
+import PortfolioBuilder from "./ui/PortfolioBuilder";
+import ExperiencesPage from "./ui/ExperiencesPage";
 
-import './App.css'
+const SESSION_ID = "dev-session-1"; // TODO: read from auth/session store later
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [tab, setTab] = useState<"main" | "experiences">("main");
 
   return (
-    <>
-      
-        <SkeletonPage/>
-     
-    </>
-  )
-}
+    <div style={{ padding: 16 }}>
+      <nav style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+        <button onClick={() => setTab("main")} disabled={tab === "main"}>Main</button>
+        <button onClick={() => setTab("experiences")} disabled={tab === "experiences"}>Experiences</button>
+      </nav>
 
-export default App
+      {tab === "main" ? (
+        <PortfolioBuilder sessionId={SESSION_ID} />
+      ) : (
+        <ExperiencesPage sessionId={SESSION_ID} />
+      )}
+    </div>
+  );
+}
