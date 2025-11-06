@@ -1,5 +1,5 @@
 import { ExperienceDTO, SessionId } from "../domain/types";
-const BASE = "http://localhost:5000";
+const BASE = "http://localhost:5000/api";
 
 export async function createExperience(
   sessionId: SessionId,

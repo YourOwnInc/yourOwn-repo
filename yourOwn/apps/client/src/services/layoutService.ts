@@ -1,5 +1,5 @@
 import { SessionId, LayoutModel, Placement } from "../domain/types";
-const BASE = "http://localhost:5000";
+const BASE = "http://localhost:5000/api";
 
 export async function getLayout(sessionId: SessionId): Promise<LayoutModel> {
   const res = await fetch(`${BASE}/session/${sessionId}/layout`);
