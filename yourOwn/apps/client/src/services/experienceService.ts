@@ -5,7 +5,7 @@ export async function createExperience(
   sessionId: SessionId,
   payload: Omit<ExperienceDTO, "id" | "sessionId">
 ): Promise<ExperienceDTO> {
-  const res = await fetch(`${BASE}/experience`, {
+  const res = await fetch(`${BASE}session/:id/experiences`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-Session-Id": sessionId },
     body: JSON.stringify(payload),
