@@ -1,57 +1,71 @@
-// import domain, schema, repo
 // src/services/session.service.ts
-import { SessionRepo, SessionUpdate } from "../repositories/session.repo";
-import { ExperienceEntryRepo } from "../repositories/experience-entry.repo";
-import { LinkSessionToUserBody,StartSessionBody, SaveSessionBody, SelectTemplateBody, AddExperienceEntryBody } from "../schemas/session.schema";
+// Services now call the new Prisma-backed Session + Experience repos.
 
-type StartSessionInput = {
-  userId: string | null;
-  metadata?: Record<string, any>;
-}
-export function makeSessionService(deps: {
-  sessions: SessionRepo;
-  entries: ExperienceEntryRepo;
-}) {
+import * as SessionRepo from "../repositories/session.repo";
+import * as ExperienceRepo from "../repositories/experience-entry.repo";
 
-  const { sessions, entries } = deps;
+export type StartSessionBody = {
+  userId?: string | null;
+  metadata?: Record<string, unknown>; // keep if you used it earlier
+};
 
+export type LinkSessionToUserBody = {
+  sessionId: string;
+  userId: string;
+};
 
+// If you previously allowed patching a session, define the fields here
+export type SaveSessionBody = Partial<{
+  // add fields only if they actually exist in your schema
+  // e.g., completedAt?: string | null; // if you decide to add it
+}>;
+
+export function makeSessionService() {
   return {
-   startSession: async ({ userId, metadata }: StartSessionInput) => {
-      return sessions.create({
-        userId, 
-        metadata: metadata ?? {},
-        startedAt: new Date(),
-        updatedAt: new Date(),
-      });
+    // Create a session; if userId is provided, we immediately claim it.
+    startSession: async (input: StartSessionBody) => {
+      const session = await SessionRepo.createSession();
+
+      if (input?.userId) {
+        await SessionRepo.claimSession(session.id, input.userId);
+        // return claimed session for convenience
+
+        //TODO: add getSession to repo  id SessionRepo.getSession?.(session.id) ?? session;
+      }
+      return session;
     },
-     getSession: (id: string) => sessions.findById(id),
-    saveSession: async (id: string, body: SaveSessionBody) => {
-        const patch: SessionUpdate = {};
-        if (body.status !== undefined) patch.status = body.status as any; // ideally same enum type
-      if (body.userId !== undefined) patch.userId = body.userId;        // only if you allow this
 
-      return sessions.update(id, patch);
-    },
-/*
-    addExperienceEntry: (sessionId: string, body: { title: string; description?: string; tags?: string[] }) =>
-      entries.create(sessionId, { ...body, createdAt: new Date() }),
-
-    selectTemplate: (id: string, templateVariantId: string | null) =>
-      sessions.update(id, { templateVariantId, updatedAt: new Date() }),
-
-  */
-
+    // Link an existing anonymous session to a user
     linkSessionToUser: async (sessionId: string, userId: string) => {
-      return sessions.linkToUser(sessionId, userId);
+      return SessionRepo.claimSession(sessionId, userId);
     },
 
+    // (Optional) Save/patch a session
+    // Only implement fields you actually modeled. If you don’t have any, this can be a no-op or removed.
+    saveSession: async (_id: string, _patch: SaveSessionBody) => {
+      // Example if you add "completedAt" later:
+      // return prisma.session.update({ where: { id }, data: { completedAt: patch.completedAt ? new Date(patch.completedAt) : null } });
+      throw new Error("saveSession not implemented: no mutable fields on Session in the current schema.");
+    },
+
+
+    /*
+    // Mark as complete – only if you add a completedAt column to Session.
     completeSession: async (sessionId: string) => {
-      return sessions.complete(sessionId, new Date());
+      // If you add `completedAt DateTime?` to schema:
+      // return prisma.session.update({ where: { id: sessionId }, data: { completedAt: new Date() } });
+      // For now (no completedAt in schema), just return the current session:
+      if (SessionRepo.getSession) return SessionRepo.getSession(sessionId);
+      return { id: sessionId };
     },
 
+    */
+
+    // Count how many experiences belong to this session
     getNumberEntries: async (sessionId: string) => {
-      return sessions.countEntries(sessionId);
-    }
+      // If you add a `countBySession(sessionId)` to ExperienceRepo, call it here.
+      const list = await ExperienceRepo.listExperiences({ sessionId });
+      return list.length;
+    },
   };
 }

@@ -7,6 +7,8 @@ import userRoutes from "./routes/user.routes";
 import sessionRoutes from "./routes/session.routes"
 import experienceRoutes from "./routes/experience-entry.routes"
 
+import devRoutes from './routes/dev'
+
 //import ... from "./routes/..."
 
 
@@ -19,10 +21,13 @@ const CORS_ORIGIN =   'http://localhost:5000';
 app.use(cors({origin: CORS_ORIGIN, credentials: true}));
 app.use(express.json());
 
+app.use('/dev', devRoutes);
+
 // where routes will live
 app.use('/api/users', userRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('api/experiences', experienceRoutes);
+
 
 
 app.get('/api/health', (_req, res) => {

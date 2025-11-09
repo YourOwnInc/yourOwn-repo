@@ -1,88 +1,95 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-DATABASE_URL="file:./dev.db"
-
-
+// datasource + generator
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+// ---------- Enums ----------
+enum ExperienceKind {
+  WORK
+  PROJECT
+  EDUCATION
+  AWARD
+  OTHER
+}
 
-// --------- Models (tables) ----------
+// ---------- Models ----------
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  // optional profile fields you might add later
-  name      String? 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String      @id @default(uuid()) @db.Uuid
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
+  // Relationships
   sessions  Session[]
-  entries   ExperienceEntry[]  // entries created after sign-up (optional)
+  experiences Experience[]
+  layouts   Layout[]
+
+  // For future auth fields (email, provider IDs, etc.)
+  // email     String?   @unique
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String?
-  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id        String     @id @default(uuid()) @db.Uuid
+  createdAt DateTime   @default(now())
+  claimedByUserId String? @db.Uuid
+  claimedBy   User?    @relation(fields: [claimedByUserId], references: [id], onDelete: SetNull)
 
-  status       SessionStatus @default(DRAFT)
-  meta         Json?         // JSONB in Postgres
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  // Relationships
+  experiences Experience[]
+  layouts     Layout[]
 
-  // if you support choosing a template while editing:
-  templateVariantId String? 
-  templateVariant   TemplateVariant? @relation(fields: [templateVariantId], references: [id], onDelete: SetNull)
-
-  experienceEntries ExperienceEntry[]
-  @@index([userId])
-  @@index([templateVariantId])
+  @@index([claimedByUserId])
 }
 
-model ExperienceEntry {
-  id           String   @id @default(cuid())
-  sessionId    String
-  session      Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+model Experience {
+  id        String     @id @default(uuid()) @db.Uuid
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
-  // if user signs up later, you can stamp ownership:
-  userId       String?
-  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  sessionId String?    @db.Uuid
+  userId    String?    @db.Uuid
 
-  title        String
-  organization String?
-  startDate    DateTime?
-  endDate      DateTime?
-  description  String?
-  data         Json?
-  orderIndex   Int       @default(0)
+  session   Session?   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user      User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
 
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  title     String
+  summary   String?
+  start     DateTime?
+  end       DateTime?
+  kind      ExperienceKind @default(OTHER)
+
+  // Postgres supports scalar lists; @db.Text specifies element type
+  tags      String[]   @db.Text
 
   @@index([sessionId])
   @@index([userId])
-  @@index([orderIndex])
+  @@index([kind])
+  @@index([title])
 }
 
-// Optional: store preset layout/content options
-model TemplateVariant {
-  id        String   @id @default(cuid())
-  key       String   @unique   // e.g., "classic", "grid-v2"
-  label     String
-  config    Json?               // theme, fonts, layout knobs
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Layout {
+  id        String     @id @default(uuid()) @db.Uuid
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
-  sessions  Session[]
+  sessionId String?    @db.Uuid
+  userId    String?    @db.Uuid
+
+  session   Session?   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user      User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  templateId String
+  theme      String?
+
+  // JSON payloads for flexible MVP structures
+  slots       Json      @default("{}")
+  placements  Json      @default("{}")
+
+  @@index([sessionId])
+  @@index([userId])
+  @@index([templateId])
 }

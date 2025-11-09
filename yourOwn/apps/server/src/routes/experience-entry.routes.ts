@@ -1,10 +1,15 @@
-import {Router} from 'express';
-import * as EC from "../controller/experience-entry.controller"
+// routes/experience-entry.routes.ts
+import { Router } from "express";
+import { resolveCtx } from "../middleware/ctx";
+import * as ctrl from "../controller/experience-entry.controller";
 
-const router = Router();
+const r = Router();
 
-router.get('/:id', EC.getExperienceEntry)
-router.patch('/:id', EC.saveExperienceEntry)
-router.delete('/:id', EC.deleteExperienceEntry)
+r.post("/experiences", resolveCtx, ctrl.create);
+r.get("/experiences", resolveCtx, ctrl.list);
+r.get("/experiences/:id", resolveCtx, ctrl.getOne);
+r.put("/experiences/:id", resolveCtx, ctrl.update);
+r.patch("/experiences/:id", resolveCtx, ctrl.update);
+r.delete("/experiences/:id", resolveCtx, ctrl.remove);
 
-export default router;
+export default r;

@@ -10,6 +10,7 @@ import {
   LinkSessionToUserBody,
   AddExperienceEntryBody,
 } from "../schemas/session.schema";
+import * as sessions from "../repositories/session.repo";
 
 // NOTE: In real app, inject via DI container. For now, wire in-memory repos.
 const service = makeSessionService({
@@ -70,6 +71,15 @@ export const saveSession = ah(async (req, res) => {
 
 
 
+// POST /sessions/:id/claim  (requires auth; userId from req.user.id)
+export async function claim(req: Request, res: Response) {
+  const userId = (req as any).user?.id;
+  if (!userId) return res.status(401).json({ error: { code: "UNAUTHORIZED", message: "Login required" }});
+
+  const sessionId = req.params.id;
+  await sessions.claimSession({ sessionId, userId }); // moves experiences/layout/placements ownership
+  return res.json({ ok: true });
+}
 
 /**
  * POST /sessions/:id/entries

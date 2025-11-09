@@ -1,32 +1,76 @@
-import { 
-  AddExperienceEntryBody, 
-  ExperienceEntryRepo, 
-  SaveExperienceEntryBody 
-} from "../repositories/experience-entry.repo";
+// src/services/experience-entry.service.ts
+// Services now call the new Prisma-backed Experience repo functions.
 
-export function makeExperienceEntryService(
-  entries: ExperienceEntryRepo
-) {
+import type { ExperienceKind } from "@prisma/client";
+import * as ExperienceRepo from "../repositories/experience-entry.repo";
+
+// If you had request-body types before, keep them here (they’re just DTOs).
+export type AddExperienceEntryBody = {
+  sessionId?: string;
+  userId?: string;
+  title: string;
+  summary?: string | null;
+  start?: string | null; // ISO strings are OK; convert to Date in repo if you prefer
+  end?: string | null;
+  kind?: ExperienceKind;
+  tags?: string[];
+};
+
+export type SaveExperienceEntryBody = Partial<{
+  title: string;
+  summary: string | null ;
+  start: string | null;
+  end: string | null;
+  kind: ExperienceKind;
+  tags: string[];
+}>;
+
+export function makeExperienceEntryService() {
   return {
-    // Create the new experience entry
-    startExperienceEntry: async(input: AddExperienceEntryBody) => {
-      return entries.create(input);
+    // Create the new experience entry  (old: entries.create)
+    startExperienceEntry: async (input: AddExperienceEntryBody) => {
+      return ExperienceRepo.createExperience({
+        sessionId: input.sessionId,
+        userId: input.userId,
+        title: input.title,
+        summary: input.summary ?? undefined,
+        start: input.start ? new Date(input.start) : undefined,
+        end: input.end ? new Date(input.end) : undefined,
+        kind: input.kind ?? "OTHER",
+        tags: input.tags ?? [],
+      });
     },
 
-    // Get the experience entry by id
-    getExperienceEntry: async (id: string) => entries.findById(id),
-
-    // Update the experience entry
-    saveExperienceEntry: async(id: string, patch: SaveExperienceEntryBody) => {
-      return entries.update(id, patch);
+    // Get a single entry by id  (old: entries.findById)
+    getExperienceEntry: async (id: string) => {
+      return ExperienceRepo.getExperience(id);
     },
 
-    // Get the experience entry by id 
-    getEntriesBySession: (sessionId: string) => {
-      return entries.findBySession(sessionId)
+    // Update an entry by id  (old: entries.update)
+    saveExperienceEntry: async (id: string, patch: SaveExperienceEntryBody) => {
+      return ExperienceRepo.updateExperience(id, {
+        title: patch.title,
+        summary: patch.summary ?? undefined,
+        start: patch.start ? new Date(patch.start) : undefined,
+        end: patch.end ? new Date(patch.end) : undefined,
+        kind: patch.kind,
+        tags: patch.tags,
+      });
     },
 
-    // Delete the experience entry by id
-    delete: async (id: string) => entries.delete(id)
+    // List entries for a session  (old: entries.findBySession)
+    getEntriesBySession: async (sessionId: string) => {
+      return ExperienceRepo.listExperiences({ sessionId });
+    },
+
+    // Optionally list entries for a user (handy after claim)
+    getEntriesByUser: async (userId: string) => {
+      return ExperienceRepo.listExperiences({ userId });
+    },
+
+    // Delete an entry  (old: entries.delete)
+    delete: async (id: string) => {
+      return ExperienceRepo.deleteExperience(id);
+    },
   };
 }

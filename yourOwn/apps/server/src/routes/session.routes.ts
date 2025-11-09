@@ -6,8 +6,12 @@ const router = Router();
 
 router.post('/start',SC.startSession)
 router.get('/:id', SC.getSession)
-router.get('/:id/entries', EC.getExperienceEntries)
-router.post('/:id/entries', EC.addExperienceEntry)
+
+// experience endpoints
+router.get('/:sessionId/experiences', EC.list)
+router.post('/:sessionId/experiences', EC.create)
+router.post('/sessions/:id/claim', SC.claim)
+
 // these might be the same things
 // Might take one out. you have to have a userId to save a session.
 router.put('/save/:id', SC.saveSession)

@@ -11,6 +11,7 @@ export interface ExperienceEntry {
   end?: string;
   start?: string;
   media?: Array<{ kind:'image'|'video'|'link'; url:string; alt?:string; meta?:Record<string,unknown> }>;
+  kind?: String;
   createdAt: Date;
   updatedAt: Date;
 };
