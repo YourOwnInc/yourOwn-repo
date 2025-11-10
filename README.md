@@ -712,7 +712,7 @@ Provide detailed information on the programming language(s) and their versions, 
 
 The project is a full-stack TypeScript monorepo using npm workspaces. The frontend runs on React 18.3.1 with React Router DOM 7.9.5, built with Vite 5.4.0 and TypeScript 5.6.3, targeting ES2022. It uses Framer Motion 12.23.24 for animations, Axios 1.13.2 for HTTP, and React Testing Library 14.1.2 with Vitest 1.0.4 (jsdom 23.0.0) and MSW 2.0.8 for API mocking. The backend uses Express 5.1.0, TypeScript 5.9.3 (ES2022, Node16 modules), tsx 4.20.6 for development, and Zod 4.1.12 for validation. Authentication uses jsonwebtoken 9.0.2 and bcrypt 5.1.1. The server runs on port 5000 with CORS for http://localhost:5173. Data is stored in-memory (Map-based repositories); the client uses localStorage for session persistence. The workspace uses concurrently 9.2.1 to run client and server, ESLint 9.36.0 with TypeScript ESLint 8.44.0 for linting, and @types/node 24.8.1. No external database; the system works on Windows 10 (and other platforms), Node.js (recommended LTS), and any IDE (VSCode recommended). Environment variables are managed with dotenv 17.2.3, and the project uses ES modules throughout.
 
-# Testing Summary: 
+# Testing Summary: Nick
 
 Explain how the implemented features were tested. Include details on the testing framework (e.g., pytest, JUnit, Mocha, etc.), the type of tests conducted (unit, integration, or system), and how each test case traces back to one or more requirements. Summarize the achieved code coverage and describe how it demonstrates sufficient testing of all implemented requirements.
 
@@ -728,7 +728,7 @@ We first assumed that we had to store the UI code for the portfolio in some sort
 
 One of our assumptions that held true was to have the dynamic data ( Experience entry, template choice) separated with the main orchestration of the portfolio. 
 
-# Impact of Automated Testing:
+# Impact of Automated Testing: Nick
 
  Explain how automated testing improved the quality, reliability, or maintainability of your system.
 
