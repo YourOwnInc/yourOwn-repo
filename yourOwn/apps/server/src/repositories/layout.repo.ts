@@ -1,12 +1,14 @@
+import { JsonArray } from '@prisma/client/runtime/library';
 import { prisma } from '../lib/prisma';
+
 
 export type CreateLayoutInput = {
   sessionId?: string;
   userId?: string;
   templateId: string;
   theme?: string | null;
-  slots?: Record<string, unknown>;
-  placements?: Record<string, unknown>;
+  slots?: JsonArray;
+  placements?: JsonArray; //TODO:  check if this object ir correct for placments and sltos 
 };
 
 export async function createLayout(input: CreateLayoutInput) {

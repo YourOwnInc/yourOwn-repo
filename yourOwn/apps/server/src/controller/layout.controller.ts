@@ -2,14 +2,14 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 import { ownerWhere } from "../middleware/ctx";
-import * as layoutRepo from "../repositories/";
-import * as expRepo from "../repos/experience-entry.repo";
+import * as layoutRepo from "../repositories/layout.repo";
+import * as expRepo from "../repositories/experience-entry.repo";
 
 const assignSchema = z.object({
   slotId: z.string().min(1),
   experienceId: z.string().min(1),
   patternId: z.string().min(1),
-  props: z.record(z.any()).optional(),
+  props: z.record(z.unknown()).optional(),
 });
 
 export async function getLayout(req: Request, res: Response) {

@@ -25,7 +25,7 @@ export function usePortfolioStore(sessionId: SessionId) {
   }, [sessionId]);
 
   const addExperience = useCallback(async (payload: Omit<ExperienceDTO, "id" | "sessionId">) => {
-    const created = await createExperience(sessionId, payload);
+    const created = await createExperience('e18c0e71-735b-48f6-a76c-c86cde2e9c49', payload);
     setExperiences((prev) => [created, ...prev]);
     return created;
   }, [sessionId]);

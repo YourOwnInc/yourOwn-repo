@@ -8,14 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ---------- Enums ----------
-enum ExperienceKind {
-  WORK
-  PROJECT
-  EDUCATION
-  AWARD
-  OTHER
-}
+
 
 // ---------- Models ----------
 model User {
@@ -27,6 +20,8 @@ model User {
   sessions  Session[]
   experiences Experience[]
   layouts   Layout[]
+
+  profile    Profile?
 
   // For future auth fields (email, provider IDs, etc.)
   // email     String?   @unique
@@ -42,7 +37,37 @@ model Session {
   experiences Experience[]
   layouts     Layout[]
 
+  profile Profile?
+
   @@index([claimedByUserId])
+}
+
+model Profile {
+  id         String   @id @default(uuid()) @db.Uuid
+ createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Owner (exactly one must be set)
+  sessionId String?  @db.Uuid
+  userId    String?  @db.Uuid
+
+  session   Session? @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Portfolio header content
+  displayName String?         // e.g., "Luis Alarcón"
+  headline    String?         // e.g., "Product-minded SWE"
+  location    String?
+  bio         String?         // 2–3 sentence summary
+  avatarUrl   String?
+
+  // Keep simple as arrays/JSON for MVP
+  skills      String[] @db.Text
+  links       Json      // {email, github, linkedin, website, twitter, ...}
+
+  // uniqueness: one profile per owner
+  @@unique([sessionId])
+  @@unique([userId])
 }
 
 model Experience {
@@ -60,10 +85,8 @@ model Experience {
   summary   String?
   start     DateTime?
   end       DateTime?
-  kind      ExperienceKind @default(OTHER)
-
-  // Postgres supports scalar lists; @db.Text specifies element type
-  tags      String[]   @db.Text
+  kind      String   @db.Text @default("other")
+ 
 
   @@index([sessionId])
   @@index([userId])

@@ -13,6 +13,7 @@
     "build": "npm --prefix apps/client run build && npm --prefix apps/server run build"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },

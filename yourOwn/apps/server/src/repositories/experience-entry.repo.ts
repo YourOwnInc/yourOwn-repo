@@ -1,71 +1,85 @@
-import { prisma } from '../lib/prisma';
-import { ExperienceKind, Prisma } from '@prisma/client';
+// src/repos/experience-entry.repo.ts
+import { prisma } from "../lib/prisma";
 
-export type CreateExperienceInput = {
-  sessionId?: string;
-  userId?: string;
+// The controller guarantees exactly one of these
+type Owner = { userId?: string | null; sessionId?: string | null };
+const ofOwner = (o: Owner) => (o.userId ? { userId: o.userId } : { sessionId: o.sessionId });
+
+export type CreateExperienceInput = Owner & {
   title: string;
-  summary?: string;
+  summary?: string | null;
   start?: Date | null;
   end?: Date | null;
-  kind?: ExperienceKind;
-  tags?: string[];
+  kind?: string | null; // map to your Prisma enum if you have one
 };
 
 export async function createExperience(input: CreateExperienceInput) {
-  return prisma.experience.create({
-    data: {
-      sessionId: input.sessionId ?? null,
-      userId: input.userId ?? null,
-      title: input.title,
-      summary: input.summary ?? null,
-      start: input.start ?? null,
-      end: input.end ?? null,
-      kind: input.kind ?? 'OTHER',
-      tags: input.tags ?? [],
-    },
-  });
+  const data = {
+    userId: input.userId ?? null,
+    sessionId: input.sessionId ?? null,
+    title: input.title,
+    summary: input.summary ?? null,
+    start: input.start ?? null,
+    end: input.end ?? null,
+    kind: (input.kind as any) ?? null,
+  };
+  return prisma.experience.create({ data });
 }
 
-export async function listExperiences(filter: {
-  sessionId?: string;
-  userId?: string;
-  kind?: ExperienceKind;
-}) {
+export async function listExperiences(filter: Owner & { kind?: string | null }) {
   return prisma.experience.findMany({
     where: {
-      sessionId: filter.sessionId,
-      userId: filter.userId,
-      kind: filter.kind,
+      ...ofOwner(filter),
+      ...(filter.kind ? { kind: filter.kind as any } : {}),
     },
-    orderBy: { createdAt: 'desc' },
+    orderBy: { createdAt: "desc" },
   });
 }
 
-export async function getExperience(id: string) {
-  return prisma.experience.findUnique({ where: { id } });
+export async function getExperienceOwned(id: string, owner: Owner) {
+  return prisma.experience.findFirst({
+    where: { id, ...ofOwner(owner) },
+  });
 }
 
-export async function updateExperience(
+export async function updateExperienceOwned(
   id: string,
-  patch: Partial<Omit<CreateExperienceInput, 'sessionId' | 'userId'>> & {
+  owner: Owner,
+  patch: {
+    title?: string;
+    summary?: string | null;
+    start?: Date | null;      // undefined means “don’t touch”, null clears
+    end?: Date | null;
+    kind?: string | null;
     tags?: string[];
-    summary?: string
-  },
+  }
 ) {
+  // Build a “set only provided fields” object
+  const data: any = {};
+  if (typeof patch.title !== "undefined") data.title = patch.title;
+  if (typeof patch.summary !== "undefined") data.summary = patch.summary;
+  if (typeof patch.start !== "undefined") data.start = patch.start;
+  if (typeof patch.end !== "undefined") data.end = patch.end;
+  if (typeof patch.kind !== "undefined") data.kind = patch.kind as any;
+  if (typeof patch.tags !== "undefined") data.tags = patch.tags;
+
   return prisma.experience.update({
-    where: { id },
-    data: {
-      title: patch.title,
-      summary: patch.summary,
-      start: patch.start ?? undefined,
-      end: patch.end ?? undefined,
-      kind: patch.kind,
-      tags: patch.tags,
-    },
+    where: { id, ...ofOwner(owner) } as any, // Prisma doesn’t allow compound where in update without a unique; fallback to updateMany
+    data,
+  }).catch(async () => {
+    // Fallback using updateMany (returns count) then read
+    const { count } = await prisma.experience.updateMany({
+      where: { id, ...ofOwner(owner) },
+      data,
+    });
+    if (count === 0) return null;
+    return prisma.experience.findFirst({ where: { id, ...ofOwner(owner) } });
   });
 }
 
-export async function deleteExperience(id: string) {
-  return prisma.experience.delete({ where: { id } });
+export async function deleteExperienceOwned(id: string, owner: Owner) {
+  const { count } = await prisma.experience.deleteMany({
+    where: { id, ...ofOwner(owner) },
+  });
+  return count > 0;
 }
