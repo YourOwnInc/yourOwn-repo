@@ -632,6 +632,111 @@ Mitigation: Use optimistic UI updates, client caching, and batched endpoints for
 Push pre-rendered diffs rather than full HTML when possible.
 
 
+### Deliverable 3 ###
+# Overview: Luis
+
+Briefly describe the system’s purpose, main functionalities, and the problem it solves. Clearly explain how the work in Deliverable III builds upon Deliverables I and II, showing that earlier artifacts (requirements, design diagrams, and models) were actively used to guide implementation.
+
+YourOwn is a platform that delivers curated portfolios to user by giving them the source code. It servers as an ownership centered portfolio maker alternative, where the code is owned by the user. 
+
+Deliverable 1 and 2 were a pivotal process in our development due to the strict use cases that would accur in our system. Because we knew the exact outcomes of how users will interact with the platform it was benificial for us the define the exact structure of how we’d scale our implementatinos. 
+
+As a team we initially separated the 3 main processes happening in our software; Client-server interaction, exporting tool, deploying assistant. This helped us define building blocks for a specific process without a risk of clashing with other processes and making redundant requirements. The combination of our careful organization and creation of requirements allowed us to divide the work efficiently on deliverable III. 
+
+Additionally, defining the content and conditions for each major object of our system from deliverable II forced and assited us in being picky on how exactly the code should look like. 
+
+# Development Process: Prabhas
+
+Explain the development approach (Agile sprints, milestones, or Plan-Driven phases) and how the team utilized previous deliverables to plan and execute this phase. Describe how requirements and design artifacts were referenced during implementation, and how the team coordinated tasks to ensure traceability to the original specifications.
+
+We used a plan driven approach to do our project. We wanted to simplify development to focus on delivering certain features from the bottom up. We created a github project with our deliverables and we assigned deliverables to each of our teammates. We coordinated tasks by checking off the task and updating its status.
+
+# Design and Implementation Summary: Luis
+
+Summarize the specific features or requirements developed in this deliverable, referencing their corresponding requirement IDs from Deliverable I. Describe how the implementation followed the design artifacts from Deliverable II, including any adjustments made. Mention the programming language(s), frameworks, and tools used, and provide details of the environment setup.
+
+This section will cover the requirements completed for this deliverable and why.
+
+## **FR-04 Add Experiences ( Content input)** 
+
+Our diagram model was a great help when it came to developing FR-01. Sinse we already had defined all the fields we needed for the object that  would hold all the experience metadata, the main portion of development was designing our API around this data. 
+
+## **FR-03 Dashboard Page** 
+
+While the bashboard it self didnt include alot of components, we needed to develop it in such a way where 2 separated scenarios landed you on the same point at the end. Both a user who didnt want to sing up with an email and the one who chose to had to end up at the dashboard with the same functionalities, not counting saving work. Our process model from Deliverable II gave the team clarity on how to alter the endpoint interactions based on each scenario. 
+
+## **FR-08 Media Upload**
+
+Media upload happened in each experience entry by a user. Based on this we decided to add the a **media** field to the experience object when developing the Class diagram.   
+We currently are only accepting images, but we have built this requirement flexible enough to accept more file in the future. 
+
+## **FR-05 Choose a template for experience**
+
+While the same logic stuck through the development, naming conventions beacem an importance when we started interaction with multiple objects and functions in one process. The template was designed to have a place to store and identify how an experience block will look like. The general idea was kept but we relized we had to have an extra object that held the specific set of experiences with the desired “template” for that experiences. Since the name template felt like a hard truth for a set of items, we decide on changing the name to **Patterns.**  The new object was named **layout.**  We felt as though it made it clearer the specific use for each one. 
+
+## **FR-02 Create and manage a portfolio project**
+
+This requirement ended up being more about tying each individual process/object that built a portfolio and managing the data flow correctly. After having that set and developed, we could then replicate this for any other projects wanted to be made. We initially thought having multipel portfolio projects to manage per user will increase cost so this was going to be a “premium” feature. We wont longer for this and instead have other incentives to improve the business model.
+
+**FR-07 Export zip**   
+This feature allows users to export their generated portfolio as a fully functional React \+ Vite project. When the user clicks “**Export**”, their portfolio content is automatically integrated into a pre-configured project template that includes all necessary configuration and dependency files. The system then packages the project into a `.zip` file and provides it for download. After unzipping, users can simply run a few commands to launch their personalized portfolio locally.
+
+# Environment setup & more 
+
+We ran both our server and clients simultaneously in our local host. Both the client and server ran in different ports so network interactions and metrics could be used for testing. 
+
+**Language:** typescript   
+**Techstack** 
+
+* **React \+ Vite – Front end** 
+
+	We made a react boilerplate using vite for our client
+
+* **Prisma \+ Postgres built on Docker container – Data Base**  
+     
+* **Express \+ zod – back end** 
+
+	Used express for our server and zod for schema validation and error handling   
+**Tools** 
+
+* **Figma**   
+* **Postman**  
+* **Docker**   
+* **Github projects**
+
+## 
+
+# Development Environment: Prabhas
+
+Provide detailed information on the programming language(s) and their versions, libraries, frameworks, and tools used. Include environment configuration details such as IDEs, operating systems, database versions, or any other dependencies required to run and test the system successfully.
+
+The project is a full-stack TypeScript monorepo using npm workspaces. The frontend runs on React 18.3.1 with React Router DOM 7.9.5, built with Vite 5.4.0 and TypeScript 5.6.3, targeting ES2022. It uses Framer Motion 12.23.24 for animations, Axios 1.13.2 for HTTP, and React Testing Library 14.1.2 with Vitest 1.0.4 (jsdom 23.0.0) and MSW 2.0.8 for API mocking. The backend uses Express 5.1.0, TypeScript 5.9.3 (ES2022, Node16 modules), tsx 4.20.6 for development, and Zod 4.1.12 for validation. Authentication uses jsonwebtoken 9.0.2 and bcrypt 5.1.1. The server runs on port 5000 with CORS for http://localhost:5173. Data is stored in-memory (Map-based repositories); the client uses localStorage for session persistence. The workspace uses concurrently 9.2.1 to run client and server, ESLint 9.36.0 with TypeScript ESLint 8.44.0 for linting, and @types/node 24.8.1. No external database; the system works on Windows 10 (and other platforms), Node.js (recommended LTS), and any IDE (VSCode recommended). Environment variables are managed with dotenv 17.2.3, and the project uses ES modules throughout.
+
+# Testing Summary: 
+
+Explain how the implemented features were tested. Include details on the testing framework (e.g., pytest, JUnit, Mocha, etc.), the type of tests conducted (unit, integration, or system), and how each test case traces back to one or more requirements. Summarize the achieved code coverage and describe how it demonstrates sufficient testing of all implemented requirements.
+
+# Challenges Faced:
+
+Discuss major technical or teamwork challenges encountered during implementation and testing, and how they were resolved.
+
+# Design Assumptions & Revisions: Luis
+
+ Identify which initial design assumptions held true and which required revision during development.
+
+We first assumed that we had to store the UI code for the portfolio in some sort of database and interact with it when we needed to export a portfolio for a user. The dynamic data would stay in our main db that our server interacts with, and the static data/code that was needed to build a portfolio would stay in a separated area. This ultimately did not hold true because we decided on making the static code required to give a portfolio be the same code we use to build our website. We replicate it and then add the dynamic data on top of it. 
+
+One of our assumptions that held true was to have the dynamic data ( Experience entry, template choice) separated with the main orchestration of the portfolio. 
+
+# Impact of Automated Testing:
+
+ Explain how automated testing improved the quality, reliability, or maintainability of your system.
+
+The automated testing helped improve the reliability of the system by finding edge cases and functionality issues without the need for bias from the coders. In general these tests were able to find issues that could long term break the maintainability and quality of the system, and fixing the bugs early allows our project to stay consistent for users and for future release changes.
+
+# Screenshots & Evidence: 
+
+Include screenshots, logs, or test reports that demonstrate successful feature execution and passing test results.
 
 
 
