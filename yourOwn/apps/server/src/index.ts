@@ -60,3 +60,5 @@ app.use((err: any, _req: any, res: any, _next: any) => {
 app.listen(PORT, () => {
   console.log(`API listening on http://localhost:${PORT}`)
 })
+
+export default app;

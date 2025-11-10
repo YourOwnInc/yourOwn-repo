@@ -9,7 +9,11 @@
     "rootDir": "src",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+     "types": ["node", "vitest"],
   },
-  "include": ["src"]
+  "include": [
+
+    "src",
+]
 }
