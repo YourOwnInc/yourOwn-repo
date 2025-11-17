@@ -14,31 +14,32 @@ export type CreateExperienceInput = Owner & {
 };
 
 export async function createExperience(input: CreateExperienceInput) {
-  const data = {
-    userId: input.userId ?? null,
-    sessionId: input.sessionId ?? null,
+  const data: any = {
     title: input.title,
     summary: input.summary ?? null,
     start: input.start ?? null,
     end: input.end ?? null,
     kind: (input.kind as any) ?? null,
   };
+
+  if (input.userId) {
+    data.userId = input.userId;
+  }
+  if (input.sessionId) {
+    data.session = { connect: { id: input.sessionId } };
+  }
+
   return prisma.experience.create({ data });
 }
 
 export async function listExperiences(filter: Owner & { kind?: string | null }) {
   return prisma.experience.findMany({
-    where: {
-      ...ofOwner(filter),
-      ...(filter.kind ? { kind: filter.kind as any } : {}),
-    },
     orderBy: { createdAt: "desc" },
   });
 }
 
 export async function getExperienceOwned(id: string, owner: Owner) {
   return prisma.experience.findFirst({
-    where: { id, ...ofOwner(owner) },
   });
 }
 
@@ -69,17 +70,15 @@ export async function updateExperienceOwned(
   }).catch(async () => {
     // Fallback using updateMany (returns count) then read
     const { count } = await prisma.experience.updateMany({
-      where: { id, ...ofOwner(owner) },
       data,
     });
     if (count === 0) return null;
-    return prisma.experience.findFirst({ where: { id, ...ofOwner(owner) } });
+    return prisma.experience.findFirst();
   });
 }
 
 export async function deleteExperienceOwned(id: string, owner: Owner) {
   const { count } = await prisma.experience.deleteMany({
-    where: { id, ...ofOwner(owner) },
   });
   return count > 0;
 }
