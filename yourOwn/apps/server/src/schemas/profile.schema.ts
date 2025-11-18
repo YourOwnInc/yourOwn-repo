@@ -9,6 +9,6 @@ export const LinkedSchema = z.object( {
 })
 
 export const profileSchema = z.object({
-    //TODO: add field like name, profession etc 
+    //TODO: add schema and fields of a profile, will act as the "userobject" while theres no user account 
 }) 
 

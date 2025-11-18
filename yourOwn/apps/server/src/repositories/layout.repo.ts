@@ -37,55 +37,77 @@ export async function findOrCreateLayoutForSession(sessionId: string) {
   return layout;
 }
 
-/**
- * Replace all layout items for a given layout with the provided list.
- */
-export async function replaceLayoutItems(
-  layoutId: string,
-  items: layoutItemInput[]
-) {
-  // 1. Clear all existing items for this layout
-  await prisma.layoutItem.deleteMany({
-    where: { layoutId },
-  });
 
-  // 2. If there are no new items, we’re done
-  if (!items.length) return;
+// Creates an item and associates it with a layout with given id 
+export async function createItem(
+  experienceId: string,
+  sessionId: string,
+  position: number,
+  patternId: string,
+){
+  // checks for exisiting layout 
+  let layout = await prisma.layout.findUnique({
+    where: {
+      id: sessionId
+    }
+  })
+  if(!layout) {
 
-  // 3. Insert the new items
-  await prisma.layoutItem.createMany({
-    // TS can be picky here, so we cast to any to match Prisma's expected shape
-    data: items.map((item) => ({
-      layoutId,
-      experienceId: item.experienceId,
-      position: item.position,
-      patternId: item.patternId ?? null,
-      patternProps: (item.patternProps ?? null) as any,
-    })) as any,
-    skipDuplicates: true,
-  });
-}
+  }
 
-export async function createLayoutItemForSession(
-  input: CreateLayoutInput
-) {
-  const { sessionId, experienceId, position, patternId} = input;
+  // get experience 
+  let exp = await prisma.experience.findUnique({
+    where: {
+      id: experienceId
+    }
+  })
 
-  const layout = await findOrCreateLayoutForSession(sessionId)
+  if(!exp) {
+    throw new Error("experience not found");
+  }
 
-   // Just CREATE — do not update existing items or move anything.
-  // If a (layoutId, experienceId) already exists, Prisma will throw because of @@unique([layoutId, experienceId]).
-  const item = await prisma.layoutItem.create({
+  // shoudl i make a layoutItem then add it to the items array in layout?
+  let updatedLayout = await prisma.layout.update({
+    where: {
+      id: sessionId
+    },
     data: {
-      layoutId: layout.id,
-      experienceId,
-      position,
-      patternId: patternId ?? null,
+      items: {
+        create: {
+             experienceId,
+             patternId,
+             position
+        }
+      }
     },
     include: {
-      experience: true,
-    },
+      items: true
+    }
   });
 
-  return item;
+  return updatedLayout;
+}
+
+
+export async function fetchLayoutBySessionId(sessionId: string) {
+  let layout = await prisma.layout.findUnique({
+    where: {
+      sessionId
+    }
+  })
+  return layout;
+}
+
+// get layout items by layoutId 
+
+export async function fetchItems(layoutId: string ) {
+  let items = await prisma.layout.findUnique({
+   where: {
+    id: layoutId
+   },
+   select: {
+    items: true
+   }
+  })
+  return items;
 }

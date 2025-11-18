@@ -6,7 +6,7 @@ import {
 } from "../domain/layoutModel";
 import * as layoutRepo from "../repositories/layout.repo";
 import * as sessionRepo from "../repositories/session.repo";
-import * as experienceRepo from "../repositories/experience-entry.repo";
+import * as experienceRepo from "../";
 
 type OwnerWhere = { userId: string };
 
@@ -30,9 +30,32 @@ export async function getSessionLayout(
   return layout;
 }
 
+export async function getLayoutItems(
+  layoutId: string
+){
+  const items = await layoutRepo.fetchItems(layoutId)
+
+  if(!items) {
+    const err = new Error("BAD_CREDENTIALS")
+    throw err;
+  }
+
+  return items;
+}
+
+export async function createLayout(sessionId: string ) {
+  const layout = await layoutRepo.findOrCreateLayoutForSession(sessionId)
+
+  if(!layout) {
+    const err = new Error("Error creating layout for session")
+    throw err
+  }
+  return layout
+}
+
 /**
  * Replace all layout items for a session's layout.
- */
+
 export async function updateSessionLayout(
   sessionId: string,
   input: UpdateLayoutInput,
@@ -65,3 +88,5 @@ export async function updateSessionLayout(
   // 5. Return updated layout DTO
   return getSessionLayout(sessionId, owner);
 }
+
+**/

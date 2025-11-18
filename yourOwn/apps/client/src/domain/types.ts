@@ -19,7 +19,7 @@ export type Slot = {
 }
 
 export type Placement = {
-    slotId: SlotId;
+    position: SlotId;
     experienceId: ExperienceId;
     patternId: PatternId;
 }
