@@ -9,6 +9,15 @@ export const LinkedSchema = z.object( {
 })
 
 export const profileSchema = z.object({
-    //TODO: add schema and fields of a profile, will act as the "userobject" while theres no user account 
+    id: z.string().uuid().optional(),
+    sessionId: z.string().uuid().optional(),
+    userId: z.string().uuid().optional(),
+    displayName: z.string().trim().min(1).max(100).optional(),
+    headline: z.string().trim().max(160).optional(),
+    location: z.string().trim().max(120).optional(),
+    bio: z.string().trim().max(500).optional(),
+    avatarUrl: z.string().url().optional(),
+    skills: z.array(z.string().trim().min(1)).default([]),
+    links: LinkedSchema.default({}),
 }) 
 
