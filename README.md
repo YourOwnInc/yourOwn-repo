@@ -95,37 +95,37 @@ We will categorize requirements into the following groups:
 - Watermark stays in a discreet area of the portfolio to advertise YourOwn
 - Users can pay to remove the watermark
 
-### FR-0 Upload Media
+### FR-06 Upload Media
 **Goal:** Add project images and profile photos  
 **Acceptance:**
 - Users can upload images from their device
 - Large or unsupported file show a friendly error
 
-### FR-0 Upload links
+### FR-07 Upload links
 **Goal:** Users are allowed to upload links of their socials and any other external sites  
 **Acceptance:**
 - Links are embedded in assets for better UI
 - Users can CRUD links after portfolio is done
 - Their local dev allows them to do that
 
-### FR-05 Choose a template for experience
+### FR-08 Choose a template for experience
 **Goal:** The system shall allow user to pick 1-2 templates  
 **Acceptance:**
 - Template picker shows screenshots
 - Selected template updates the preview
 
-### FR-06 Live Preview
+### FR-09 Live Preview
 **Goal:** The system shall show how portfolio will look like without delivering full code  
 **Acceptance:**
 - Preview shows at the end of process
 - Preview shows correct content with template
 
-### FR-07 Export a ZIP
+### FR-10 Export a ZIP
 **Goal:** The system shall allow user to download a working website (HTML/CSS/Assets) as a zip  
 **Acceptance:**
 - “Export” Creates a downloadable zip
 
-### FR-08 Automate publishing template in AWS
+### FR-11 Automate publishing template in AWS
 **Goal:** The system shall have a tool to setup a users aws account to publish portfolio  
 **Acceptance:**
 - Tool should be optional for users
