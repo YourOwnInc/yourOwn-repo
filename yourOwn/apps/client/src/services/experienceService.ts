@@ -1,23 +1,36 @@
 import { ExperienceDTO, SessionId } from "../domain/types";
 const BASE = "http://localhost:5000/api";
-
-export async function createExperience(
-  sessionId: SessionId,
-  payload: Omit<ExperienceDTO, "id" | "sessionId">
-): Promise<ExperienceDTO> {
-  const res = await fetch(`${BASE}session/:id/experiences`, {
+export async function createExperience(sessionId: string, payload: any) {
+  const res = await fetch(`${BASE}/experiences`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", "X-Session-Id": sessionId },
+    headers: {
+      "Content-Type": "application/json",
+      "X-Session-Id": sessionId,
+    },
     body: JSON.stringify(payload),
   });
-  if (!res.ok) throw new Error("createExperience failed");
-  return res.json();
+
+  // surface server JSON errors so you don't think it's a CORS issue
+  let data: any = null;
+  const text = await res.text();
+  try { data = text ? JSON.parse(text) : null; } catch { /* leave as text */ }
+
+  if (!res.ok) {
+    const msg =
+      data?.error?.message ||
+      (Array.isArray(data?.error?.details) ? JSON.stringify(data.error.details) : text) ||
+      `HTTP ${res.status}`;
+    throw new Error(`createExperience failed: ${msg}`);
+  }
+  return data;
 }
 
 
 
 export async function listExperiences(sessionId: SessionId): Promise<ExperienceDTO[]> {
-  const res = await fetch(`${BASE}/session/${sessionId}/experiences`);
+  const res = await fetch(`${BASE}/experiences`, {
+    method: "GET"
+  });
   if (!res.ok) throw new Error("listExperiences failed");
   return res.json();
 }

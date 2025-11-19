@@ -1,76 +1,58 @@
 // src/services/experience-entry.service.ts
-// Services now call the new Prisma-backed Experience repo functions.
+import * as repo from "../repositories/experience-entry.repo";
 
-import type { ExperienceKind } from "@prisma/client";
-import * as ExperienceRepo from "../repositories/experience-entry.repo";
+/**
+ * Exactly one of userId or sessionId must be provided by the caller (controller).
+ */
+export type Owner = { userId?: string | null; sessionId?: string | null };
 
-// If you had request-body types before, keep them here (they’re just DTOs).
-export type AddExperienceEntryBody = {
-  sessionId?: string;
-  userId?: string;
+function ensureOwner(o: Owner) {
+  const hasUser = !!o.userId;
+  const hasSess = !!o.sessionId;
+  if (hasUser === hasSess) {
+    throw new Error("Exactly one of userId or sessionId must be set.");
+  }
+}
+
+export type CreateExperienceInput = Owner & {
   title: string;
   summary?: string | null;
-  start?: string | null; // ISO strings are OK; convert to Date in repo if you prefer
-  end?: string | null;
-  kind?: ExperienceKind;
-  tags?: string[];
+  start?: Date | null;
+  end?: Date | null;
+  kind?: string | null; // map enums earlier; keep service generic
 };
 
-export type SaveExperienceEntryBody = Partial<{
-  title: string;
-  summary: string | null ;
-  start: string | null;
-  end: string | null;
-  kind: ExperienceKind;
-  tags: string[];
-}>;
+export async function createExperience(input: CreateExperienceInput) {
+  ensureOwner(input);
+  return repo.createExperience(input);
+}
 
-export function makeExperienceEntryService() {
-  return {
-    // Create the new experience entry  (old: entries.create)
-    startExperienceEntry: async (input: AddExperienceEntryBody) => {
-      return ExperienceRepo.createExperience({
-        sessionId: input.sessionId,
-        userId: input.userId,
-        title: input.title,
-        summary: input.summary ?? undefined,
-        start: input.start ? new Date(input.start) : undefined,
-        end: input.end ? new Date(input.end) : undefined,
-        kind: input.kind ?? "OTHER",
-        tags: input.tags ?? [],
-      });
-    },
+export async function listExperiences(filter: Owner & { kind?: string | null }) {
+  ensureOwner(filter);
+  return repo.listExperiences(filter);
+}
 
-    // Get a single entry by id  (old: entries.findById)
-    getExperienceEntry: async (id: string) => {
-      return ExperienceRepo.getExperience(id);
-    },
+export async function getExperienceOwned(id: string, owner: Owner) {
+  ensureOwner(owner);
+  return repo.getExperienceOwned(id, owner);
+}
 
-    // Update an entry by id  (old: entries.update)
-    saveExperienceEntry: async (id: string, patch: SaveExperienceEntryBody) => {
-      return ExperienceRepo.updateExperience(id, {
-        title: patch.title,
-        summary: patch.summary ?? undefined,
-        start: patch.start ? new Date(patch.start) : undefined,
-        end: patch.end ? new Date(patch.end) : undefined,
-        kind: patch.kind,
-        tags: patch.tags,
-      });
-    },
+export async function updateExperienceOwned(
+  id: string,
+  owner: Owner,
+  patch: {
+    title?: string;
+    summary?: string | null;
+    start?: Date | null; // undefined = untouched; null = clear
+    end?: Date | null;
+    kind?: string | null;
+  }
+) {
+  ensureOwner(owner);
+  return repo.updateExperienceOwned(id, owner, patch);
+}
 
-    // List entries for a session  (old: entries.findBySession)
-    getEntriesBySession: async (sessionId: string) => {
-      return ExperienceRepo.listExperiences({ sessionId });
-    },
-
-    // Optionally list entries for a user (handy after claim)
-    getEntriesByUser: async (userId: string) => {
-      return ExperienceRepo.listExperiences({ userId });
-    },
-
-    // Delete an entry  (old: entries.delete)
-    delete: async (id: string) => {
-      return ExperienceRepo.deleteExperience(id);
-    },
-  };
+export async function deleteExperienceOwned(id: string, owner: Owner) {
+  ensureOwner(owner);
+  return repo.deleteExperienceOwned(id, owner);
 }

@@ -1,12 +1,25 @@
-import { prisma } from '../lib/prisma';
+import { prisma } from "../lib/prisma";
 
-export async function createSession() {
-  return prisma.session.create({ data: {} });
+export interface SessionRow {
+  id: string;
+  createdAt: Date;
+  claimedByUserId?: string | null;
+  metadata?: unknown | null;
 }
 
-export async function claimSession(sessionId: string, userId: string) {
-  return prisma.session.update({
-    where: { id: sessionId },
-    data: { claimedByUserId: userId },
+
+/* Creates an empty row and returns the UUID created at endpoint*/
+export async function createSession(){
+return prisma.session.create({ data: {}})
+}
+
+export async function getSession(id: string): Promise<SessionRow | null> {
+  return prisma.session.findUnique({ where: { id } });
+}
+
+export async function claimSession(opts: { sessionId: string; userId: string }): Promise<void> {
+  await prisma.session.update({
+    where: { id: opts.sessionId },
+    data: { claimedByUserId: opts.userId },
   });
 }

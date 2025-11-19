@@ -8,14 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ---------- Enums ----------
-enum ExperienceKind {
-  WORK
-  PROJECT
-  EDUCATION
-  AWARD
-  OTHER
-}
+
 
 // ---------- Models ----------
 model User {
@@ -25,24 +18,39 @@ model User {
 
   // Relationships
   sessions  Session[]
-  experiences Experience[]
-  layouts   Layout[]
+  profile    Profile?
 
   // For future auth fields (email, provider IDs, etc.)
   // email     String?   @unique
 }
 
-model Session {
-  id        String     @id @default(uuid()) @db.Uuid
-  createdAt DateTime   @default(now())
-  claimedByUserId String? @db.Uuid
-  claimedBy   User?    @relation(fields: [claimedByUserId], references: [id], onDelete: SetNull)
 
-  // Relationships
-  experiences Experience[]
-  layouts     Layout[]
+model Profile {
+  id         String   @id @default(uuid()) @db.Uuid
+ createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@index([claimedByUserId])
+  // Owner (exactly one must be set)
+  sessionId String?  @db.Uuid
+  userId    String?  @db.Uuid
+
+  session   Session? @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Portfolio header content
+  displayName String?         // e.g., "Luis Alarcón"
+  headline    String?         // e.g., "Product-minded SWE"
+  location    String?
+  bio         String?         // 2–3 sentence summary
+  avatarUrl   String?
+
+  // Keep simple as arrays/JSON for MVP
+  skills      String[] @db.Text
+  links       Json      // {email, github, linkedin, website, twitter, ...}
+
+  // uniqueness: one profile per owner
+  @@unique([sessionId])
+  @@unique([userId])
 }
 
 model Experience {
@@ -50,46 +58,71 @@ model Experience {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 
-  sessionId String?    @db.Uuid
-  userId    String?    @db.Uuid
+  // MVP: tie experiences only to sessions
+  sessionId String     @db.Uuid
+  session   Session    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
-  session   Session?   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  user      User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  layoutItems LayoutItem[]
 
   title     String
   summary   String?
   start     DateTime?
   end       DateTime?
-  kind      ExperienceKind @default(OTHER)
-
-  // Postgres supports scalar lists; @db.Text specifies element type
-  tags      String[]   @db.Text
+  kind      String   @db.Text @default("other")
 
   @@index([sessionId])
-  @@index([userId])
   @@index([kind])
   @@index([title])
 }
 
-model Layout {
+
+
+model Session {
   id        String     @id @default(uuid()) @db.Uuid
   createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  claimedByUserId String? @db.Uuid
+  claimedBy   User?    @relation(fields: [claimedByUserId], references: [id], onDelete: SetNull)
 
-  sessionId String?    @db.Uuid
-  userId    String?    @db.Uuid
+  experiences Experience[]
+  layout      Layout?   // <- singular
 
-  session   Session?   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  user      User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  profile Profile?
 
-  templateId String
-  theme      String?
+  @@index([claimedByUserId])
+}
 
-  // JSON payloads for flexible MVP structures
-  slots       Json      @default("{}")
-  placements  Json      @default("{}")
+model Layout {
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@index([sessionId])
-  @@index([userId])
+  sessionId String   @db.Uuid
+  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  templateId String?
+
+  items LayoutItem[]
+
+  @@unique([sessionId])
   @@index([templateId])
 }
+
+model LayoutItem {
+  id           String      @id @default(uuid()) @db.Uuid
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  layoutId     String      @db.Uuid
+  layout       Layout      @relation(fields: [layoutId], references: [id], onDelete: Cascade)
+
+  experienceId String      @db.Uuid
+  experience   Experience  @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+
+  position     Int
+  patternId    String?
+  patternProps Json?
+
+  @@unique([layoutId, experienceId])
+  @@index([layoutId, position])
+}
+

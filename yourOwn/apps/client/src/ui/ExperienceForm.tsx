@@ -24,7 +24,14 @@ export default function ExperienceForm({
     <form
       onSubmit={async (e) => {
         e.preventDefault();
-        await onSubmit({ title, summary, start, end, kind});
+
+
+        await onSubmit({ 
+          title, 
+          summary, 
+          start: start ? new Date(start).toISOString() : undefined  , 
+          end: end ? new Date(end).toISOString() : undefined, 
+          kind});
       }}
     >
       <div><label>Title <input value={title} onChange={(e) => setTitle(e.target.value)} required /></label></div>
