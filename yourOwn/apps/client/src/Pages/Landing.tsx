@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedText, AnimatedTextSequence } from '../components/AnimatedText';
 import { useUser } from '../contexts/UserContext';
-import PortfolioBuilder from './PortfolioBuilder';
 
-type LandingStep = 'hero' | 'welcome' | 'name' | 'bio' | 'portfolio';
+type LandingStep = 'hero' | 'welcome' | 'name' | 'bio';
 
 export default function Landing() {
-  const { user, setUser, setOnboardingComplete, onboardingComplete } = useUser();
-  const [step, setStep] = useState<LandingStep>(onboardingComplete ? 'portfolio' : 'hero');
+  const navigate = useNavigate();
+  const { user, setUser, setOnboardingComplete } = useUser();
+  const [step, setStep] = useState<LandingStep>('hero');
   const [name, setName] = useState(user?.name || '');
   const [bio, setBio] = useState(user?.bio || '');
   const [heroComplete, setHeroComplete] = useState(false);
@@ -66,15 +67,10 @@ export default function Landing() {
       });
       setOnboardingComplete(true);
       setTimeout(() => {
-        setStep('portfolio');
+        navigate('/portfoliobuilder', { replace: true });
       }, 500);
     }
   };
-
-  // If onboarding is complete, show portfolio directly
-  if (step === 'portfolio' || onboardingComplete) {
-    return <PortfolioBuilder />;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-indigo-950/20 to-zinc-950 text-white font-sans overflow-hidden">
