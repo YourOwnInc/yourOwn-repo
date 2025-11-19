@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { assignSlot, getLayout } from "../services/layoutService";
+import { assignItem, getLayout } from "../services/layoutService";
 import { createExperience, deleteExperience, listExperiences, updateExperience,  } from "../services/experienceService";
 import type { ExperienceDTO, SessionId, LayoutModel, Placement, PortfolioModel } from "./types";
 
@@ -43,10 +43,10 @@ export function usePortfolioStore(sessionId: SessionId) {
   }, [])
 
   const upsertPlacement = useCallback(async (p: Placement) => {
-    await assignSlot(sessionId, p);
+    await assignItem(sessionId, p);
     setLayout((prev) => {
       if (!prev) return prev;
-      const others = prev.placements.filter(x => x.slotId !== p.slotId);
+      const others = prev.placements.filter(x => x.position !== p.position);
       return { ...prev, placements: [...others, p] };
     });
   }, [sessionId]);
