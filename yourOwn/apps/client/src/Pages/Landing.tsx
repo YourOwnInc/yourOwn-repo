@@ -18,9 +18,9 @@ export default function Landing() {
   // Hero section texts
   const heroTexts = [
     'Welcome to YourOwn',
-    'Where creativity meets technology',
-    'Build your portfolio',
-    'Share your story',
+    'Portfolio Builder -',
+    'Build Your Experiences',
+    'Own Your Code',
   ];
 
   // Welcome section texts
@@ -73,7 +73,7 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-indigo-950/20 to-zinc-950 text-white font-sans overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-bl  from-[#F5EBCB] via-[#F9FAE3] to-[#92BFD0] text-white font-sans overflow-hidden">
       <AnimatePresence mode="wait">
         {/* Hero Section */}
         {step === 'hero' && (
@@ -88,7 +88,7 @@ export default function Landing() {
             {/* Animated background elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
               <motion.div
-                className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"
+                className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#A9CBF0] rounded-full blur-3xl"
                 animate={{
                   scale: [1, 1.2, 1],
                   opacity: [0.3, 0.5, 0.3],
@@ -133,7 +133,7 @@ export default function Landing() {
               <motion.div
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 2, repeat: Infinity }}
-                className="flex flex-col items-center gap-2 text-zinc-400"
+                className="flex flex-col items-center gap-2 text-[#A9CBF0]"
               >
                 <span className="text-sm">Scroll to continue</span>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -152,15 +152,15 @@ export default function Landing() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col items-center justify-center min-h-screen text-center px-6"
+            className="flex flex-col items-center justify-center min-h-screen text-center px-6 "
           >
-            <div className="max-w-2xl space-y-8">
+            <div className="max-w-2xl space-y-8 ">
               <AnimatedTextSequence
                 texts={welcomeTexts}
                 delayBetween={0.3}
                 duration={0.6}
                 onComplete={() => setWelcomeComplete(true)}
-                className="space-y-4"
+                className="space-y-4 "
               />
             </div>
           </motion.div>
@@ -178,7 +178,7 @@ export default function Landing() {
           >
             <div className="max-w-2xl w-full space-y-6">
               <AnimatedText delay={0} duration={0.6}>
-                <h2 className="text-5xl font-semibold mb-4 bg-gradient-to-r from-white to-indigo-300 bg-clip-text text-transparent">
+                <h2 className="text-5xl font-semibold mb-4 bg-[#A9CBF0] bg-clip-text text-transparent">
                   What's your name?
                 </h2>
               </AnimatedText>
@@ -199,7 +199,7 @@ export default function Landing() {
                   }}
                   placeholder="Enter your name"
                   autoFocus
-                  className="w-full max-w-md mx-auto px-6 py-4 rounded-xl bg-zinc-800/50 backdrop-blur-sm text-white border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg transition-all"
+                  className="w-full max-w-md mx-auto px-6 py-4 rounded-xl bg-zinc-800/50 backdrop-blur-sm text-white border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-[#FBC1C1] focus:border-transparent text-lg transition-all"
                 />
               </AnimatedText>
               <AnimatedText delay={0.9} duration={0.6}>
@@ -208,7 +208,7 @@ export default function Landing() {
                   disabled={!name.trim()}
                   className={`px-8 py-3 rounded-xl transition-all text-lg font-medium ${
                     name.trim()
-                      ? 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg shadow-indigo-500/50'
+                      ? 'bg-[#F5EBCB] hover:bg-[#FBC1C1] text-white shadow-lg shadow-[#FBC1C1]'
                       : 'bg-zinc-700 cursor-not-allowed text-zinc-400'
                   }`}
                 >

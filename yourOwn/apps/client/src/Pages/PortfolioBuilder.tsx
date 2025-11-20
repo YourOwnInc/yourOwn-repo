@@ -102,7 +102,7 @@ export default function PortfolioBuilder() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 text-white p-8" id="portfolio-export">
+    <div className="min-h-screen bg-gradient-to-br from-[#0d0d0d] via-zinc-900 to-[#0d0d0d] text-white p-8" id="portfolio-export">
       {/* Header with user data - auto-unblurred */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -113,7 +113,7 @@ export default function PortfolioBuilder() {
         <ProgressiveBlur blurLevel={userDataUnblurred ? 0 : 1} className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-white via-indigo-200 to-indigo-400 bg-clip-text text-transparent">
+              <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-[#F5EBCB] via-[#E8DE99] to-[#92BFD0] bg-clip-text text-transparent">
                 {user?.name ? `${user.name}'s Portfolio` : 'My Portfolio'}
               </h1>
               {user?.bio && (
@@ -144,7 +144,7 @@ export default function PortfolioBuilder() {
         <BlurOverlay isBlurred={isBlurred}>
           <button
             onClick={() => setShowAddForm(!showAddForm)}
-            className="px-6 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-medium transition-all flex items-center gap-2"
+            className="px-6 py-3 rounded-xl bg-[#0d0d0d] hover:bg-[#4D3131] text-white font-medium transition-all flex items-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -162,7 +162,7 @@ export default function PortfolioBuilder() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="mb-6 p-6 rounded-xl bg-zinc-800/50 backdrop-blur-sm border border-zinc-700"
+            className="mb-6 p-6 rounded-xl bg-zinc-800/50 backdrop-blur-sm border border-[#4D3131]"
           >
             <h3 className="text-xl font-semibold mb-4">New Experience Entry</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -171,35 +171,35 @@ export default function PortfolioBuilder() {
                 placeholder="Title"
                 value={newEntry.title}
                 onChange={(e) => setNewEntry({ ...newEntry, title: e.target.value })}
-                className="px-4 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-4 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-[#4D3131]"
               />
               <input
                 type="text"
                 placeholder="Type (e.g., project, internship)"
                 value={newEntry.type}
                 onChange={(e) => setNewEntry({ ...newEntry, type: e.target.value })}
-                className="px-4 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-4 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-[#4D3131]"
               />
               <textarea
                 placeholder="Summary"
                 value={newEntry.summary}
                 onChange={(e) => setNewEntry({ ...newEntry, summary: e.target.value })}
                 rows={3}
-                className="px-4 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 md:col-span-2 resize-none"
+                className="px-4 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-[#4D3131] md:col-span-2 resize-none"
               />
               <input
                 type="text"
                 placeholder="Start date (optional)"
                 value={newEntry.start}
                 onChange={(e) => setNewEntry({ ...newEntry, start: e.target.value })}
-                className="px-4 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-4 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-[#4D3131]"
               />
               <input
                 type="text"
                 placeholder="End date (optional)"
                 value={newEntry.end}
                 onChange={(e) => setNewEntry({ ...newEntry, end: e.target.value })}
-                className="px-4 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-4 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-[#4D3131]"
               />
             </div>
             
@@ -255,7 +255,7 @@ export default function PortfolioBuilder() {
                 disabled={!newEntry.title.trim() || !newEntry.summary.trim()}
                 className={`px-6 py-2 rounded-lg font-medium transition-all ${
                   newEntry.title.trim() && newEntry.summary.trim()
-                    ? 'bg-indigo-500 hover:bg-indigo-600 text-white'
+                    ? 'bg-[#4D3131] hover:bg-[#301F1F] text-white'
                     : 'bg-zinc-700 cursor-not-allowed text-zinc-400'
                 }`}
               >

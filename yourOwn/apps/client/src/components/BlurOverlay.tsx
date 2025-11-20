@@ -52,7 +52,7 @@ interface ProgressiveBlurProps {
 export function ProgressiveBlur({
   children,
   blurLevel,
-  maxBlur = 8,
+  maxBlur = 30,
   transitionDuration = 0.6,
   className = '',
 }: ProgressiveBlurProps) {

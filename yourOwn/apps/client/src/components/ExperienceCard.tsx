@@ -87,7 +87,7 @@ export default function ExperienceCard({
           h-full p-6 rounded-xl bg-zinc-800/50 backdrop-blur-sm border border-zinc-700
           cursor-grab active:cursor-grabbing
           transition-all duration-300
-          ${isHovered ? 'border-indigo-500 shadow-lg shadow-indigo-500/20' : ''}
+          ${isHovered ? 'border-[#301F1F] shadow-lg shadow-[#301F1F]' : ''}
           ${isDragging ? 'opacity-50' : ''}
         `}
       >
@@ -96,7 +96,7 @@ export default function ExperienceCard({
           <div className="flex-1">
             <h3 className="text-xl font-semibold text-white mb-2">{entry.title}</h3>
             {entry.type && (
-              <span className="text-xs px-2 py-1 rounded-full bg-indigo-500/20 text-indigo-300">
+              <span className="text-xs px-2 py-1 rounded-full bg-[#301F1F] text-indigo-300">
                 {entry.type}
               </span>
             )}
@@ -211,7 +211,7 @@ export default function ExperienceCard({
               }}
             >
               <div className="w-full h-full flex items-end justify-end">
-                <div className="w-3 h-3 border-r-2 border-b-2 border-indigo-400 rounded-br-lg" />
+                <div className="w-3 h-3 border-r-2 border-b-2 border-[#301F1F] rounded-br-lg" />
               </div>
             </motion.div>
           </div>

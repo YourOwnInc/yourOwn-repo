@@ -32,12 +32,15 @@ export default function ExportButton({ className = '' }: ExportButtonProps) {
         })),
       };
 
-      const response = await fetch('http://localhost:5000/api/export/portfolio', {
+  
+      const response = await fetch('http://localhost:5000/api/export/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(exportData),
+        body: JSON.stringify({
+          html: exportData
+        }),
       });
 
       if (!response.ok) {
@@ -72,10 +75,10 @@ export default function ExportButton({ className = '' }: ExportButtonProps) {
         className={`
           px-6 py-3 rounded-xl font-medium transition-all flex items-center gap-2
           ${isExporting
-            ? 'bg-indigo-600 cursor-wait'
+            ? 'bg-[#EFD2A4] cursor-wait'
             : portfolioEntries.length === 0
             ? 'bg-zinc-700 cursor-not-allowed opacity-50'
-            : 'bg-indigo-500 hover:bg-indigo-600'
+            : 'bg-[#EFD2A4] hover:bg-[#4D3131]'
           }
           text-white
         `}

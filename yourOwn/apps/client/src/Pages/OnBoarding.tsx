@@ -115,7 +115,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                   disabled={!name.trim()}
                   className={`px-8 py-3 rounded-xl transition-all text-lg font-medium ${
                     name.trim()
-                      ? 'bg-indigo-500 hover:bg-indigo-600 text-white'
+                      ? 'bg-[#A9CBF0] hover:bg-indigo-600 text-white'
                       : 'bg-zinc-700 cursor-not-allowed text-zinc-400'
                   }`}
                 >
@@ -136,12 +136,12 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
               className="space-y-6"
             >
               <AnimatedText delay={0} duration={0.6}>
-                <h2 className="text-4xl font-semibold mb-2">
-                  Tell us about yourself, {name}
+                <h2 className="text-4xl font-semibold mb-2 bg-[#A9CBF0]">
+                  Tell us about yourselffffff, {name}
                 </h2>
               </AnimatedText>
               <AnimatedText delay={0.2} duration={0.6}>
-                <p className="text-zinc-400 text-lg mb-4">
+                <p className="text-[#A9CBF0] text-lg mb-4">
                   Share a paragraph about yourself in your respective field
                 </p>
               </AnimatedText>
@@ -161,7 +161,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                   disabled={!bio.trim()}
                   className={`px-8 py-3 rounded-xl transition-all text-lg font-medium ${
                     bio.trim()
-                      ? 'bg-indigo-500 hover:bg-indigo-600 text-white'
+                      ? 'bg-[#F5EBCB] hover:bg-[#FBC1C1] text-white shadow-lg shadow-[#FBC1C1]'
                       : 'bg-zinc-700 cursor-not-allowed text-zinc-400'
                   }`}
                 >
