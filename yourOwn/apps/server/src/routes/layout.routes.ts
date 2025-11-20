@@ -5,7 +5,7 @@ import * as ctrl from "../controller/layout.controller";
 
 const r = Router();
 
-r.get("/layout", resolveCtx, ctrl.getLayout);
-r.put("/layout/assign", resolveCtx, ctrl.assign);
+r.get("/", resolveCtx, ctrl.getLayout);
+r.put("/assign", resolveCtx, ctrl.assign);
 
 export default r;

@@ -12,13 +12,11 @@ r.post('/seed', async (_req, res, next) => {
       title: 'First Project',
       summary: 'Built a thing for the MVP',
       kind: 'PROJECT',
-      tags: ['typescript', 'react', 'express'],
     });
     await createExperience({
       sessionId: session.id,
       title: 'CS Course',
       kind: 'EDUCATION',
-      tags: ['university'],
     });
 
     const experiences = await listExperiences({ sessionId: session.id });

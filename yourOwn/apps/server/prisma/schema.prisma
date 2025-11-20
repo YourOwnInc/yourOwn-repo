@@ -18,29 +18,12 @@ model User {
 
   // Relationships
   sessions  Session[]
-  experiences Experience[]
-  layouts   Layout[]
-
   profile    Profile?
 
   // For future auth fields (email, provider IDs, etc.)
   // email     String?   @unique
 }
 
-model Session {
-  id        String     @id @default(uuid()) @db.Uuid
-  createdAt DateTime   @default(now())
-  claimedByUserId String? @db.Uuid
-  claimedBy   User?    @relation(fields: [claimedByUserId], references: [id], onDelete: SetNull)
-
-  // Relationships
-  experiences Experience[]
-  layouts     Layout[]
-
-  profile Profile?
-
-  @@index([claimedByUserId])
-}
 
 model Profile {
   id         String   @id @default(uuid()) @db.Uuid
@@ -75,44 +58,71 @@ model Experience {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 
-  sessionId String?    @db.Uuid
-  userId    String?    @db.Uuid
+  // MVP: tie experiences only to sessions
+  sessionId String     @db.Uuid
+  session   Session    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
-  session   Session?   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  user      User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  layoutItems LayoutItem[]
 
   title     String
   summary   String?
   start     DateTime?
   end       DateTime?
   kind      String   @db.Text @default("other")
- 
 
   @@index([sessionId])
-  @@index([userId])
   @@index([kind])
   @@index([title])
 }
 
-model Layout {
+
+
+model Session {
   id        String     @id @default(uuid()) @db.Uuid
   createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  claimedByUserId String? @db.Uuid
+  claimedBy   User?    @relation(fields: [claimedByUserId], references: [id], onDelete: SetNull)
 
-  sessionId String?    @db.Uuid
-  userId    String?    @db.Uuid
+  experiences Experience[]
+  layout      Layout?   // <- singular
 
-  session   Session?   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  user      User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  profile Profile?
 
-  templateId String
-  theme      String?
+  @@index([claimedByUserId])
+}
 
-  // JSON payloads for flexible MVP structures
-  slots       Json      @default("{}")
-  placements  Json      @default("{}")
+model Layout {
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@index([sessionId])
-  @@index([userId])
+  sessionId String   @db.Uuid
+  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  templateId String?
+
+  items LayoutItem[]
+
+  @@unique([sessionId])
   @@index([templateId])
 }
+
+model LayoutItem {
+  id           String      @id @default(uuid()) @db.Uuid
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  layoutId     String      @db.Uuid
+  layout       Layout      @relation(fields: [layoutId], references: [id], onDelete: Cascade)
+
+  experienceId String      @db.Uuid
+  experience   Experience  @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+
+  position     Int
+  patternId    String?
+  patternProps Json?
+
+  @@unique([layoutId, experienceId])
+  @@index([layoutId, position])
+}
+

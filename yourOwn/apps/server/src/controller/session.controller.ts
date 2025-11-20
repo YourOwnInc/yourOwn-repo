@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 import * as svc from "../services/session.service";
+import * as layoutService from "../services/layout.services"
 
 const StartSessionBody = z.object({
   metadata: z.record(z.string(), z.unknown()).optional().default({}),
@@ -13,8 +14,15 @@ export async function startSession(req: Request, res: Response, next: NextFuncti
   try {
     
     const session = await svc.startSession();
+    if(!session) throw new Error("could not create session");
+
+    
+    // create a layout with the assoicated sessionId 
+    let sessionId = session.id;
+    const newLayout = await layoutService.createLayout(sessionId);
+
     // return the generated UUID to the client
-    res.status(201).json(session);
+    res.status(201).json({sessionId, newLayout});
   } catch (err) {
     next(err);
   }
