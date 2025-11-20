@@ -6,7 +6,7 @@ const router = Router();
 // Where we will import controller functions for user routes
 // follow this pattern for rest of objects 
 router.post("/register", UC.register);
-router.post("/login", UC.login);
-router.get("/me",  UC.me);
+//router.post("/login", UC.login);
+//router.get("/me",  UC.me);
 
 export default router;

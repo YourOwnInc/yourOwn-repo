@@ -17,6 +17,10 @@ export async function getSession(id: string): Promise<SessionRow | null> {
   return prisma.session.findUnique({ where: { id } });
 }
 
+export async function listSessions() {
+  const list = await prisma.user.findMany();
+  return list;
+}
 export async function claimSession(opts: { sessionId: string; userId: string }): Promise<void> {
   await prisma.session.update({
     where: { id: opts.sessionId },

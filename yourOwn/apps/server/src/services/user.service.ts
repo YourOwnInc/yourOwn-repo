@@ -1,14 +1,22 @@
 import { sign } from "crypto";
 import { User } from "../domain/user";
-import { UserRepo } from "../repositories/user.repo";
+//import { UserRepo } from "../repositories/user.repo";
 import { LoginBody, RegisterBody } from "../schemas/user.schema";
 //import { hashPasword } from "../utils/hash-password";
-
+import * as repo from "../repositories/user.repo";
+import { setServers } from "dns";
 
 //import {signJwt} from 
 
+export async function register(input: RegisterBody) {
+    // create a usre 
+    const sessionId = input.sessionId
+    const user = await repo.createUser(sessionId);
+    return user;
 
-export function makeUserService(repo: UserRepo) {
+}
+/*
+export function makeUserService() {
     // return to get functions that controller will use
     return {
         async register(input: RegisterBody): Promise<{user: User; token: string }> {
@@ -17,13 +25,7 @@ export function makeUserService(repo: UserRepo) {
                 throw new Error('User already exists');
             }
             //const passwordHash = await hashPassword(input.passwordHash);
-            const newUser = await repo.create(
-                {
-                    name: input.name,
-                    email: input.email,
-                    passwordHash: input.passwordHash
-                }
-            );
+            const newUser = await repo.
 
             //const token = signJwt({ userId: newUser.id });
             return {
@@ -46,4 +48,6 @@ export function makeUserService(repo: UserRepo) {
         }
 
     }
+        */
+
 

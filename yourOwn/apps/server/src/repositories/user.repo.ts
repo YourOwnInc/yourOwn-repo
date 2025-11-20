@@ -1,31 +1,32 @@
 import { User } from "../domain/user";
 import crypto from "node:crypto";
-
+import { Prisma } from "@prisma/client";
+import { prisma } from "../lib/prisma";
 const users = new Map<string, User>();
 
+/*
 export interface UserRepo {
   create(u: Omit<User,"id"|"createdAt"|"updatedAt">): Promise<User>;
   findByEmail(email: string): Promise<User | null>;
   findById(id: string): Promise<User | null>;
 }
+  */
 
-export function makeInMemoryUserRepo(): UserRepo {
-  return {
-    async create(u) {
-      const id = crypto.randomUUID();
-      const now = new Date();
-      const user: User = { id, createdAt: now, updatedAt: now, ...u };
-      users.set(id, user);
-      return user;
-    },
-    async findByEmail(email) {
-      for (const u of users.values()) if (u.email === email) return u;
-      return null;
-    },
-    async findById(id) {
-      return users.get(id) ?? null;
-    }
-  };
+export async function createUser(sessionId: string ) {
+  // creates a user object with the session
+  const user = await prisma.user.create({
+    data: {
+      sessions: {
+        connect: [{id: sessionId}], // connect exisitng session by its id 
+      },
+      // TODO: connect profile when developed 
+
+    } 
+  })
+
+  if(!user ){
+    throw new Error(" error creating user in repo")
+  }
+  return user;
 }
-
 

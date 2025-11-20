@@ -6,6 +6,7 @@ const router = Router();
 
 router.post('/start',SC.startSession)
 router.get('/:id', SC.getSession)
+router.get('/',SC.getAllSessions)
 
 // these might be the same things
 // Might take one out. you have to have a userId to save a session.

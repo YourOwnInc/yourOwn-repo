@@ -1,17 +1,9 @@
 // src/repos/experience-entry.repo.ts
+import { fi } from "zod/v4/locales";
 import { prisma } from "../lib/prisma";
 
 // The controller guarantees exactly one of these
-type Owner = { userId?: string | null; sessionId?: string | null };
-const ofOwner = (o: Owner) => (o.userId ? { userId: o.userId } : { sessionId: o.sessionId });
 
-export type CreateExperienceInput = Owner & {
-  title: string;
-  summary?: string | null;
-  start?: Date | null;
-  end?: Date | null;
-  kind?: string | null; // map to your Prisma enum if you have one
-};
 
 export async function createExperience(input: CreateExperienceInput) {
   const data: any = {
@@ -32,8 +24,35 @@ export async function createExperience(input: CreateExperienceInput) {
   return prisma.experience.create({ data });
 }
 
+
+
+// The controller guarantees exactly one of these
+type Owner = { userId?: string | null; sessionId?: string | null };
+const ofOwner = (o: Owner) => (o.userId ? { userId: o.userId } : { sessionId: o.sessionId });
+
+export type CreateExperienceInput = Owner & {
+  title: string;
+  summary?: string | null;
+  start?: Date | null;
+  end?: Date | null;
+  kind?: string | null; // map to your Prisma enum if you have one
+};
+
+// ...
+
 export async function listExperiences(filter: Owner & { kind?: string | null }) {
+  const { kind, ...owner } = filter;
+
+  // base where is "owned by this user or this session"
+  const where: any = ofOwner(owner);
+
+  // optional filter by kind
+  if (typeof kind !== "undefined" && kind !== null) {
+    where.kind = kind;
+  }
+
   return prisma.experience.findMany({
+    where,
     orderBy: { createdAt: "desc" },
   });
 }

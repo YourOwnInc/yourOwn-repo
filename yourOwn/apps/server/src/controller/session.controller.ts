@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 import * as svc from "../services/session.service";
 import * as layoutService from "../services/layout.services"
+import * as sessionRepo from "../repositories/session.repo"
 
 const StartSessionBody = z.object({
   metadata: z.record(z.string(), z.unknown()).optional().default({}),
@@ -37,6 +38,17 @@ export async function getSession(req: Request, res: Response, next: NextFunction
     res.json(s);
   } catch (err) {
     next(err);
+  }
+}
+
+export async function getAllSessions(req: Request, res: Response) {
+  try {
+    const sessions = await sessionRepo.listSessions();
+
+    return res.json(sessions);
+  }
+  catch(err) {
+
   }
 }
 
