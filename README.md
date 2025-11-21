@@ -719,6 +719,7 @@ Explain how the implemented features were tested. Include details on the testing
 # Challenges Faced: Dipendra Dhakal
 
 Discuss major technical or teamwork challenges encountered during implementation and testing, and how they were resolved.
+During implementation and testing of YourOwn, the team faced several technical and teamwork challenges, especially when integrating the client–server interaction, export system, and deployment assistant. Inconsistent data structures and endpoint expectations caused early failures, which were resolved by revisiting Deliverable II diagrams and unifying schemas with Zod. The export feature also created issues when embedding user content into a React + Vite project, requiring a stable base template and improved logging. Team coordination challenges, such as differing interpretations of requirements and frequent merge conflicts, were addressed through clearer task tracking and a stricter Git workflow. Despite these obstacles, consistent communication and reference to earlier deliverables helped the team align the implementation with the original design.
 
 # Design Assumptions & Revisions: Luis
 
