@@ -231,7 +231,7 @@ export default function Landing() {
           >
             <div className="max-w-2xl w-full space-y-6">
               <AnimatedText delay={0} duration={0.6}>
-                <h2 className="text-5xl font-semibold mb-4 bg-gradient-to-r from-white to-indigo-300 bg-clip-text text-transparent">
+                <h2 className="text-5xl font-semibold mb-4 bg-[#A9CBF0] bg-clip-text text-transparent">
                   Tell us about yourself, {name}
                 </h2>
               </AnimatedText>
@@ -247,7 +247,7 @@ export default function Landing() {
                   placeholder="Write about your technical or creative pursuits..."
                   autoFocus
                   rows={6}
-                  className="w-full max-w-2xl mx-auto px-6 py-4 rounded-xl bg-zinc-800/50 backdrop-blur-sm text-white border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg transition-all resize-none"
+                  className="w-full max-w-2xl mx-auto px-6 py-4 rounded-xl bg-zinc-800/50 backdrop-blur-sm text-white border border-[#FBC1C1] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg transition-all resize-none"
                 />
               </AnimatedText>
               <AnimatedText delay={0.6} duration={0.6}>
@@ -256,7 +256,7 @@ export default function Landing() {
                   disabled={!bio.trim()}
                   className={`px-8 py-3 rounded-xl transition-all text-lg font-medium ${
                     bio.trim()
-                      ? 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg shadow-indigo-500/50'
+                      ? 'bg-[#F5EBCB] hover:bg-[#FBC1C1] text-white shadow-lg shadow-[#FBC1C1]'
                       : 'bg-zinc-700 cursor-not-allowed text-zinc-400'
                   }`}
                 >
