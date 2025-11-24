@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Minimal global styles */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #09090b; /* same as bg-zinc-950 */
+  color: white;
+  font-family: 'Inter', sans-serif;
+}
+
+button, input, textarea {
+  font-family: inherit;
+}

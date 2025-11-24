@@ -1,0 +1,14 @@
+{
+  "name": "@yourown/shared",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev:client": "npm --prefix apps/client run dev",
+    "dev:server": "npm --prefix apps/server run dev"
+  }
+}
