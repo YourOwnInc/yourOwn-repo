@@ -6,8 +6,8 @@ import { STORAGE_KEYS } from '../types';
 interface UserContextType {
   user: User | null;
   setUser: (user: User | null) => void;
-  sessionId: SessionId | null;
-  setSessionId: (id: SessionId | null) => void;
+  sessionId: SessionId;
+  setSessionId: (id: SessionId ) => void;
   onboardingComplete: boolean;
   setOnboardingComplete: (complete: boolean) => void;
   portfolioEntries: PortfolioEntry[];
@@ -20,15 +20,14 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useLocalStorage<User | null>(STORAGE_KEYS.USER_DATA, null);
-  const [sessionId, setSessionId] = useLocalStorage<SessionId | null>(STORAGE_KEYS.SESSION_ID, null);
+  const [user, setUser] = useLocalStorage<User | null>(STORAGE_KEYS.USER_DATA);
+  const [sessionId, setSessionId] = useLocalStorage<SessionId>(STORAGE_KEYS.SESSION_ID);
   const [onboardingComplete, setOnboardingComplete] = useLocalStorage<boolean>(
-    STORAGE_KEYS.ONBOARDING_COMPLETE,
-    false
+    STORAGE_KEYS.ONBOARDING_COMPLETE
   );
   const [portfolioEntries, setPortfolioEntries] = useLocalStorage<PortfolioEntry[]>(
-    STORAGE_KEYS.PORTFOLIO_ENTRIES,
-    []
+    STORAGE_KEYS.PORTFOLIO_ENTRIES
+  
   );
 
   const addPortfolioEntry = (entry: PortfolioEntry) => {

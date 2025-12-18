@@ -1,4 +1,4 @@
-import { ExperienceDTO, SessionId } from "../domain/types";
+ import { ExperienceDTO, SessionId } from "../domain/types";
 const BASE = "http://localhost:5000/api";
 export async function createExperience(sessionId: string, payload: any) {
   const res = await fetch(`${BASE}/experiences`, {

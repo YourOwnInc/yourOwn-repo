@@ -5,13 +5,15 @@ import { PortfolioEntry, GridSize } from '../types';
 import BlurOverlay, { ProgressiveBlur } from '../components/BlurOverlay';
 import PortfolioGrid from '../components/PortfolioGrid';
 import ExportButton from '../components/ExportButton';
+import { usePortfolioStore } from '../domain/usePortfolioStore';
 
 export default function PortfolioBuilder() {
-  const { user, portfolioEntries, setPortfolioEntries, addPortfolioEntry, updatePortfolioEntry, removePortfolioEntry } = useUser();
+  const { user, sessionId,  portfolioEntries, setPortfolioEntries, addPortfolioEntry, updatePortfolioEntry, removePortfolioEntry } = useUser();
   const [isBlurred, setIsBlurred] = useState(true);
   const [userDataUnblurred, setUserDataUnblurred] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newEntry, setNewEntry] = useState({
+  
+   const [newEntry, setNewEntry] = useState({
     title: '',
     summary: '',
     type: '',
@@ -19,6 +21,8 @@ export default function PortfolioBuilder() {
     end: '',
     images: [] as string[],
   });
+  const {addExperience, removeExperience, editExperience} = usePortfolioStore();
+
 
   // Auto-unblur user data on mount
   useEffect(() => {
@@ -84,7 +88,7 @@ export default function PortfolioBuilder() {
       updatedAt: new Date(),
     };
 
-    addPortfolioEntry(entry);
+    addExperience(entry);
     setNewEntry({ title: '', summary: '', type: '', start: '', end: '', images: [] });
     setShowAddForm(false);
   };
