@@ -1,12 +1,16 @@
 import { Request, Response, NextFunction } from "express";
-import { z } from "zod";
+import { jwt, z } from "zod";
 import * as svc from "../services/session.service";
 import * as layoutService from "../services/layout.services"
 import * as sessionRepo from "../repositories/session.repo"
+import { JwtEngine}  from "../lib/auth/jwt.engine";
 
 const StartSessionBody = z.object({
   metadata: z.record(z.string(), z.unknown()).optional().default({}),
 });
+
+
+
 
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -15,6 +19,9 @@ export async function startSession(req: Request, res: Response, next: NextFuncti
   try {
     
     const session = await svc.startSession();
+    // create Jwt token
+    const token = JwtEngine.sign({sub: session.id, sessionId: session.id, role: 'GUEST'});
+
     if(!session) throw new Error("could not create session");
 
     
@@ -23,11 +30,15 @@ export async function startSession(req: Request, res: Response, next: NextFuncti
     const newLayout = await layoutService.createLayout(sessionId);
 
     // return the generated UUID to the client
-    res.status(201).json({sessionId, newLayout});
+    res.status(201).json({token, newLayout});
   } catch (err) {
     next(err);
   }
 }
+
+// TODO: 
+// new function to create a new session with an existing user
+
 
 export async function getSession(req: Request, res: Response, next: NextFunction) {
   try {

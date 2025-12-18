@@ -2,15 +2,17 @@
 import { Router } from "express";
 import { resolveCtx } from "../middleware/ctx";
 import * as ctrl from "../controller/experience-entry.controller";
+import { requireAuth } from "../middleware/auth";
+
 
 const r = Router();
 
 // Resource-first, context via header/auth middleware
-r.post("/experiences", resolveCtx, ctrl.createExperience);
-r.get("/experiences", resolveCtx, ctrl.listExperiences);
-r.get("/experiences/:id", resolveCtx, ctrl.getExperience);
-r.put("/experiences/:id", resolveCtx, ctrl.updateExperience);
-r.patch("/experiences/:id", resolveCtx, ctrl.updateExperience);
-r.delete("/experiences/:id", resolveCtx, ctrl.deleteExperience);
+r.post("/experiences", requireAuth, ctrl.createExperience);
+r.get("/experiences", requireAuth, ctrl.listExperiences);
+r.get("/experiences/:id", requireAuth, ctrl.getExperience);
+r.put("/experiences/:id", requireAuth, ctrl.updateExperience);
+r.patch("/experiences/:id", requireAuth, ctrl.updateExperience);
+r.delete("/experiences/:id", requireAuth, ctrl.deleteExperience);
 
 export default r;
