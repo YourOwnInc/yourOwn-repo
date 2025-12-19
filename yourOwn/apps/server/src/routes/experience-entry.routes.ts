@@ -8,7 +8,7 @@ import { requireAuth } from "../middleware/auth";
 const r = Router();
 
 // Resource-first, context via header/auth middleware
-r.post("/experiences", requireAuth, ctrl.createExperience);
+r.post(":sessionId/experiences", requireAuth, ctrl.createExperience);
 r.get("/experiences", requireAuth, ctrl.listExperiences);
 r.get("/experiences/:id", requireAuth, ctrl.getExperience);
 r.put("/experiences/:id", requireAuth, ctrl.updateExperience);

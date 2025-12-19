@@ -17,20 +17,19 @@ const UUID_RE =
 
 export async function startSession(req: Request, res: Response, next: NextFunction) {
   try {
-    
+    // calls service function to create a new session
     const session = await svc.startSession();
     // create Jwt token
     const token = JwtEngine.sign({sub: session.id, sessionId: session.id, role: 'GUEST'});
 
     if(!session) throw new Error("could not create session");
 
-    
     // create a layout with the assoicated sessionId 
     let sessionId = session.id;
     const newLayout = await layoutService.createLayout(sessionId);
 
     // return the generated UUID to the client
-    res.status(201).json({token, newLayout});
+    res.status(201).json({token, sessionId, newLayout});
   } catch (err) {
     next(err);
   }

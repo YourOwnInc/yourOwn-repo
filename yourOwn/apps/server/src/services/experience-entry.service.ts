@@ -6,11 +6,9 @@ import * as repo from "../repositories/experience-entry.repo";
  */
 export type Owner = { userId?: string | null; sessionId?: string | null };
 
-function ensureOwner(o: Owner) {
-  const hasUser = !!o.userId;
-  const hasSess = !!o.sessionId;
-  if (hasUser === hasSess) {
-    throw new Error("Exactly one of userId or sessionId must be set.");
+function authenticate(o: Owner) {
+  if(!o.userId && !o.sessionId) {
+    throw new Error("Exactly one of userId or sessionId must be provided");
   }
 }
 
@@ -23,17 +21,17 @@ export type CreateExperienceInput = Owner & {
 };
 
 export async function createExperience(input: CreateExperienceInput) {
-  ensureOwner(input);
+  authenticate(input);
   return repo.createExperience(input);
 }
 
 export async function listExperiences(filter: Owner & { kind?: string | null }) {
-  ensureOwner(filter);
+  authenticate(filter);
   return repo.listExperiences(filter);
 }
 
 export async function getExperienceOwned(id: string, owner: Owner) {
-  ensureOwner(owner);
+  authenticate(owner);
   return repo.getExperienceOwned(id, owner);
 }
 
@@ -48,11 +46,11 @@ export async function updateExperienceOwned(
     kind?: string | null;
   }
 ) {
-  ensureOwner(owner);
+  authenticate(owner);
   return repo.updateExperienceOwned(id, owner, patch);
 }
 
 export async function deleteExperienceOwned(id: string, owner: Owner) {
-  ensureOwner(owner);
+  authenticate(owner);
   return repo.deleteExperienceOwned(id, owner);
 }

@@ -33,14 +33,12 @@ export async function createExperience(
   const {sessionId} = req.params;
 
   try {
+    // Check if user is a guest
+    // Check if sessionId mattches 
     if(role === 'GUEST'){
       if( sessionId !== authReq.user.sessionId) {
         return res.status(403).json({ error: { code: "FORBIDDEN", message: "You do not have permission to create experience for this session" }});
       }
-    }
-    else {
-      //user is ADMIN OR USER
-      //TODO: implement userId verification
     }
     
     const body: ExperienceCreateBody = ExperienceCreateSchema.parse(req.body);
@@ -64,26 +62,36 @@ export async function createExperience(
 
 export async function listExperiences(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
-  const sessionId = authReq.user.sessionId;
+  const {sessionId} = req.params;
+  const role = authReq.user.role;
   const userId = authReq.user.userId;
 
-  
-  const { kind } = req.query as any;
 
+  const { kind } = req.query as any;
+  try {
+    if(role == "GUEST") {
+      if( sessionId !== authReq.user.sessionId) {
+        return res.status(403).json({ error: { code: "FORBIDDEN", message: "You do not have permission to create experience for this session" }});
+      }
+    }
+    
   const items = await svc.listExperiences({
     sessionId,
-    userId,
     kind: mapKind(kind),
   });
 
   return res.json(items);
+
+  }catch(error) {
+
+  }
+
 }
 
 export async function getExperience(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
-  const sessionId = authReq.user.sessionId;
+  const {sessionId, id} = req.params;
 
-  const id = req.params.id;
 
   const item = await svc.getExperienceOwned(id,{sessionId});
   if (!item) return res.status(404).json({ error: { code: "NOT_FOUND", message: "Experience not found" }});
@@ -92,11 +100,12 @@ export async function getExperience(req: Request, res: Response) {
 
 export async function updateExperience(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
-  const sessionId = authReq.user.sessionId;
-  const id = req.params.id;
+  const userId = authReq.user.userId;
+  const {sessionId, experienceId}  = req.params;
+  const id = req.params.id; // experince ID 
   const patch = ExperienceUpdateSchema.parse(req.body);
 
-  const updated = await svc.updateExperienceOwned(id, owner, {
+  const updated = await svc.updateExperienceOwned(id, {sessionId, userId}, {
     title: patch.title,
     summary: patch.summary ?? null,
     start: typeof patch.start === "undefined" ? undefined : (patch.start ?? null),
