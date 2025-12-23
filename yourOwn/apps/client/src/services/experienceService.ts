@@ -1,11 +1,14 @@
  import { ExperienceDTO, SessionId } from "../domain/types";
+ 
 const BASE = "http://localhost:5000/api";
 export async function createExperience(sessionId: string, payload: any) {
   const res = await fetch(`${BASE}/experiences`, {
     method: "POST",
+    
     headers: {
       "Content-Type": "application/json",
-      "X-Session-Id": sessionId,
+      Authorization: `Bearer ${sessionId}` // THIS WILL NOT TAKE SESSIONID. replace with actual jwt token when intergrated
+  
     },
     body: JSON.stringify(payload),
   });

@@ -26,7 +26,23 @@ export const sessionService = {
    * 1. Uncomment the method body
    * 2. Call this after onboarding to create a session
    * 3. Store session ID in UserContext
+   
    */
+  // Starts a session body and layout assigned to that session
+  async startSession() {
+   const res = await fetch(`${BASE}/session/start`);
+
+   const sessionData = await res.json();
+   // Extract session ID and JWT token from sessionData
+   const JwtToken = sessionData.token;
+   const sessionId = sessionData.sessionId;
+   // store them in local storage
+  localStorage.setItem('sessionId', sessionId);
+   localStorage.setItem('token', JwtToken);
+
+   if (!res.ok) throw new Error("getLayout failed");
+   return res.json();
+},
 
   /**
    * Get session by ID
