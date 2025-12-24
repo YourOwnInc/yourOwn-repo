@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedText, AnimatedTextSequence } from '../components/AnimatedText';
 import { useUser } from '../contexts/UserContext';
+import { sessionService } from '../services/sessionService';
 
 type LandingStep = 'hero' | 'welcome' | 'name' | 'bio';
 
@@ -14,6 +15,7 @@ export default function Landing() {
   const [bio, setBio] = useState(user?.bio || '');
   const [heroComplete, setHeroComplete] = useState(false);
   const [welcomeComplete, setWelcomeComplete] = useState(false);
+  const [startingSession, setStartingSession] = useState(false);
 
   // Hero section texts
   const heroTexts = [
@@ -44,8 +46,13 @@ export default function Landing() {
     }
   }, [welcomeComplete, step]);
 
-  const handleNameSubmit = () => {
-    if (name.trim()) {
+  const handleNameSubmit = async () => {
+    // Call start session function
+    setStartingSession(true);
+    
+    try {
+      // start session -> sessionService.startSession stores token + sessionId in localStorage
+      await sessionService.startSession();
       const userId = user?.id || `user-${Date.now()}`;
       setUser({
         id: userId,
@@ -54,6 +61,11 @@ export default function Landing() {
         bio: user?.bio,
       });
       setStep('bio');
+    } catch (err) {
+      console.error('startSession failed', err);
+      // show user-friendly error / toast
+    } finally {
+      setStartingSession(false);
     }
   };
 

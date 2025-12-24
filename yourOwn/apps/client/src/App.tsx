@@ -11,7 +11,7 @@ function AppContent() {
       <Routes>
         <Route path="/landing" element={<Landing />} />
         <Route path="/portfoliobuilder" element={<PortfolioBuilder />} />
-        <Route
+        {/* <Route
           path="/"
           element={
             <Navigate
@@ -19,7 +19,7 @@ function AppContent() {
               replace
             />
           }
-        />
+        /> */}
       </Routes>
     </BrowserRouter>
   );
