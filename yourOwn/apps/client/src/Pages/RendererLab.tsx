@@ -1,0 +1,83 @@
+import React, { useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
+import { PortfolioRenderer, PortfolioRenderData } from "../../../../renderer/src/PortfolioRenderer";
+
+const SCENARIOS: Record<string, PortfolioRenderData> = {
+  "Standard Profile": {
+    layout: {
+      slots: [
+        { id: "s1", area: "header" },
+        { id: "s2", area: "main" },
+      ],
+      placements: [
+        { slotId: "s1", experienceId: "exp1", patternId: "hero-basic" },
+        { slotId: "s2", experienceId: "exp2", patternId: "card-universal" },
+      ],
+    },
+    experiences: [
+      { id: "exp1", kind: "general", title: "My Name" },
+      { id: "exp2", kind: "job", title: "My Job" },
+    ],
+  },
+
+  "Broken Pattern ID": {
+    layout: {
+      slots: [{ id: "s1", area: "header" }],
+      placements: [{ slotId: "s1", experienceId: "exp1", patternId: "hero-missing" }],
+    },
+    experiences: [{ id: "exp1", kind: "general", title: "Test Title" }],
+  },
+
+  "Missing Data": {
+    layout: {
+      slots: [{ id: "s1", area: "header" }],
+      placements: [{ slotId: "s1", experienceId: "exp-ghost", patternId: "hero-basic" }],
+    },
+    experiences: [],
+  },
+};
+
+export const RendererLab = () => {
+  const [params, setParams] = useSearchParams();
+
+  const scenarioKey =
+    params.get("scenario") && SCENARIOS[params.get("scenario")!]
+      ? params.get("scenario")!
+      : "Standard Profile";
+
+  const data = useMemo(() => SCENARIOS[scenarioKey], [scenarioKey]);
+
+  return (
+    <div className="flex h-screen">
+      <div className="w-72 bg-gray-100 p-4 border-r">
+        <h2 className="font-bold mb-4">🧪 Renderer Lab</h2>
+
+        <div className="flex flex-col gap-2">
+          {Object.keys(SCENARIOS).map((key) => (
+            <button
+              key={key}
+              onClick={() => setParams({ scenario: key })}
+              className={`p-2 text-left rounded ${
+                scenarioKey === key ? "bg-blue-500 text-white" : "bg-white"
+              }`}
+            >
+              {key}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-8 text-xs text-gray-500 space-y-1">
+          <p>Active Layout: {data.layout.slots.length} slots</p>
+          <p>Active Exps: {data.experiences.length} items</p>
+          <p className="break-all">Share: ?scenario={encodeURIComponent(scenarioKey)}</p>
+        </div>
+      </div>
+
+      <div className="flex-1 p-8 bg-gray-50 overflow-auto">
+        <div className="border border-dashed border-gray-400 p-2 min-h-[500px] bg-white shadow-lg">
+          <PortfolioRenderer data={data} />
+        </div>
+      </div>
+    </div>
+  );
+};
