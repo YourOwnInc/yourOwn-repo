@@ -13,15 +13,7 @@ function AppContent() {
         <Route path="/landing" element={<Landing />} />
         <Route path="/portfoliobuilder" element={<PortfolioBuilder />} />
         <Route path="/lab" element={<RendererLab />} />
-        <Route
-          path="/"
-          element={
-            <Navigate
-              to={onboardingComplete ? '/portfoliobuilder' : '/landing'}
-              replace
-            />
-          }
-        />
+
       </Routes>
     </BrowserRouter>
   );

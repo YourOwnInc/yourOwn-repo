@@ -1,6 +1,6 @@
 // PortfolioRenderer.tsx
 import React, { useMemo } from "react";
-import { PATTERN_REGISTRY } from "../../packages/ui-patterns/src/registry";
+import { PATTERN_REGISTRY } from "./patterns-bridge";
 import portfolioData from "../public/portfolio.json";
 
 type Slot = { id: string; area: string };
@@ -19,8 +19,11 @@ type Props = {
 };
 
 export const PortfolioRenderer = ({ data }: Props) => {
-  const source = data ?? (portfolioData as PortfolioRenderData);
-  const { layout, experiences } = source;
+  if(!data) {
+    return <div> Missing render Data </div>
+  }
+
+  const { layout, experiences } = data;
 
   const experienceMap = useMemo(
     () => Object.fromEntries(experiences.map((e) => [e.id, e])),
