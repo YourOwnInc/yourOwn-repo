@@ -19,12 +19,18 @@ type Props = {
 };
 
 export const PortfolioRenderer = ({ data }: Props) => {
+  console.log("Renderer");
+
+  console.log("Patterrn Registry: ", PATTERN_REGISTRY);
   if(!data) {
+    console.log("Missing render Data");
     return <div> Missing render Data </div>
+  
   }
 
   const { layout, experiences } = data;
 
+  console.log("data:", data );
   const experienceMap = useMemo(
     () => Object.fromEntries(experiences.map((e) => [e.id, e])),
     [experiences]
@@ -35,18 +41,25 @@ export const PortfolioRenderer = ({ data }: Props) => {
     [layout.placements]
   );
 
-  const gridStyles: React.CSSProperties = {
-    display: "grid",
-    gap: "1rem",
-    gridTemplateAreas: `
-      "header header"
-      "sidebar main"
-    `,
-    padding: "2rem",
+  const containerStyles: React.CSSProperties = {
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    height: "100%",
+    overflow: "auto",
+  };
+
+  const sectionStyles: React.CSSProperties = {
+    width: "100%",
+    minHeight: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
   };
 
   return (
-    <div style={gridStyles}>
+    <div style={containerStyles}>
       {layout.slots.map((slot) => {
         const placement = placementMap[slot.id];
         if (!placement) return null;
@@ -54,10 +67,12 @@ export const PortfolioRenderer = ({ data }: Props) => {
         const expData = experienceMap[placement.experienceId];
 
         const PatternComponent =
-          PATTERN_REGISTRY[placement.patternId] ?? PATTERN_REGISTRY["default"];
+          PATTERN_REGISTRY[placement.patternId] ;
+
+          console.log("PatternComponent: ", PatternComponent);
 
         return (
-          <div key={slot.id} style={{ gridArea: slot.area }}>
+          <div key={slot.id} style={sectionStyles}>
             <PatternComponent data={expData} />
           </div>
         );

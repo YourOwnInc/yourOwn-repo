@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { PortfolioRenderer, PortfolioRenderData } from "../../../../renderer/src/PortfolioRenderer";
+// RendererLab.tsx
 
 const SCENARIOS: Record<string, PortfolioRenderData> = {
   "Standard Profile": {
@@ -8,15 +9,34 @@ const SCENARIOS: Record<string, PortfolioRenderData> = {
       slots: [
         { id: "s1", area: "header" },
         { id: "s2", area: "main" },
+        { id: "s3", area: "main" },
       ],
       placements: [
         { slotId: "s1", experienceId: "exp1", patternId: "hero-basic" },
-        { slotId: "s2", experienceId: "exp2", patternId: "card-universal" },
+        { slotId: "s2", experienceId: "exp2", patternId: "generic-card", },
+        { slotId: "s3", experienceId: "exp3", patternId: "generic-card", },
+
       ],
     },
     experiences: [
-      { id: "exp1", kind: "general", title: "My Name" },
-      { id: "exp2", kind: "job", title: "My Job" },
+      { 
+        id: "exp1", 
+        kind: "general", 
+        title: "Alex Rivera", 
+        summary: "Full-stack engineer specializing in scalable React architectures." // Added summary for HeroBasic
+      },
+      { 
+        id: "exp2", 
+        kind: "job", 
+        title: "Senior Developer", 
+        organization: "Tech Corp Inc." // Added organization for GenericCard
+      },
+       { 
+        id: "exp3", 
+        kind: "Project", 
+        title: "AI SSAS BSBS", 
+        organization: "Tech Corp Inc." // Added organization for GenericCard
+      },
     ],
   },
 
@@ -25,12 +45,13 @@ const SCENARIOS: Record<string, PortfolioRenderData> = {
       slots: [{ id: "s1", area: "header" }],
       placements: [{ slotId: "s1", experienceId: "exp1", patternId: "hero-missing" }],
     },
-    experiences: [{ id: "exp1", kind: "general", title: "Test Title" }],
+    experiences: [{ id: "exp1", kind: "general", title: "Test Title", summary: "Test Summary" }],
   },
 
   "Missing Data": {
     layout: {
       slots: [{ id: "s1", area: "header" }],
+      // This tests what happens when a placement points to an ID that doesn't exist in the experiences array
       placements: [{ slotId: "s1", experienceId: "exp-ghost", patternId: "hero-basic" }],
     },
     experiences: [],
@@ -58,7 +79,7 @@ export const RendererLab = () => {
               key={key}
               onClick={() => setParams({ scenario: key })}
               className={`p-2 text-left rounded ${
-                scenarioKey === key ? "bg-blue-500 text-white" : "bg-white"
+                scenarioKey === key ? "bg-blue-500 text-black" : "bg-gray-200 text-gray-700"
               }`}
             >
               {key}
