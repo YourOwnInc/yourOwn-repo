@@ -1,0 +1,63 @@
+{
+  "info": {
+    "_postman_id": "bcbc99cb-d9e7-449b-bc0c-b952f6e2f34f",
+    "name": "Sessions",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "[sessions].[start session].[userId not necessary ]",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "67494b7d-a7c1-4c92-aec8-f31952b3df3b",
+            "exec": [
+              "// Parse the JSON response\r",
+              "const responseData = pm.response.json();\r",
+              "console.log(\"reponse data \", responseData);\r",
+              "\r",
+              "// Check if the token exists in the response\r",
+              "if (responseData.token) {\r",
+              "    // Set the environment variable 'current_token' with the new JWT\r",
+              "    pm.environment.set(\"current_token\", responseData.token);\r",
+              "    console.log(\"Token updated successfully!\");\r",
+              "} else {\r",
+              "    console.error(\"Token not found in response.\");\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "bda6c7b8-2116-4776-badc-0a2749b85804",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"userId\": null,\r\n  \"title\": \"Luis\",\r\n  \"status\": \"mypassword123\",\r\n  \"metadata\": {\r\n    \r\n  }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/sessions/start",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "sessions",
+            "start"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

@@ -6,11 +6,13 @@ function getAuthHeader() {
   const token = localStorage.getItem("token");
   return `Bearer ${token}`;
 }
+
+
 export async function createExperience(sessionId: string, payload: any) {
   const authHeader = getAuthHeader();
-  const res = await fetch(`${BASE}/experiences`, {
+  const localSessionId = localStorage.getItem("sessionId");
+  const res = await fetch(`${BASE}/sessions/${localSessionId}`, {
     method: "POST",
-    
     headers: {
       "Content-Type": "application/json",
       Authorization: authHeader // THIS WILL NOT TAKE SESSIONID. replace with actual jwt token when intergrated
@@ -34,10 +36,14 @@ export async function createExperience(sessionId: string, payload: any) {
 }
 
 
-
 export async function listExperiences(sessionId: SessionId): Promise<ExperienceDTO[]> {
-  const res = await fetch(`${BASE}/experiences`, {
-    method: "GET"
+  const authHeader = getAuthHeader();
+  const res = await fetch(`${BASE}/sessions/${sessionId}/experiences`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authHeader 
+    }
   });
   if (!res.ok) throw new Error("listExperiences failed");
   return res.json();
@@ -45,10 +51,11 @@ export async function listExperiences(sessionId: SessionId): Promise<ExperienceD
 
 
 // Optional MVP+1
-export async function updateExperience(id: string, payload: Partial<ExperienceDTO>): Promise<ExperienceDTO> {
-  const res = await fetch(`${BASE}/experience/${id}`, {
+export async function updateExperience(sessionId: SessionId, id: string, payload: Partial<ExperienceDTO>): Promise<ExperienceDTO> {
+  const authHeader = getAuthHeader();
+  const res = await fetch(`${BASE}/sessions/${sessionId}/experience/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", Authorization: authHeader },
     body: JSON.stringify(payload),
   });
   if (!res.ok) throw new Error("updateExperience failed");

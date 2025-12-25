@@ -8,6 +8,8 @@ interface UserContextType {
   setUser: (user: User | null) => void;
   sessionId: SessionId;
   setSessionId: (id: SessionId ) => void;
+  authToken: string;
+  setAuthToken: (token: string) => void;
   onboardingComplete: boolean;
   setOnboardingComplete: (complete: boolean) => void;
   portfolioEntries: PortfolioEntry[];
@@ -22,6 +24,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useLocalStorage<User | null>(STORAGE_KEYS.USER_DATA);
   const [sessionId, setSessionId] = useLocalStorage<SessionId>(STORAGE_KEYS.SESSION_ID);
+  const [authToken, setAuthToken] = useLocalStorage<string>(STORAGE_KEYS.AUTH_TOKEN);
   const [onboardingComplete, setOnboardingComplete] = useLocalStorage<boolean>(
     STORAGE_KEYS.ONBOARDING_COMPLETE
   );
@@ -51,6 +54,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
         setUser,
         sessionId,
         setSessionId,
+        authToken,
+        setAuthToken,
         onboardingComplete,
         setOnboardingComplete,
         portfolioEntries,

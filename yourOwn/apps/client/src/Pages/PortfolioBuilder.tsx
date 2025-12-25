@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUser } from '../contexts/UserContext';
-import { PortfolioEntry, GridSize } from '../types';
+import { PortfolioEntry, GridSize, ExperienceEntry } from '../types';
 import BlurOverlay, { ProgressiveBlur } from '../components/BlurOverlay';
 import PortfolioGrid from '../components/PortfolioGrid';
 import ExportButton from '../components/ExportButton';
@@ -67,25 +67,12 @@ export default function PortfolioBuilder() {
   const handleAddEntry = () => {
     if (!newEntry.title.trim() || !newEntry.summary.trim()) return;
 
-    const entry: PortfolioEntry = {
-      id: `entry-${Date.now()}`,
-      sessionId: 'local-session',
+    const entry: ExperienceEntry = {
       title: newEntry.title,
       summary: newEntry.summary,
       type: newEntry.type || undefined,
       start: newEntry.start || undefined,
-      end: newEntry.end || undefined,
-      images: newEntry.images.length > 0 ? newEntry.images : undefined,
-      position: {
-        x: (portfolioEntries.length % 4) + 1,
-        y: Math.floor(portfolioEntries.length / 4) + 1,
-      },
-      size: {
-        width: 1,
-        height: 1,
-      },
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      end: newEntry.end || undefined
     };
 
     addExperience(entry);

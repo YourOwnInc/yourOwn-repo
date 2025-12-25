@@ -9,7 +9,8 @@ export function usePortfolioStore() {
   const [experiences, setExperiences] = useState<ExperienceDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError ] = useState<string | null>(null);
-  const { user, sessionId } = useUser();
+  const { user, sessionId, authToken } = useUser(); //adds authtoken in context if needed.
+  //Make the context handle session Switches? IE updating sessionId when user wants to look at other sessions they have?
 
   useEffect(() => {
 
@@ -33,10 +34,10 @@ export function usePortfolioStore() {
   }, [sessionId]);
 
   const editExperience = useCallback(async (id: string , payload:  Partial<ExperienceDTO>)=> {
-     const edited = await updateExperience(id,payload)
+     const edited = await updateExperience(sessionId,id,payload)
      setExperiences((prev) => [edited, ...prev])
     return edited;
-  }, [] )
+  }, [sessionId])
 
   const removeExperience=  useCallback(async (id: string) => {
     await deleteExperience(id)
