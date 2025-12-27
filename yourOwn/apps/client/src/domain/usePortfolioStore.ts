@@ -3,10 +3,11 @@ import { assignItem, getLayout } from "../services/layoutService";
 import { createExperience, deleteExperience, listExperiences, updateExperience,  } from "../services/experienceService";
 import type { ExperienceDTO, SessionId, LayoutModel, Placement, PortfolioModel } from "./types";
 import { useUser} from "../contexts/UserContext";
+import { PortfolioEntry, ExperienceEntry } from '../types';
 
 export function usePortfolioStore() {
   const [layout, setLayout] = useState<LayoutModel | null>(null);
-  const [experiences, setExperiences] = useState<ExperienceDTO[]>([]);
+  const [experiences, setExperiences] = useState<PortfolioEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError ] = useState<string | null>(null);
   const { user, sessionId, authToken } = useUser(); //adds authtoken in context if needed.
@@ -17,6 +18,7 @@ export function usePortfolioStore() {
     let cancelled = false;
     (async () => {
       setLoading(true);
+      console.log("SessionId given to get exp", sessionId );
       const [l, exps] = await Promise.all([getLayout(sessionId), listExperiences(sessionId)]);
       if (!cancelled) {
         setLayout(l);
@@ -35,7 +37,7 @@ export function usePortfolioStore() {
 
   const editExperience = useCallback(async (id: string , payload:  Partial<ExperienceDTO>)=> {
      const edited = await updateExperience(sessionId,id,payload)
-     setExperiences((prev) => [edited, ...prev])
+     setExperiences((prev) => prev.map(e => e.id === id ? { ...e, ...edited } : e))
     return edited;
   }, [sessionId])
 

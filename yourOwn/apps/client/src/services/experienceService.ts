@@ -1,5 +1,6 @@
  import { ExperienceDTO, SessionId } from "../domain/types";
  
+ 
 const BASE = "http://localhost:5000/api";
 
 function getAuthHeader() {
@@ -36,7 +37,7 @@ export async function createExperience(sessionId: string, payload: any) {
 }
 
 
-export async function listExperiences(sessionId: SessionId): Promise<ExperienceDTO[]> {
+export async function listExperiences(sessionId: SessionId) {
   const authHeader = getAuthHeader();
   const res = await fetch(`${BASE}/sessions/${sessionId}/experiences`, {
     method: "GET",

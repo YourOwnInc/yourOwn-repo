@@ -43,6 +43,9 @@ export const sessionService = {
    const JwtToken = sessionData.token;
    const sessionId = sessionData.sessionId;
    console.log("SessionId being stored", sessionId);
+
+   
+
    // store them in local storage
   localStorage.setItem('sessionId', sessionId);
    localStorage.setItem('token', JwtToken);

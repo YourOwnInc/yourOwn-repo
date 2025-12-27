@@ -49,6 +49,7 @@ export interface ExperienceEntry {
   start?: string;
   end?: string;
   media?: MediaItem[];
+  images?: string[]; // Base64 image data for export
   kind?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -68,7 +69,6 @@ export interface GridSize {
 // May not be nessecary if these are purley UI fields. exp
 export interface PortfolioEntry extends ExperienceEntry {
   id: ExperienceEntryId; // make it not required 
-  sessionId: string;
   position: GridPosition;
   size: GridSize;
   images?: string[]; // Base64 image data for export
