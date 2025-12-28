@@ -1,0 +1,223 @@
+{
+  "info": {
+    "_postman_id": "42f2fa83-c745-4cef-b9a4-1a1fcfa00697",
+    "name": "experience",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "[experience].[add exp to session]",
+      "event": [
+        {
+          "id": "e589bbfb-ebf4-4397-a7ef-08e1a2e289e9",
+          "listen": "test",
+          "script": {
+            "id": "ef79b17e-0084-4b86-b94f-27c148c87136",
+            "exec": [
+              "// Test: Verify response status is successful",
+              "pm.test(\"Experience creation successful\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              "",
+              "// Parse the response",
+              "const responseData = pm.response.json();",
+              "",
+              "// Test: Verify experience was created successfully",
+              "pm.test(\"Experience data exists in response\", function () {",
+              "    pm.expect(responseData).to.be.an('object');",
+              "    pm.expect(responseData).to.not.be.empty;",
+              "});",
+              "",
+              "// Test: Verify the experience is tied to the correct session",
+              "pm.test(\"Experience is tied to correct session\", function () {",
+              "    const sessionId = pm.collectionVariables.get(\"sessionId\");",
+              "    pm.expect(sessionId).to.not.be.undefined;",
+              "    ",
+              "    // Check if response contains session reference",
+              "    if (responseData.sessionId) {",
+              "        pm.expect(responseData.sessionId).to.eql(sessionId);",
+              "    } else if (responseData.session) {",
+              "        pm.expect(responseData.session).to.include(sessionId);",
+              "    }",
+              "    ",
+              "    console.log(\"Experience created for session: \" + sessionId);",
+              "});",
+              "",
+              "// Test: Verify experience ID exists (if applicable)",
+              "pm.test(\"Experience ID exists in response\", function () {",
+              "    const hasId = responseData.id || responseData.experienceId || responseData._id;",
+              "    pm.expect(hasId).to.not.be.undefined;",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "83c789dc-209f-45b3-973f-8c38b4a29c1e",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "eceda89c-697d-49c1-bf3b-ab801b233703",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{current_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Session-Id",
+            "value": "e18c0e71-735b-48f6-a76c-c86cde2e9c49",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Portfolio MVP\",\r\n  \"summary\": \"and and and and  \",\r\n  \"kind\": \"internship\",\r\n  \"start\": \"2025-11-10T00:25:41.234Z\",\r\n  \"end\": \"2025-11-11T00:25:41.234Z\",\r\n  \"tags\": [\"typescript\", \"react\"]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/sessions/:sessionId/experiences",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "sessions",
+            ":sessionId",
+            "experiences"
+          ],
+          "variable": [
+            {
+              "key": "sessionId",
+              "value": "9986f170-ac31-40f7-ac80-da580bbfd268"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[experience].[get list of exp within each session]",
+      "event": [
+        {
+          "id": "5d007533-b0d3-4cf3-ae4c-2f80d63d6a68",
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Test: Verify response status is successful",
+              "pm.test(\"Experience retrieval successful\", function () {",
+              "    pm.expect(pm.response.code).to.eql(200);",
+              "});",
+              "",
+              "// Parse the response",
+              "const responseData = pm.response.json();",
+              "",
+              "// Test: Verify experiences were retrieved successfully",
+              "pm.test(\"Experience list exists in response\", function () {",
+              "    pm.expect(responseData).to.not.be.undefined;",
+              "    ",
+              "    // Check if response is an array or contains an array",
+              "    if (Array.isArray(responseData)) {",
+              "        pm.expect(responseData).to.be.an('array');",
+              "    } else if (responseData.experiences) {",
+              "        pm.expect(responseData.experiences).to.be.an('array');",
+              "    } else if (responseData.data) {",
+              "        pm.expect(responseData.data).to.be.an('array');",
+              "    }",
+              "});",
+              "",
+              "// Test: Verify experiences are tied to the correct session",
+              "pm.test(\"Experiences are tied to correct session\", function () {",
+              "    const sessionId = pm.collectionVariables.get(\"sessionId\");",
+              "    pm.expect(sessionId).to.not.be.undefined;",
+              "    ",
+              "    let experiences = responseData;",
+              "    if (responseData.experiences) {",
+              "        experiences = responseData.experiences;",
+              "    } else if (responseData.data) {",
+              "        experiences = responseData.data;",
+              "    }",
+              "    ",
+              "    // If we have experiences, verify they belong to the session",
+              "    if (Array.isArray(experiences) && experiences.length > 0) {",
+              "        experiences.forEach(function(exp) {",
+              "            if (exp.sessionId) {",
+              "                pm.expect(exp.sessionId).to.eql(sessionId);",
+              "            } else if (exp.session) {",
+              "                pm.expect(exp.session).to.include(sessionId);",
+              "            }",
+              "        });",
+              "    }",
+              "    ",
+              "    console.log(\"Retrieved experiences for session: \" + sessionId);",
+              "});",
+              "",
+              "// Test: Verify response structure",
+              "pm.test(\"Response has valid structure\", function () {",
+              "    pm.expect(responseData).to.be.an('object').or.to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "29147c29-c274-4d92-8664-79a47ebee710",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"test@example.com\",\r\n  \"name\": \"Luis\",\r\n  \"passwordHash\": \"mypassword123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/sessions/:sessionId/experiences ",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "sessions",
+            ":sessionId",
+            "experiences "
+          ],
+          "variable": [
+            {
+              "key": "sessionId",
+              "value": ""
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

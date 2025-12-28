@@ -1,5 +1,6 @@
 import { apiClient } from './api';
 import { Session, StartSessionBody, SaveSessionBody, ApiResponse } from '../types';
+import { useUser } from '../contexts/UserContext';
 
 /**
  * Session service for API calls
@@ -26,7 +27,22 @@ export const sessionService = {
    * 1. Uncomment the method body
    * 2. Call this after onboarding to create a session
    * 3. Store session ID in UserContext
+   
    */
+  // Starts a session body and layout assigned to that session
+  async startSession() {
+  const res = await fetch(`${BASE}/sessions/start`, {
+    method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  }}
+  );
+
+
+   if (!res.ok) throw new Error("getLayout failed");
+
+   return res.json();
+},
 
   /**
    * Get session by ID
