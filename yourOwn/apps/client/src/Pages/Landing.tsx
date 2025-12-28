@@ -9,7 +9,7 @@ type LandingStep = 'hero' | 'welcome' | 'name' | 'bio';
 
 export default function Landing() {
   const navigate = useNavigate();
-  const { user, setUser, setOnboardingComplete } = useUser();
+  const { user, setUser, setOnboardingComplete, setAuthToken, setSessionId } = useUser();
   const [step, setStep] = useState<LandingStep>('hero');
   const [name, setName] = useState(user?.name || '');
   const [bio, setBio] = useState(user?.bio || '');
@@ -52,7 +52,11 @@ export default function Landing() {
     
     try {
       // start session -> sessionService.startSession stores token + sessionId in localStorage
-      await sessionService.startSession();
+      const sessionData: {sessionId: string, token: string } = await sessionService.startSession();
+      console.log('Started session:', sessionData);
+      setSessionId(sessionData.sessionId);
+      setAuthToken(sessionData.token);
+
       const userId = user?.id || `user-${Date.now()}`;
       setUser({
         id: userId,

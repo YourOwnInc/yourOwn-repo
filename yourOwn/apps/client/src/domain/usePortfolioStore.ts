@@ -17,37 +17,59 @@ export function usePortfolioStore() {
 
     let cancelled = false;
     (async () => {
+      // Guard: do nothing until a session exists
+      if (!sessionId) {
+        setLayout(null);
+        setExperiences([]);
+        setLoading(false);
+        return;
+      }
+
       setLoading(true);
       console.log("SessionId given to get exp", sessionId );
-      const [l, exps] = await Promise.all([getLayout(sessionId), listExperiences(sessionId)]);
-      if (!cancelled) {
-        setLayout(l);
-        setExperiences(exps);
-        setLoading(false);
+      try {
+        const [l, exps] = await Promise.all([getLayout(sessionId), listExperiences(sessionId)]);
+        if (!cancelled) {
+          setLayout(l);
+          setExperiences(exps);
+          setError(null);
+        }
+      } catch (err: any) {
+        if (!cancelled) {
+          setError(err?.message ?? String(err));
+          setLayout(null);
+          setExperiences([]);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     })();
     return () => { cancelled = true; };
   }, [sessionId]);
 
   const addExperience = useCallback(async (payload: Omit<ExperienceDTO, "id" | "sessionId">) => {
+    if (!sessionId) throw new Error("Cannot create experience: sessionId is required");
     const created = await createExperience(sessionId, payload);
     setExperiences((prev) => [created, ...prev]);
     return created;
   }, [sessionId]);
 
   const editExperience = useCallback(async (id: string , payload:  Partial<ExperienceDTO>)=> {
+     if (!sessionId) throw new Error("Cannot update experience: sessionId is required");
      const edited = await updateExperience(sessionId,id,payload)
      setExperiences((prev) => prev.map(e => e.id === id ? { ...e, ...edited } : e))
     return edited;
   }, [sessionId])
 
   const removeExperience=  useCallback(async (id: string) => {
+    // delete likely doesn't need sessionId, but if it does, validate as above
     await deleteExperience(id)
     setExperiences((prev) => prev.filter(e => e.id !== id));
 
   }, [])
 
   const upsertPlacement = useCallback(async (p: Placement) => {
+    if (!sessionId) throw new Error("Cannot upsert placement: sessionId is required");
     await assignItem(sessionId, p);
     setLayout((prev) => {
       if (!prev) return prev;

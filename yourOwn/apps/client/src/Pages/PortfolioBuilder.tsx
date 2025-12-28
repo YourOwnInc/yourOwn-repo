@@ -8,8 +8,8 @@ export default function PortfolioBuilder() {
   const {  loading, error, removeExperience } = usePortfolioStore();
   const { experiences } = useExperiences();
 
-  if (loading) return <div className="p-8 text-white">Syncing with server...</div>;
-  if (error) return <div className="p-8 text-red-500">Error: {error}</div>;
+  // if (loading) return <div className="p-8 text-white">Syncing with server...</div>;
+  // if (error) return <div className="p-8 text-red-500">Error: {error}</div>;
 
   return (
     <div className="min-h-screen bg-zinc-900 text-white p-8">

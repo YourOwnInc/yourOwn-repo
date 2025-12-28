@@ -37,7 +37,7 @@ export async function createExperience(sessionId: string, payload: any) {
 }
 
 
-export async function listExperiences(sessionId: SessionId) {
+export async function listExperiences(sessionId: SessionId | null) {
   const authHeader = getAuthHeader();
   const res = await fetch(`${BASE}/sessions/${sessionId}/experiences`, {
     method: "GET",

@@ -1,5 +1,6 @@
 import { apiClient } from './api';
 import { Session, StartSessionBody, SaveSessionBody, ApiResponse } from '../types';
+import { useUser } from '../contexts/UserContext';
 
 /**
  * Session service for API calls
@@ -34,24 +35,13 @@ export const sessionService = {
     method: "POST",
   headers: {
     "Content-Type": "application/json",
-  },
-  }
-  ,);
+  }}
+  );
 
-   const sessionData = await res.json();
-   // Extract session ID and JWT token from sessionData
-   const JwtToken = sessionData.token;
-   const sessionId = sessionData.sessionId;
-   console.log("SessionId being stored", sessionId);
-
-   
-
-   // store them in local storage
-  localStorage.setItem('sessionId', sessionId);
-   localStorage.setItem('token', JwtToken);
 
    if (!res.ok) throw new Error("getLayout failed");
-  
+
+   return res.json();
 },
 
   /**
