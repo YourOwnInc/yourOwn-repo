@@ -14,8 +14,11 @@ import {
   sortableKeyboardCoordinates,
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
-import { PortfolioEntry } from '../types';
+import { PortfolioEntry,  } from '../types';
 import ExperienceCard from './ExperienceCard';
+// Should i use protflioEntry or ExperienceDTO here? 
+// 
+
 
 interface PortfolioGridProps {
   entries: PortfolioEntry[];

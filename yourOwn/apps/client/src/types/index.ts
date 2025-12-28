@@ -39,15 +39,17 @@ export interface MediaItem {
   meta?: Record<string, unknown>;
 }
 
+//TODO: figure out what fields are needed for an entry on the client side 
+// took out id's and sessionId. this data is handled in context and service layer 
+//this is for the dynamic data the user inputs 
 export interface ExperienceEntry {
-  id: ExperienceEntryId;
-  sessionId: string;
   type?: string; // "project", "internship", etc.
   title: string;
   summary: string;
   start?: string;
   end?: string;
   media?: MediaItem[];
+  images?: string[]; // Base64 image data for export
   kind?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -64,7 +66,9 @@ export interface GridSize {
   height: number;
 }
 
+// May not be nessecary if these are purley UI fields. exp
 export interface PortfolioEntry extends ExperienceEntry {
+  id: ExperienceEntryId; // make it not required 
   position: GridPosition;
   size: GridSize;
   images?: string[]; // Base64 image data for export
@@ -112,7 +116,8 @@ export interface AddExperienceEntryBody {
 // Local storage keys
 export const STORAGE_KEYS = {
   USER_DATA: 'yourown_user_data',
-  SESSION_ID: 'yourown_session_id',
+  SESSION_ID: 'sessionId',
+  AUTH_TOKEN: "token",
   PORTFOLIO_ENTRIES: 'yourown_portfolio_entries',
   ONBOARDING_COMPLETE: 'yourown_onboarding_complete',
 } as const;

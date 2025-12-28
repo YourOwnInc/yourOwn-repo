@@ -1,7 +1,7 @@
 import { SessionId, LayoutModel, Placement } from "../domain/types";
 const BASE = "http://localhost:5000/api";
 
-export async function getLayout(sessionId: SessionId): Promise<LayoutModel> {
+export async function getLayout(sessionId: SessionId | null): Promise<LayoutModel> {
   const res = await fetch(`${BASE}/layout/`);
   if (!res.ok) throw new Error("getLayout failed");
   return res.json();

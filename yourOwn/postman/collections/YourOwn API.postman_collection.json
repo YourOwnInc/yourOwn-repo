@@ -1,0 +1,517 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+    "name": "YourOwn API",
+    "description": "API collection for the YourOwn portfolio application. This API manages user sessions, experiences (projects, jobs, internships, volunteering), layouts, and exports.\n\n## Base URL\n`http://localhost:5000`\n\n## Authentication\nMost endpoints require a Bearer token obtained from the `/api/sessions/start` endpoint. Include the token in the `Authorization` header.\n\n## Headers\n- `Authorization: Bearer <token>` - Required for authenticated endpoints\n- `X-Session-Id: <sessionId>` - Required for layout endpoints\n- `Content-Type: application/json` - Required for POST/PUT/PATCH requests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "sessionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "experienceId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Check if the API server is running and healthy."
+          },
+          "response": []
+        }
+      ],
+      "description": "Health check endpoints for monitoring API status."
+    },
+    {
+      "name": "Sessions",
+      "item": [
+        {
+          "name": "Start Session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('token', response.token);",
+                  "    pm.collectionVariables.set('sessionId', response.sessionId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"metadata\": {}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sessions/start",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sessions", "start"]
+            },
+            "description": "Start a new guest session. Returns a JWT token and session ID that should be used for subsequent authenticated requests."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Session by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/sessions/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sessions", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{sessionId}}",
+                  "description": "Session UUID"
+                }
+              ]
+            },
+            "description": "Retrieve a specific session by its UUID."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Sessions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/sessions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sessions"]
+            },
+            "description": "Retrieve all sessions."
+          },
+          "response": []
+        },
+        {
+          "name": "Claim Session",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sessions/save/:id/claim",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sessions", "save", ":id", "claim"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{sessionId}}",
+                  "description": "Session UUID to claim"
+                }
+              ]
+            },
+            "description": "Claim a session for a registered user. Associates the session with the authenticated user's account."
+          },
+          "response": []
+        }
+      ],
+      "description": "Session management endpoints. Sessions are used to track user activity and can be claimed by registered users."
+    },
+    {
+      "name": "Experiences",
+      "item": [
+        {
+          "name": "Create Experience",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('experienceId', response.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Software Engineer Intern\",\n  \"summary\": \"Developed REST APIs and microservices\",\n  \"start\": \"2024-06-01T00:00:00.000Z\",\n  \"end\": \"2024-08-31T00:00:00.000Z\",\n  \"kind\": \"internship\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sessions/:sessionId/experiences",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sessions", ":sessionId", "experiences"],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Session UUID"
+                }
+              ]
+            },
+            "description": "Create a new experience entry (project, job, internship, or volunteering).\n\n**Request Body:**\n- `title` (required): Title of the experience\n- `summary` (optional): Description of the experience\n- `start` (optional): Start date in ISO 8601 format\n- `end` (optional): End date in ISO 8601 format\n- `kind` (optional): Type of experience - one of: `internship`, `project`, `job`, `volunteering`"
+          },
+          "response": []
+        },
+        {
+          "name": "List Experiences",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sessions/:sessionId/experiences",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sessions", ":sessionId", "experiences"],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Session UUID"
+                }
+              ],
+              "query": [
+                {
+                  "key": "kind",
+                  "value": "project",
+                  "description": "Filter by experience type (internship, project, job, volunteering)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "List all experiences for a session. Optionally filter by kind."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Experience by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sessions/:sessionId/experiences/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sessions", ":sessionId", "experiences", ":id"],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Session UUID"
+                },
+                {
+                  "key": "id",
+                  "value": "{{experienceId}}",
+                  "description": "Experience UUID"
+                }
+              ]
+            },
+            "description": "Retrieve a specific experience by its ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Experience (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Senior Software Engineer\",\n  \"summary\": \"Led development of core platform features\",\n  \"start\": \"2024-01-01T00:00:00.000Z\",\n  \"end\": \"2024-12-31T00:00:00.000Z\",\n  \"kind\": \"job\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sessions/:sessionId/experiences/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sessions", ":sessionId", "experiences", ":id"],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Session UUID"
+                },
+                {
+                  "key": "id",
+                  "value": "{{experienceId}}",
+                  "description": "Experience UUID"
+                }
+              ]
+            },
+            "description": "Update an existing experience (full update)."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Experience (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"summary\": \"Updated description of the experience\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sessions/:sessionId/experiences/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sessions", ":sessionId", "experiences", ":id"],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Session UUID"
+                },
+                {
+                  "key": "id",
+                  "value": "{{experienceId}}",
+                  "description": "Experience UUID"
+                }
+              ]
+            },
+            "description": "Partially update an existing experience. Only include fields you want to change."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Experience",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sessions/:sessionId/experiences/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sessions", ":sessionId", "experiences", ":id"],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Session UUID"
+                },
+                {
+                  "key": "id",
+                  "value": "{{experienceId}}",
+                  "description": "Experience UUID"
+                }
+              ]
+            },
+            "description": "Delete an experience by its ID. Returns 204 No Content on success."
+          },
+          "response": []
+        }
+      ],
+      "description": "Experience management endpoints. Experiences represent portfolio items like projects, jobs, internships, and volunteering activities."
+    },
+    {
+      "name": "Layout",
+      "item": [
+        {
+          "name": "Get Layout",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Session-Id",
+                "value": "{{sessionId}}",
+                "description": "Session UUID"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/layout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "layout"]
+            },
+            "description": "Get the layout configuration for a session. Returns template ID, theme, slots, and placements."
+          },
+          "response": []
+        },
+        {
+          "name": "Assign Experience to Layout",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Session-Id",
+                "value": "{{sessionId}}",
+                "description": "Session UUID"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"{{sessionId}}\",\n  \"experienceId\": \"{{experienceId}}\",\n  \"position\": \"hero\",\n  \"patternId\": \"card-basic\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/layout/assign",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "layout", "assign"]
+            },
+            "description": "Assign an experience to a specific position in the layout.\n\n**Request Body:**\n- `sessionId` (required): Session UUID\n- `experienceId` (required): Experience UUID to assign\n- `position` (required): Layout position identifier\n- `patternId` (required): Pattern/template ID for rendering"
+          },
+          "response": []
+        }
+      ],
+      "description": "Layout management endpoints. Layouts define how experiences are displayed in the portfolio."
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"{{sessionId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "register"]
+            },
+            "description": "Register a new user by associating a session with a user account.\n\n**Request Body:**\n- `sessionId` (required): Valid session UUID to associate with the new user"
+          },
+          "response": []
+        }
+      ],
+      "description": "User management endpoints for registration and authentication."
+    },
+    {
+      "name": "Export",
+      "item": [
+        {
+          "name": "Export Portfolio as ZIP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"html\": {\n    \"userName\": \"John Doe\",\n    \"entries\": [\n      {\n        \"title\": \"Software Engineer\",\n        \"summary\": \"Built amazing things\",\n        \"kind\": \"job\"\n      }\n    ]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/export",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "export"]
+            },
+            "description": "Export portfolio data as a downloadable ZIP file containing HTML and JSON files.\n\n**Request Body:**\n- `html` (required): Object containing export data\n  - `userName`: Name to display in the export\n  - `entries`: Array of experience entries to include"
+          },
+          "response": []
+        }
+      ],
+      "description": "Export endpoints for downloading portfolio data."
+    },
+    {
+      "name": "Dev",
+      "item": [
+        {
+          "name": "Seed Database",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/dev/seed",
+              "host": ["{{baseUrl}}"],
+              "path": ["dev", "seed"]
+            },
+            "description": "Development endpoint to seed the database with sample data. Creates a new session with sample experiences (a project and an education entry)."
+          },
+          "response": []
+        }
+      ],
+      "description": "Development and testing endpoints. These should not be used in production."
+    }
+  ]
+}
