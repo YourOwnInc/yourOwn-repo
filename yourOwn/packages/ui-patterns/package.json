@@ -1,0 +1,10 @@
+{
+    "name": "@yourown/ui-patterns",
+    "version": "0.0.1",
+    "main": "./index.ts",
+    "types": "./index.ts",
+    "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

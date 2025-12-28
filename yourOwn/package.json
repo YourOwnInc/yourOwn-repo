@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^10.1.0",
+    "@yourown/ui-patterns": "^0.0.1",
     "archiver": "^7.0.1",
     "cors": "^2.8.5",
     "execa": "^9.6.0",
