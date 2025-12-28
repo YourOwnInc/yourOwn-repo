@@ -3,6 +3,7 @@ import { UserProvider, useUser } from './contexts/UserContext';
 import Landing from './Pages/Landing';
 import PortfolioBuilder from './Pages/PortfolioBuilder';
 import {RendererLab} from './Pages/RendererLab';
+import ExperienceHub from './Pages/ExperienceHub';
 
 function AppContent() {
   const { onboardingComplete } = useUser();
@@ -13,7 +14,7 @@ function AppContent() {
         <Route path="/landing" element={<Landing />} />
         <Route path="/portfoliobuilder" element={<PortfolioBuilder />} />
         <Route path="/lab" element={<RendererLab />} />
-
+        <Route path="/experiences" element={<ExperienceHub  />} />
       </Routes>
     </BrowserRouter>
   );

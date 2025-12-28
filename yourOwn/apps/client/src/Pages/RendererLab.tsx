@@ -15,7 +15,6 @@ const SCENARIOS: Record<string, PortfolioRenderData> = {
         { slotId: "s1", experienceId: "exp1", patternId: "hero-basic" },
         { slotId: "s2", experienceId: "exp2", patternId: "generic-card", },
         { slotId: "s3", experienceId: "exp3", patternId: "generic-card", },
-
       ],
     },
     experiences: [
@@ -39,7 +38,6 @@ const SCENARIOS: Record<string, PortfolioRenderData> = {
       },
     ],
   },
-
   "Broken Pattern ID": {
     layout: {
       slots: [{ id: "s1", area: "header" }],
@@ -59,6 +57,7 @@ const SCENARIOS: Record<string, PortfolioRenderData> = {
 };
 
 export const RendererLab = () => {
+
   const [params, setParams] = useSearchParams();
 
   const scenarioKey =
@@ -99,6 +98,7 @@ export const RendererLab = () => {
           <PortfolioRenderer data={data} />
         </div>
       </div>
+
     </div>
   );
 };
