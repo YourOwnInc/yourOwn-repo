@@ -1,4 +1,4 @@
-export type SessionId = string;
+export type SessionId = string ;
 export type SlotId = string;
 export type ExperienceId = string;
 export type PatternId =  "exp.card.v1" | "exp.row.v1"; // extend later
@@ -19,7 +19,7 @@ export type Slot = {
 }
 
 export type Placement = {
-    slotId: SlotId;
+    position: SlotId;
     experienceId: ExperienceId;
     patternId: PatternId;
 }

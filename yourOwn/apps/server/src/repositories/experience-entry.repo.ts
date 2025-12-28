@@ -1,5 +1,30 @@
 // src/repos/experience-entry.repo.ts
+import { fi } from "zod/v4/locales";
 import { prisma } from "../lib/prisma";
+
+// The controller guarantees exactly one of these
+
+
+export async function createExperience(input: CreateExperienceInput) {
+  const data: any = {
+    title: input.title,
+    summary: input.summary ?? null,
+    start: input.start ?? null,
+    end: input.end ?? null,
+    kind: (input.kind as any) ?? null,
+  };
+
+  if (input.userId) {
+    data.userId = input.userId;
+  }
+  if (input.sessionId) {
+    data.session = { connect: { id: input.sessionId } };
+  }
+
+  return prisma.experience.create({ data });
+}
+
+
 
 // The controller guarantees exactly one of these
 type Owner = { userId?: string | null; sessionId?: string | null };
@@ -13,32 +38,27 @@ export type CreateExperienceInput = Owner & {
   kind?: string | null; // map to your Prisma enum if you have one
 };
 
-export async function createExperience(input: CreateExperienceInput) {
-  const data = {
-    userId: input.userId ?? null,
-    sessionId: input.sessionId ?? null,
-    title: input.title,
-    summary: input.summary ?? null,
-    start: input.start ?? null,
-    end: input.end ?? null,
-    kind: (input.kind as any) ?? null,
-  };
-  return prisma.experience.create({ data });
-}
+// ...
 
 export async function listExperiences(filter: Owner & { kind?: string | null }) {
+  const { kind, ...owner } = filter;
+
+  // base where is "owned by this user or this session"
+  const where: any = ofOwner(owner);
+
+  // optional filter by kind
+  if (typeof kind !== "undefined" && kind !== null) {
+    where.kind = kind;
+  }
+
   return prisma.experience.findMany({
-    where: {
-      ...ofOwner(filter),
-      ...(filter.kind ? { kind: filter.kind as any } : {}),
-    },
+    where,
     orderBy: { createdAt: "desc" },
   });
 }
 
 export async function getExperienceOwned(id: string, owner: Owner) {
   return prisma.experience.findFirst({
-    where: { id, ...ofOwner(owner) },
   });
 }
 
@@ -69,17 +89,15 @@ export async function updateExperienceOwned(
   }).catch(async () => {
     // Fallback using updateMany (returns count) then read
     const { count } = await prisma.experience.updateMany({
-      where: { id, ...ofOwner(owner) },
       data,
     });
     if (count === 0) return null;
-    return prisma.experience.findFirst({ where: { id, ...ofOwner(owner) } });
+    return prisma.experience.findFirst();
   });
 }
 
 export async function deleteExperienceOwned(id: string, owner: Owner) {
   const { count } = await prisma.experience.deleteMany({
-    where: { id, ...ofOwner(owner) },
   });
   return count > 0;
 }

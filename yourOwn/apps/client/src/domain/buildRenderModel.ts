@@ -7,7 +7,7 @@ export function buildRenderModel(model: PortfolioModel): RenderNode[] {
 
   for (const p of model.layout.placements) {
     const data = byId.get(p.experienceId);
-    const slot = model.layout.slots.find((s) => s.id === p.slotId);
+    const slot = model.layout.slots.find((s) => s.id === p.position);
     if (!data || !slot) continue;
     nodes.push(PATTERNS[p.patternId].toRenderNode({ data, slot }));
   }

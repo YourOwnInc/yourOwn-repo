@@ -1,39 +1,113 @@
-import { JsonArray } from '@prisma/client/runtime/library';
-import { prisma } from '../lib/prisma';
-
+// src/repositories/layout.repo.ts
+import { prisma } from "../lib/prisma";
+import { layoutItemInput } from "../schemas/layout.schema";
 
 export type CreateLayoutInput = {
-  sessionId?: string;
-  userId?: string;
-  templateId: string;
-  theme?: string | null;
-  slots?: JsonArray;
-  placements?: JsonArray; //TODO:  check if this object ir correct for placments and sltos 
+  sessionId: string;
+  patternId: string;
+  experienceId: string;
+  position: number;
 };
 
-export async function createLayout(input: CreateLayoutInput) {
-  return prisma.layout.create({
-    data: {
-      sessionId: input.sessionId ?? null,
-      userId: input.userId ?? null,
-      templateId: input.templateId,
-      theme: input.theme ?? null,
-      slots: input.slots ?? {},
-      placements: input.placements ?? {},
+/**
+ * Find the layout for a session, or create an empty one if it doesn't exist.
+ * Returns layout + its items.
+ */
+export async function findOrCreateLayoutForSession(sessionId: string) {
+  let layout = await prisma.layout.findUnique({
+    where: { sessionId },
+    include: {
+      items: true,
     },
   });
+
+  if (!layout) {
+    // You can change "DEFAULT" to whatever template you’re using
+    layout = await prisma.layout.create({
+      data: {
+        sessionId,
+        templateId: "DEFAULT",
+      },
+      include: {
+        items: true,
+      },
+    });
+  }
+
+  return layout;
 }
 
-export async function getLayoutBySession(sessionId: string) {
-  return prisma.layout.findFirst({
-    where: { sessionId },
-    orderBy: { createdAt: 'desc' },
+
+// Creates an item and associates it with a layout with given id 
+export async function createItem(
+  experienceId: string,
+  sessionId: string,
+  position: number,
+  patternId: string,
+){
+  // checks for exisiting layout 
+  let layout = await prisma.layout.findUnique({
+    where: {
+      id: sessionId
+    }
+  })
+  if(!layout) {
+
+  }
+
+  // get experience 
+  let exp = await prisma.experience.findUnique({
+    where: {
+      id: experienceId
+    }
+  })
+
+  if(!exp) {
+    throw new Error("experience not found");
+  }
+
+  // shoudl i make a layoutItem then add it to the items array in layout?
+  let updatedLayout = await prisma.layout.update({
+    where: {
+      id: sessionId
+    },
+    data: {
+      items: {
+        create: {
+             experienceId,
+             patternId,
+             position
+        }
+      }
+    },
+    include: {
+      items: true
+    }
   });
+
+  return updatedLayout;
 }
 
-export async function getLayoutByUser(userId: string) {
-  return prisma.layout.findFirst({
-    where: { userId },
-    orderBy: { createdAt: 'desc' },
-  });
+
+export async function fetchLayoutBySessionId(sessionId: string) {
+  let layout = await prisma.layout.findUnique({
+    where: {
+      sessionId
+    }
+  })
+  return layout;
+}
+
+// get layout items by layoutId 
+
+export async function fetchItems(layoutId: string ) {
+  let items = await prisma.layout.findUnique({
+   where: {
+    id: layoutId
+   },
+   select: {
+    items: true
+   }
+  })
+  return items;
 }

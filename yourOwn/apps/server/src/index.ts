@@ -6,7 +6,8 @@ import { z} from 'zod';
 import userRoutes from "./routes/user.routes";
 import sessionRoutes from "./routes/session.routes"
 import experienceRoutes from "./routes/experience-entry.routes"
-
+import layoutRoutes from "./routes/layout.routes"
+import exportRoutes from "./routes/export.routes"
 import devRoutes from './routes/dev'
 
 //import ... from "./routes/..."
@@ -36,8 +37,9 @@ app.use('/dev', devRoutes);
 // where routes will live
 app.use('/api/users', userRoutes);
 app.use('/api/sessions', sessionRoutes);
+app.use('/api/layout', layoutRoutes);
 app.use('/api', experienceRoutes);
-
+app.use('/api/export', exportRoutes);
 
 
 app.get('/api/health', (_req, res) => {

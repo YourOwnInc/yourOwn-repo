@@ -1,0 +1,749 @@
+# Project Overview
+
+YourOwn is a platform designed to simplify and enrich the process of building personal portfolios. Unlike existing open-source templates, which often feel tedious to customize, unappealing, and require technical depth, YourOwn emphasizes user experience. When users enter the platform, they are guided through reflection-based questions that help them describe their experience in a structured and meaningful way. Each experience can then be formatted with templates, previewed as part of a full portfolio, and then exported as a ZIP file or Github Repository.
+
+To take a step further, YourOwn provides an optional tool that automatically sets up the user's AWS account with the correct S3 and load balancer configuration, allowing users to host their portfolio on their own cloud domain at minimal to no cost. This removes the barrier of technical setup while keeping true ownership in the hands of the user. There is no vendor lock-in; instead, users walk away with a portfolio they fully control. We only add a subtle watermark to signify it was created through YourOwn.
+
+Our development will follow a plan-driven approach. This is because YourOwn requires building a structured, end to end workflow for user onboarding, portfolio generation, and optional AWS deployment. These sets of components must be carefully designed up front to avoid misalignment and rework. A clear, sequential plan allows us to map each feature and dependent in advance, allowing us to match our intended user experience.
+
+---
+
+# Stakeholders
+
+### Students
+**Main Priority:** Find a fast, but easy way to present their skills, abilities, and accomplishments into an elegant and clear portfolio.
+
+**Sub Priorities:**
+- The portfolio can be easily updated.
+- The portfolio includes advanced options (not just doing the “bare minimum”):  
+  Examples: Deeper learning curve in coding the portfolio, option to not let “AI” dictate what you should do, supports more advanced-level code, etc.
+- The GUI and UI of the portfolio maker is readable and easy to navigate through.
+- Sending links and uploading files to media or others doesn’t cause problems (in other words, it’s straightforward to perform).
+- The ability to save others’ portfolios (and see it for future reference).
+
+### Student Organizations
+**Main Priority:** Find an efficient method to display information about their organizations.
+
+**Sub Priorities:**
+- Easy access to learn more about their organization (i.e., QR-codes, link to website).
+- An option to track who visited the website (this allows for the org to get a rough idea who’s interested).
+
+---
+
+# Requirements Elicitation
+
+### How We Will Gather Requirements
+To gather requirements for YourOwn, we will use a combination of the following methods:
+- **User Interviews:** Conduct one-on-one sessions to understand their needs and frustrations with current portfolio tools.
+- **Brainstorming Sessions:** Internal team discussions to explore creative solutions and prioritize features.
+- **Competitive Analysis:** Review existing portfolio platforms and open-source templates to identify gaps and opportunities.
+
+### Draft Questionnaire
+Here are five sample questions we would ask during interviews or surveys:
+1. What challenges have you faced when creating a personal portfolio?
+2. How important is visual customization (e.g., templates, layout) in your portfolio?
+3. Would you prefer a guided experience or full control when entering your portfolio content? Why?
+4. Do you have experience with cloud hosting (e.g., AWS)? Would you use an automated tool to publish your portfolio?
+5. What features would make you feel confident that your portfolio truly represents you?
+
+### How We Will Organize Requirements
+We will categorize requirements into the following groups:
+- **Client-Server Interactions:** Covers user-facing features such as sign-up, dashboard, content input, template selection, and live preview.
+- **Exporting Tool:** Includes functionality for generating and downloading the portfolio as a ZIP file or GitHub repository.
+- **Automation Tool:** Encompasses the optional AWS deployment tool, including S3 setup, load balancer configuration, and domain routing.
+
+---
+
+# Requirements Specification
+
+## Functional
+
+### FR-01 Sign up & Sign in
+**Goal:** The system shall let users create an account to store their progress  
+**Acceptance:**
+- Users can sign up with email/password or OAuth using third-party accounts (Google preferably)
+- Password reset
+- After sign in, they land on their dashboard
+
+### FR-02 Create and Manage a Portfolio Project
+**Goal:** The system shall allow to start a portfolio, rename it, and delete it  
+**Acceptance:**
+- “New portfolio” button creates a blank project
+- Users can rename or delete a project from the dashboard
+- Multiple Portfolios won't be in MVP but to be considered
+- Multiple portfolios could be a premium
+
+### FR-03 Dashboard page
+**Goal:** Shows all necessary items in this dashboard page.  
+**Acceptance:**
+- “New Portfolio” button to create a blank project.
+- Show Portfolio (After MVP, we will show all portfolios. MVP will only support 1 per user) and have an edit and delete button for portfolios.
+- 1-2 minute click through tutorial for new users
+- Settings page to update/change personal information
+
+### FR-04 Add Experiences (Content input)
+**Goal:** CRUD experience entries (role, org, dates, bullets, etc.)  
+**Acceptance:**
+- Form lets users add multiple experiences
+- Users can reorder experience
+- Drag and drop (?)
+- Changes are saved automatically
+
+### FR-05 YourOwn watermark
+**Goal:** Create a paywall for removing our watermark  
+**Acceptance:**
+- Watermark stays in a discreet area of the portfolio to advertise YourOwn
+- Users can pay to remove the watermark
+
+### FR-06 Upload Media
+**Goal:** Add project images and profile photos  
+**Acceptance:**
+- Users can upload images from their device
+- Large or unsupported file show a friendly error
+
+### FR-07 Upload links
+**Goal:** Users are allowed to upload links of their socials and any other external sites  
+**Acceptance:**
+- Links are embedded in assets for better UI
+- Users can CRUD links after portfolio is done
+- Their local dev allows them to do that
+
+### FR-08 Choose a template for experience
+**Goal:** The system shall allow user to pick 1-2 templates  
+**Acceptance:**
+- Template picker shows screenshots
+- Selected template updates the preview
+
+### FR-09 Live Preview
+**Goal:** The system shall show how portfolio will look like without delivering full code  
+**Acceptance:**
+- Preview shows at the end of process
+- Preview shows correct content with template
+
+### FR-10 Export a ZIP
+**Goal:** The system shall allow user to download a working website (HTML/CSS/Assets) as a zip  
+**Acceptance:**
+- “Export” Creates a downloadable zip
+
+### FR-11 Automate publishing template in AWS
+**Goal:** The system shall have a tool to setup a users aws account to publish portfolio  
+**Acceptance:**
+- Tool should be optional for users
+- No security issues handling users aws account
+- Successfully adds S3 configs
+- Successfully adds ELB configs
+- Successfully adds route 66 configs for domain name
+
+---
+
+## Non-Functional
+
+### NFR-01 Easy Sign-Up
+**Intent:** Keep account creation painless.  
+**Acceptance:**
+- Sign-up takes ≤ 1 minute for a new user.
+- No more than 2 screens (email/password → confirm).
+- Clear reasons shown if sign-up fails.
+
+### NFR-02 Clarity & Simplicity in experience creation
+**Intent:** Adding an experience should feel natural.  
+**Acceptance:**
+- Plain language labels (no jargon).
+- Each screen has one clear primary
+- No part of the process should feel unnecessary to the user
+- First-time users can create a portfolio and add one experience in ≤ 10 minutes.
+
+### NFR-03 Responsiveness (Perceived Speed)
+**Intent:** Feels snappy on normal internet.  
+**Acceptance:**
+- Preview updates within ~½ second after an edit.
+- Export completes within a short, reasonable time for small portfolios (e.g., under ~10 seconds).
+- Loading states or progress bars appear when needed.
+
+---
+
+# Requirements Validation
+
+We will validate requirements through building wireframes and mock workflows to check usability and getting feedback from early users.
+
+## Functional Requirements
+
+### FR-01: Sign up & Sign in
+- **Verifiability:** Yes, can test by creating accounts, logging in, resetting passwords.
+- **Comprehensibility:** Clear—requirements specify flows and outcomes.
+- **Traceability:** Originates from core need to give users individual experience and have info for analytics.
+- **Adaptability:** Can add more sign-in methods or 2FA later.
+
+### FR-02: Create and Manage a Portfolio Project
+- **Verifiability:** Test with new, rename, delete actions.
+- **Comprehensibility:** Straightforward, includes MVP scope.
+- **Traceability:** Comes from user’s need to manage their created portfolios.
+- **Adaptability:** Scales to multiple portfolios or premium tier.
+
+### FR-03: Dashboard page
+- **Verifiability:** Test visibility of portfolio items, tutorial, settings.
+- **Comprehensibility:** Clear features listed.
+- **Traceability:** Core usability needs.
+- **Adaptability:** Dashboard can evolve to support new features.
+
+### FR-04: Add Experiences (Content input)
+- **Verifiability:** Test CRUD operations and reordering.
+- **Comprehensibility:** Explicit fields and actions make it clear.
+- **Traceability:** Derived from portfolio content creation needs.
+- **Adaptability:** Can extend with richer input types later.
+
+### FR-05: YourOwn watermark
+- **Verifiability:** Can test watermark visibility and payment removal.
+- **Comprehensibility:** Clear paywall logic.
+- **Traceability:** Businesses need to monetize.
+- **Adaptability:** Could expand to subscription tiers.
+
+### FR-0: Upload Media
+- **Verifiability:** Test file upload success and error cases.
+- **Comprehensibility:** Clear acceptance criteria.
+- **Traceability:** From user need for visuals.
+- **Adaptability:** Extendable to video or cloud integrations.
+
+### FR-0: Upload Links
+- **Verifiability:** Test CRUD links and embedding.
+- **Comprehensibility:** Clear.
+- **Traceability:** From need to show external presence.
+- **Adaptability:** Could support custom icons or analytics.
+
+### FR-05: Choose a template
+- **Verifiability:** Test template selection and preview change.
+- **Comprehensibility:** Clear and simple.
+- **Traceability:** From design customization needs.
+- **Adaptability:** Can add more templates later.
+
+### FR-06: Live Preview
+- **Verifiability:** Test preview correctness and responsiveness.
+- **Comprehensibility:** Clear “without delivering full code.”
+- **Traceability:** From user need for feedback before publishing.
+- **Adaptability:** Could expand to real-time previews.
+
+### FR-07: Export a ZIP
+- **Verifiability:** Test by downloading and running the portfolio.
+- **Comprehensibility:** Straightforward.
+- **Traceability:** From requirement for usable output.
+- **Adaptability:** Could support GitHub Pages or Netlify export.
+
+### FR-08: Automate publishing template in AWS
+- **Verifiability:** Test AWS setup success (S3, ELB, Route 66).
+- **Comprehensibility:** Some complexity, but clear.
+- **Traceability:** From deployment convenience goal.
+- **Adaptability:** Could later add support for Azure or GCP.
+
+---
+
+## Non-Functional Requirements
+
+### NFR-01: Easy Sign-Up
+- **Verifiability:** Test sign-up duration and failure messages.
+- **Comprehensibility:** Clear time and step limits.
+- **Traceability:** From core UX design goals.
+- **Adaptability:** Can be adjusted for new flows like social login.
+
+### NFR-02: Clarity & Simplicity in Experience Creation
+- **Verifiability:** Usability testing, measuring time to add experience.
+- **Comprehensibility:** Clear plain-language requirement.
+- **Traceability:** From UX needs.
+- **Adaptability:** Can be refined based on user testing feedback.
+
+### NFR-03: Responsiveness (Perceived Speed)
+- **Verifiability:** Test preview delay and export duration.
+- **Comprehensibility:** Clear quantitative measures.
+- **Traceability:** From performance goals.
+- **Adaptability:** Benchmarks can be adjusted as portfolio sizes grow.
+
+
+---
+title: Process Model — YourOwn (Guest Session → Optional Account)
+---
+```mermaid
+flowchart LR
+  %% Lanes (visual only)
+  subgraph U[User]
+    U0([Open YourOwn])
+    U1{Has Account?}
+    U2([Provide portfolio info])
+    U3([Review Preview])
+    U4{Export or Save?}
+    U5{Wants to Save Progress?}
+    U6([Create / Login Account])
+    U7([Done])
+  end
+
+  subgraph FE[Frontend ]
+    F1([Create/Load Session ])
+    F2([Collect form data])
+    F3([Render preview])
+    F4([Request Export])
+    F5([Request Save])
+  end
+
+  subgraph BE[Backend Express + Services]
+    B1([Create Session])
+    B2([Validate with Zod])
+    B3{Valid?}
+    B4([Store in Session])
+    B5([Generate Export Artifact])
+    B6([Link Session → User])
+    B7([Persist User-owned data])
+  end
+
+  %% Flow
+  U0 --> U1
+  U1 -- "No" --> F1 --> B1
+  U1 -- "Yes" --> U6 --> F1 --> B1
+
+  U2 --> F2 --> B2 --> B3
+  B3 -- "No" --> U2
+  B3 -- "Yes" --> B4 --> F3 --> U3
+
+  U3 --> U4
+  U4 -- "Export" --> F4 --> B5 --> U7
+  U4 -- "Save/Return Later" --> U5
+  U5 -- "Yes" --> F5 --> B6 --> B7 --> U7
+  U5 -- "No" --> U7
+```
+
+  This workflow emphasizes a frictionless guest experience: a user can create a portfolio without registering. The Session object captures form inputs and preview state while the user remains anonymous. Validation runs on each submit cycle and feeds back to the client for quick correction.
+When the user wants to export or save progress, the system branches. Export proceeds directly using the Session, while saving requires linking the Session to a User (new or existing). At that point, Session data is persisted under the user account, preserving continuity for future edits.
+
+
+---
+title: Behavioral Model
+---
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User
+    participant FE as Frontend (React)
+    participant API as Backend (Express API)
+    participant SVC as SessionService
+    participant USVC as UserService
+    participant REPO as Repositories
+
+    User->>FE: Open app (no account)
+    FE->>API: POST /api/sessions (create guest session)
+    API->>SVC: createSession()
+    SVC->>REPO: persist(session)
+    REPO-->>SVC: session
+    SVC-->>API: sessionId
+    API-->>FE: { sessionId }
+
+    User->>FE: Enter portfolio data
+    FE->>API: POST /api/sessions/:id/data (JSON)
+    API->>SVC: validate(data) via Zod
+    alt Invalid
+      SVC-->>API: errors
+      API-->>FE: 400 { issues }
+      FE-->>User: Show validation errors
+    else Valid
+      SVC->>REPO: upsert(sessionData)
+      REPO-->>SVC: ok
+      SVC-->>API: ok
+      API-->>FE: 200 { preview }
+      FE-->>User: Render preview
+    end
+
+    User->>FE: Click "Save Progress"
+    FE->>API: POST /api/users/link-session { email, password, sessionId }
+    API->>USVC: ensureUser(email, password)
+    USVC->>REPO: createOrFetchUser()
+    REPO-->>USVC: user
+    USVC-->>API: user
+    API->>SVC: linkSessionToUser(sessionId, userId)
+    SVC->>REPO: persist linkage
+    REPO-->>SVC: ok
+    SVC-->>API: ok
+    API-->>FE: 200 { userId, sessionId }
+    FE-->>User: Progress saved to account
+```
+
+The Session begins in Active upon creation and cycles between Active and Error based on validation outcomes. If the user goes idle or navigates away, the Session may become Paused and later Resumed. The Session enters Completed when the user exports a portfolio or links the Session to their account and saves. Modeling behavior at this level clarifies edge cases (timeouts, retries) and ensures the API supports resuming work without data loss.
+
+---
+title: Class diagram 
+---
+
+```mermaid
+%% direction LR for horizontal readability
+classDiagram
+direction LR
+    class User {
+	    +UUID id
+	    +String email
+	    +String name
+	    +String authProvider
+	    +String role
+	    +UUID settingsId
+	    +Date createdAt
+	    +Date updatedAt
+	    +requestAccountDeletion()
+	    +own(resourceId)
+    }
+
+    class Settings {
+	    +UUID id
+	    +UUID userId
+	    +Boolean privacy_shareAnalytics
+	    +String privacy_defaultVisibility
+	    +String export_formatDefaults
+	    +Boolean export_includeSourceCode
+	    +String ui_theme
+	    +String ui_language
+	    +updatePrivacy(policy)
+	    +setExportDefaults(opts)
+    }
+
+    class Session {
+	    +UUID id
+	    +UUID userId
+	    +SessionStatus status
+	    +UUID promptFlowId
+	    +Date startedAt
+	    +Date completedAt
+	    +Date lastSavedAt
+	    +addEntry(entryDraft)
+	    +reorderEntry(entryId, newIndex)
+	    +complete()
+    }
+
+    class ExperienceEntry {
+	    +UUID id
+	    +UUID userId
+	    +UUID sessionId
+	    +String title
+	    +String summary
+	    +Block[] contentBlocks
+	    +AssetRef[] media
+	    +UUID templateVariantId
+	    +String[] tags
+	    +EntryStatus status
+	    +applyTemplate(template)
+	    +attachAsset(assetRef)
+	    +detachAsset(assetId)
+	    +markReady()
+    }
+
+    class TemplateVariant {
+	    +UUID id
+	    +String key
+	    +JSON schema
+	    +JSON renderConfig
+	    +String[] allowedBlocks
+	    +String[] allowedMedia
+	    +validate(entry)
+	    +transform(entry)
+    }
+
+    class Asset {
+	    +UUID id
+	    +UUID userId
+	    +String type
+	    +String mime
+	    +String uri
+	    +JSON metadata
+	    +String hash
+	    +Number size
+	    +AssetStatus status
+	    +markProcessed()
+	    +recalculateHash()
+    }
+
+    class Preview {
+	    +UUID id
+	    +UUID userId
+	    +UUID sessionId
+	    +String snapshotRef
+	    +Date expiresAt
+	    +render(sessionId)
+    }
+
+    class ExportJob {
+	    +UUID id
+	    +UUID userId
+	    +UUID sessionId
+	    +String format
+	    +JobStatus status
+	    +String artifactUri
+	    +String repoUrl
+	    +JSON log
+	    +Date createdAt
+	    +Date updatedAt
+	    +enqueue(jobSpec)
+	    +run(jobId)
+    }
+
+    class PublishingJob {
+	    +UUID id
+	    +UUID userId
+	    +UUID sessionId
+	    +String awsAccountRef
+	    +String stackId
+	    +JobStatus status
+	    +Date createdAt
+	    +Date updatedAt
+	    +provision()
+	    +deploy()
+	    +teardown()
+    }
+
+    class AuditLog {
+	    +UUID id
+	    +UUID userId
+	    +String actor
+	    +String action
+	    +String resource
+	    +JSON metadata
+	    +Date at
+    }
+
+    class SessionStatus { <<enumeration>>
+	    +active
+	    +paused
+	    +completed
+    }
+
+    class EntryStatus { <<enumeration>>
+	    +draft
+	    +ready
+    }
+
+    class AssetStatus { <<enumeration>>
+	    +uploaded
+	    +processed
+    }
+
+    class JobStatus { <<enumeration>>
+	    +queued
+	    +running
+	    +succeeded
+	    +failed
+    }
+
+    User "1" -- "1" Settings : has >
+    User "1" -- "0..*" Session : owns >
+    Session "1" *-- "0..*" ExperienceEntry : contains >
+    ExperienceEntry "0..*" -- "1" TemplateVariant : uses >
+    ExperienceEntry "0..*" o-- "0..*" Asset : references >
+    Preview "1" --> "1" Session : snapshotOf >
+    ExportJob "0..*" --> "1" User : for >
+    ExportJob "0..*" --> "1" Session : exportsOf >
+    PublishingJob "0..*" --> "1" User : for >
+    PublishingJob "0..*" --> "1" Session : deploysOf >
+    AuditLog "0..*" --> "1" User : actor/owner >
+```
+
+Each class is separated in such a way to allign the export without account structure. the session holds the experiance from user while the user remains a guest. Those entries can later be lined to a User upone account creation or login. TemplateVariant will conatin how each entry should render. ExportJob and Publishjob are asynchrnous model operations that will assits user in getting and publishing porfolio.
+
+
+---
+4:
+---
+
+Requirement 1: NFR-01 – Easy Sign-Up
+Design Decision
+
+Implement an OAuth 2.0-based authentication system with support for social logins (e.g., Google, Apple) and client-side form validation before submission.
+
+Justification
+
+Using OAuth reduces the number of steps a user must take during sign-up, improving both speed and reliability.
+Client-side validation ensures that users receive immediate feedback on incorrect inputs, minimizing frustration and failed attempts.
+Together, these design choices align with the system’s goal of making the sign-up process fast, smooth, and easily adaptable to new authentication flows in the future.
+
+Requirement 2: NFR-03 – Responsiveness (Perceived Speed)
+Design Decision
+
+Introduce client-side caching for static assets and asynchronous background processing for heavy tasks like experience preview generation or export.
+
+Justification
+
+Client-side caching reduces load times by reusing previously downloaded resources.
+
+Background task processing ensures that long-running operations don’t block the main interface.
+
+These approaches improve the system’s perceived speed and maintain responsiveness, even as user-generated content or portfolio sizes increase over time.
+
+
+---
+5: Logical View
+---
+
+ ![logical view ](./README-Images/logical%20view.pdf )
+
+This view shows the core modules of YourOwn:
+
+Users interact through the UI, which guides them through the Experience Builder.
+
+Their input is used by the Portfolio Generator to create a structured portfolio.
+
+The Export Manager handles output formats.
+
+The AWS Deployment Module optionally sets up hosting.
+
+---
+Process View
+---
+
+ ![process view](./README-Images/process%20view.pdf )
+
+At runtime:
+
+The user begins by entering information via the UI.
+
+The system processes this through the Experience Builder.
+
+It then generates a portfolio.
+
+The user can export it or deploy it to AWS.
+
+Each module interacts with external services (GitHub, AWS) as needed.
+
+---
+6: Use of Architectural Patterns (Client–Server)
+---
+
+![architecutral pattern](./README-Images/Use%20of%20architectural%20patterns%20(client-server)-%20.pdf)
+
+We went with a client-server-based architectural pattern because naturally, the features we implement split into a rich, guided web client (reflection flow, template selection, live preview) and a server that owns portfolio generation, export, auth, and the optional AWS automation.
+
+How this would work for YourOwn:
+
+Client (Browser/App): Onboarding wizard, content forms, drag-and-drop reorder, template picker, live preview.
+
+Internet: Auth (email/OAuth), experience CRUD, preview rendering, ZIP/GitHub export, watermark/paywall, AWS deployer (S3 + ALB + Route 53* automation).
+
+Server (API): DB for user/projects/assets, object storage for uploaded images, GitHub API, AWS APIs.
+
+One Strength (for YourOwn):
+
+Clear separation of concerns and deployment boundaries → helps validate NFR-02 Clarity and NFR-03 Responsiveness independently (e.g., client performance vs. server performance).
+It also simplifies security (tokens, roles) for FR-01.
+
+One Limitation (and Mitigation):
+
+Limitation: Network round-trips can hurt preview snappiness.
+
+Mitigation: Use optimistic UI updates, client caching, and batched endpoints for preview.
+Push pre-rendered diffs rather than full HTML when possible.
+
+
+### Deliverable 3 ###
+# Overview: Luis
+
+Briefly describe the system’s purpose, main functionalities, and the problem it solves. Clearly explain how the work in Deliverable III builds upon Deliverables I and II, showing that earlier artifacts (requirements, design diagrams, and models) were actively used to guide implementation.
+
+YourOwn is a platform that delivers curated portfolios to user by giving them the source code. It servers as an ownership centered portfolio maker alternative, where the code is owned by the user. 
+
+Deliverable 1 and 2 were a pivotal process in our development due to the strict use cases that would accur in our system. Because we knew the exact outcomes of how users will interact with the platform it was benificial for us the define the exact structure of how we’d scale our implementatinos. 
+
+As a team we initially separated the 3 main processes happening in our software; Client-server interaction, exporting tool, deploying assistant. This helped us define building blocks for a specific process without a risk of clashing with other processes and making redundant requirements. The combination of our careful organization and creation of requirements allowed us to divide the work efficiently on deliverable III. 
+
+Additionally, defining the content and conditions for each major object of our system from deliverable II forced and assited us in being picky on how exactly the code should look like. 
+
+# Development Process: Prabhas
+
+Explain the development approach (Agile sprints, milestones, or Plan-Driven phases) and how the team utilized previous deliverables to plan and execute this phase. Describe how requirements and design artifacts were referenced during implementation, and how the team coordinated tasks to ensure traceability to the original specifications.
+
+We used a plan driven approach to do our project. We wanted to simplify development to focus on delivering certain features from the bottom up. We created a github project with our deliverables and we assigned deliverables to each of our teammates. We coordinated tasks by checking off the task and updating its status.
+
+# Design and Implementation Summary: Luis
+
+Summarize the specific features or requirements developed in this deliverable, referencing their corresponding requirement IDs from Deliverable I. Describe how the implementation followed the design artifacts from Deliverable II, including any adjustments made. Mention the programming language(s), frameworks, and tools used, and provide details of the environment setup.
+
+This section will cover the requirements completed for this deliverable and why.
+
+## **FR-04 Add Experiences ( Content input)** 
+
+Our diagram model was a great help when it came to developing FR-01. Sinse we already had defined all the fields we needed for the object that  would hold all the experience metadata, the main portion of development was designing our API around this data. 
+
+## **FR-03 Dashboard Page** 
+
+While the bashboard it self didnt include alot of components, we needed to develop it in such a way where 2 separated scenarios landed you on the same point at the end. Both a user who didnt want to sing up with an email and the one who chose to had to end up at the dashboard with the same functionalities, not counting saving work. Our process model from Deliverable II gave the team clarity on how to alter the endpoint interactions based on each scenario. 
+
+## **FR-08 Media Upload**
+
+Media upload happened in each experience entry by a user. Based on this we decided to add the a **media** field to the experience object when developing the Class diagram.   
+We currently are only accepting images, but we have built this requirement flexible enough to accept more file in the future. 
+
+## **FR-05 Choose a template for experience**
+
+While the same logic stuck through the development, naming conventions beacem an importance when we started interaction with multiple objects and functions in one process. The template was designed to have a place to store and identify how an experience block will look like. The general idea was kept but we relized we had to have an extra object that held the specific set of experiences with the desired “template” for that experiences. Since the name template felt like a hard truth for a set of items, we decide on changing the name to **Patterns.**  The new object was named **layout.**  We felt as though it made it clearer the specific use for each one. 
+
+## **FR-02 Create and manage a portfolio project**
+
+This requirement ended up being more about tying each individual process/object that built a portfolio and managing the data flow correctly. After having that set and developed, we could then replicate this for any other projects wanted to be made. We initially thought having multipel portfolio projects to manage per user will increase cost so this was going to be a “premium” feature. We wont longer for this and instead have other incentives to improve the business model.
+
+**FR-07 Export zip**   
+This feature allows users to export their generated portfolio as a fully functional React \+ Vite project. When the user clicks “**Export**”, their portfolio content is automatically integrated into a pre-configured project template that includes all necessary configuration and dependency files. The system then packages the project into a `.zip` file and provides it for download. After unzipping, users can simply run a few commands to launch their personalized portfolio locally.
+
+# Environment setup & more 
+
+We ran both our server and clients simultaneously in our local host. Both the client and server ran in different ports so network interactions and metrics could be used for testing. 
+
+**Language:** typescript   
+**Techstack** 
+
+* **React \+ Vite – Front end** 
+
+	We made a react boilerplate using vite for our client
+
+* **Prisma \+ Postgres built on Docker container – Data Base**  
+     
+* **Express \+ zod – back end** 
+
+	Used express for our server and zod for schema validation and error handling   
+**Tools** 
+
+* **Figma**   
+* **Postman**  
+* **Docker**   
+* **Github projects**
+
+## 
+
+# Development Environment: Prabhas
+
+Provide detailed information on the programming language(s) and their versions, libraries, frameworks, and tools used. Include environment configuration details such as IDEs, operating systems, database versions, or any other dependencies required to run and test the system successfully.
+
+The project is a full-stack TypeScript monorepo using npm workspaces. The frontend runs on React 18.3.1 with React Router DOM 7.9.5, built with Vite 5.4.0 and TypeScript 5.6.3, targeting ES2022. It uses Framer Motion 12.23.24 for animations, Axios 1.13.2 for HTTP, and React Testing Library 14.1.2 with Vitest 1.0.4 (jsdom 23.0.0) and MSW 2.0.8 for API mocking. The backend uses Express 5.1.0, TypeScript 5.9.3 (ES2022, Node16 modules), tsx 4.20.6 for development, and Zod 4.1.12 for validation. Authentication uses jsonwebtoken 9.0.2 and bcrypt 5.1.1. The server runs on port 5000 with CORS for http://localhost:5173. Data is stored in-memory (Map-based repositories); the client uses localStorage for session persistence. The workspace uses concurrently 9.2.1 to run client and server, ESLint 9.36.0 with TypeScript ESLint 8.44.0 for linting, and @types/node 24.8.1. No external database; the system works on Windows 10 (and other platforms), Node.js (recommended LTS), and any IDE (VSCode recommended). Environment variables are managed with dotenv 17.2.3, and the project uses ES modules throughout.
+
+# Testing Summary: Nick
+
+Explain how the implemented features were tested. Include details on the testing framework (e.g., pytest, JUnit, Mocha, etc.), the type of tests conducted (unit, integration, or system), and how each test case traces back to one or more requirements. Summarize the achieved code coverage and describe how it demonstrates sufficient testing of all implemented requirements.
+
+# Challenges Faced: Dipendra Dhakal
+
+Discuss major technical or teamwork challenges encountered during implementation and testing, and how they were resolved.
+During implementation and testing of YourOwn, the team faced several technical and teamwork challenges, especially when integrating the client–server interaction, export system, and deployment assistant. Inconsistent data structures and endpoint expectations caused early failures, which were resolved by revisiting Deliverable II diagrams and unifying schemas with Zod. The export feature also created issues when embedding user content into a React + Vite project, requiring a stable base template and improved logging. Team coordination challenges, such as differing interpretations of requirements and frequent merge conflicts, were addressed through clearer task tracking and a stricter Git workflow. Despite these obstacles, consistent communication and reference to earlier deliverables helped the team align the implementation with the original design.
+
+# Design Assumptions & Revisions: Luis
+
+ Identify which initial design assumptions held true and which required revision during development.
+
+We first assumed that we had to store the UI code for the portfolio in some sort of database and interact with it when we needed to export a portfolio for a user. The dynamic data would stay in our main db that our server interacts with, and the static data/code that was needed to build a portfolio would stay in a separated area. This ultimately did not hold true because we decided on making the static code required to give a portfolio be the same code we use to build our website. We replicate it and then add the dynamic data on top of it. 
+
+One of our assumptions that held true was to have the dynamic data ( Experience entry, template choice) separated with the main orchestration of the portfolio. 
+
+# Impact of Automated Testing: Nick
+
+ Explain how automated testing improved the quality, reliability, or maintainability of your system.
+
+The automated testing helped improve the reliability of the system by finding edge cases and functionality issues without the need for bias from the coders. In general these tests were able to find issues that could long term break the maintainability and quality of the system, and fixing the bugs early allows our project to stay consistent for users and for future release changes.
+
+# Screenshots & Evidence: 
+
+Include screenshots, logs, or test reports that demonstrate successful feature execution and passing test results.
+
+ ![postman testing ](./README-Images/postman.png )
+ ![postman testing ](./README-Images/unitTest.png )
+
+ 
+
+
+
+

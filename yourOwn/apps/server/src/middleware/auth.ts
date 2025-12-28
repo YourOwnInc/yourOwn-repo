@@ -1,16 +1,46 @@
-import { Response, Request, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
+import { JwtEngine } from '../lib/auth/jwt.engine';
 
-import { verifyJwt } from "../utils/jwt";
-
-export function requireAuth(req: Request & { userId?: string }, res: Response, next: NextFunction) {
-  const hdr = req.headers.authorization;
-  const token = hdr?.startsWith("Bearer ") ? hdr.slice(7) : null;
-  if (!token) return res.status(401).json({ error: "MISSING_TOKEN" });
-  try {
-    const payload = verifyJwt(token) as { sub: string };
-    req.userId = payload.sub;
-    next();
-  } catch {
-    res.status(401).json({ error: "INVALID_TOKEN" });
-  }
+// Extend Express Request type properly
+export interface AuthenticatedRequest extends Request {
+  user: {
+    id: string;
+    sessionId: string;
+    userId: string;
+    role: 'USER' | 'ADMIN' | 'GUEST';
+  };
 }
+
+export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader?.startsWith('Bearer ')) {
+    return res.status(401).json({ 
+      error: 'AUTHENTICATION_REQUIRED',
+      message: 'Missing or malformed access token' 
+    });
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  try {
+    const payload = JwtEngine.verify(token);
+    
+    // Attach structured data to the request
+    (req as AuthenticatedRequest).user = {
+      id: payload.sub,
+      sessionId: payload.sessionId,
+      userId: payload.userId || '',
+      role: payload.role,
+    };
+
+    next();
+  } catch (error) {
+    // Distinguish between expired and tampered tokens in logs, but keep client response generic for security
+    console.error('[Auth] Token verification failed:', error);
+    return res.status(401).json({ 
+      error: 'INVALID_TOKEN',
+      message: 'Your session has expired or the token is invalid' 
+    });
+  }
+};
