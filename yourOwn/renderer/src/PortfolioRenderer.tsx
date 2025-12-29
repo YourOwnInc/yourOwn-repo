@@ -1,7 +1,7 @@
 // PortfolioRenderer.tsx
 import React, { useMemo } from "react";
 import { PATTERN_REGISTRY } from "./patterns-bridge";
-import portfolioData from "../public/portfolio.json";
+import portfolioData from "../src/data/portfolio.json";
 
 type Slot = { id: string; area: string };
 type Placement = { slotId: string; experienceId: string; patternId: string };
@@ -20,6 +20,8 @@ type Props = {
 
 export const PortfolioRenderer = ({ data }: Props) => {
   console.log("Renderer");
+  const resolved = (data ?? portfolioData) as PortfolioRenderData;
+  const { layout, experiences } = resolved;
 
   console.log("Patterrn Registry: ", PATTERN_REGISTRY);
   if(!data) {
@@ -28,7 +30,6 @@ export const PortfolioRenderer = ({ data }: Props) => {
   
   }
 
-  const { layout, experiences } = data;
 
   console.log("data:", data );
   const experienceMap = useMemo(
