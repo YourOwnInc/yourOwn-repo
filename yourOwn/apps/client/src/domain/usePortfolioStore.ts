@@ -62,9 +62,6 @@ export function usePortfolioStore() {
   }, [sessionId])
 
   const removeExperience=  useCallback(async (id: string) => {
-    // delete likely doesn't need sessionId, but if it does, validate as above
-    await deleteExperience(id)
-    setExperiences((prev) => prev.filter(e => e.id !== id));
 
   }, [])
 

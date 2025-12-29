@@ -4,6 +4,9 @@ import Landing from './Pages/Landing';
 import PortfolioBuilder from './Pages/PortfolioBuilder';
 import {RendererLab} from './Pages/RendererLab';
 import ExperienceHub from './Pages/ExperienceHub';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 function AppContent() {
   const { onboardingComplete } = useUser();

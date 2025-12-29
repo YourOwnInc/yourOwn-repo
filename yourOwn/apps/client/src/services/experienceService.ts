@@ -11,8 +11,7 @@ function getAuthHeader() {
 
 export async function createExperience(sessionId: string, payload: any) {
   const authHeader = getAuthHeader();
-  const localSessionId = localStorage.getItem("sessionId");
-  const res = await fetch(`${BASE}/sessions/${localSessionId}`, {
+  const res = await fetch(`${BASE}/sessions/${sessionId}/experiences`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -63,7 +62,11 @@ export async function updateExperience(sessionId: SessionId, id: string, payload
   return res.json();
 }
 
-export async function deleteExperience(id: string): Promise<void> {
-  const res = await fetch(`${BASE}/experience/${id}`, { method: "DELETE" });
+export async function deleteExperience(sessionId: SessionId, id: string): Promise<void> {
+  const authHeader = getAuthHeader();
+  const res = await fetch(`${BASE}/sessions/${sessionId}/experience/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: authHeader }
+  });
   if (!res.ok) throw new Error("deleteExperience failed");
 }

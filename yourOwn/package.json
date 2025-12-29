@@ -34,7 +34,8 @@
     "execa": "^9.6.0",
     "fs-extra": "^11.3.2",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "root": "github:tanstack/react-query"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
