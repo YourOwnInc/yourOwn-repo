@@ -1,14 +1,21 @@
  import { ExperienceDTO, SessionId } from "../domain/types";
  
+ 
 const BASE = "http://localhost:5000/api";
+
+function getAuthHeader() {
+  const token = localStorage.getItem("token");
+  return `Bearer ${token}`;
+}
+
+
 export async function createExperience(sessionId: string, payload: any) {
-  const res = await fetch(`${BASE}/experiences`, {
+  const authHeader = getAuthHeader();
+  const res = await fetch(`${BASE}/sessions/${sessionId}/experiences`, {
     method: "POST",
-    
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionId}` // THIS WILL NOT TAKE SESSIONID. replace with actual jwt token when intergrated
-  
+      Authorization: authHeader // THIS WILL NOT TAKE SESSIONID. replace with actual jwt token when intergrated
     },
     body: JSON.stringify(payload),
   });
@@ -29,10 +36,14 @@ export async function createExperience(sessionId: string, payload: any) {
 }
 
 
-
-export async function listExperiences(sessionId: SessionId): Promise<ExperienceDTO[]> {
-  const res = await fetch(`${BASE}/experiences`, {
-    method: "GET"
+export async function listExperiences(sessionId: SessionId | null) {
+  const authHeader = getAuthHeader();
+  const res = await fetch(`${BASE}/sessions/${sessionId}/experiences`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authHeader 
+    }
   });
   if (!res.ok) throw new Error("listExperiences failed");
   return res.json();
@@ -40,17 +51,22 @@ export async function listExperiences(sessionId: SessionId): Promise<ExperienceD
 
 
 // Optional MVP+1
-export async function updateExperience(id: string, payload: Partial<ExperienceDTO>): Promise<ExperienceDTO> {
-  const res = await fetch(`${BASE}/experience/${id}`, {
+export async function updateExperience(sessionId: SessionId, id: string, payload: Partial<ExperienceDTO>): Promise<ExperienceDTO> {
+  const authHeader = getAuthHeader();
+  const res = await fetch(`${BASE}/sessions/${sessionId}/experience/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", Authorization: authHeader },
     body: JSON.stringify(payload),
   });
   if (!res.ok) throw new Error("updateExperience failed");
   return res.json();
 }
 
-export async function deleteExperience(id: string): Promise<void> {
-  const res = await fetch(`${BASE}/experience/${id}`, { method: "DELETE" });
+export async function deleteExperience(sessionId: SessionId, id: string): Promise<void> {
+  const authHeader = getAuthHeader();
+  const res = await fetch(`${BASE}/sessions/${sessionId}/experience/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: authHeader }
+  });
   if (!res.ok) throw new Error("deleteExperience failed");
 }

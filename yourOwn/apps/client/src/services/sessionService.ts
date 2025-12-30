@@ -1,5 +1,6 @@
 import { apiClient } from './api';
 import { Session, StartSessionBody, SaveSessionBody, ApiResponse } from '../types';
+import { useUser } from '../contexts/UserContext';
 
 /**
  * Session service for API calls
@@ -30,17 +31,16 @@ export const sessionService = {
    */
   // Starts a session body and layout assigned to that session
   async startSession() {
-   const res = await fetch(`${BASE}/session/start`);
+  const res = await fetch(`${BASE}/sessions/start`, {
+    method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  }}
+  );
 
-   const sessionData = await res.json();
-   // Extract session ID and JWT token from sessionData
-   const JwtToken = sessionData.token;
-   const sessionId = sessionData.sessionId;
-   // store them in local storage
-  localStorage.setItem('sessionId', sessionId);
-   localStorage.setItem('token', JwtToken);
 
    if (!res.ok) throw new Error("getLayout failed");
+
    return res.json();
 },
 

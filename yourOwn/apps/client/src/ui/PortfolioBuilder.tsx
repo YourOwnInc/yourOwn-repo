@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { usePortfolioStore } from "../domain/usePortfolioStore";
 import { SessionId } from "../domain/types";
-import { PATTERNS } from "../patterns/PATTERNS";
+import { PATTERNS } from "../patterns.LEGACY/PATTERNS";
 import SlotPicker from "./SlotPicker";
 import ExportButton from "./ExportButton";
 
