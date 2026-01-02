@@ -46,15 +46,16 @@ const SCENARIOS: Record<string, PortfolioRenderData> = {
   },
   "Standard Profile": {
     layout: {
+      id: "bento-v1",
       slots: [
-        { id: "s1", area: "header" },
+        { id: "main", area: "header" },
+        { id: "s1", area: "main" },
         { id: "s2", area: "main" },
-        { id: "s3", area: "main" },
       ],
       placements: [
-        { slotId: "s1", experienceId: "exp1", patternId: "hero-basic" },
-        { slotId: "s2", experienceId: "exp2", patternId: "generic-card", },
-        { slotId: "s3", experienceId: "exp3", patternId: "generic-card", },
+        { slotId: "main", experienceId: "exp1", patternId: "hero-basic" },
+        { slotId: "s1", experienceId: "exp2", patternId: "generic-card", },
+        { slotId: "s2", experienceId: "exp3", patternId: "generic-card", },
       ],
     },
     experiences: [
@@ -118,7 +119,7 @@ export const RendererLab = () => {
       </div>
 
       <div className="flex-1 p-8 bg-gray-50 overflow-auto">
-        <div className="border border-dashed border-gray-400 p-2 min-h-[500px] bg-white shadow-lg">
+        <div className="border border-dashed border-gray-400 p-2 min-h-[500px] bg-white shadow-lg text-black">
           <PortfolioRenderer data={data} />
         </div>
       </div>
