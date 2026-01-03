@@ -1,8 +1,11 @@
 // src/modules/export/export.worker.ts
 import path from "path";
 import fs from "fs-extra";
+import { fileURLToPath } from "url";
 import { getExportJob, updateExportJob } from "./export.store";
-import { generatePortfolioData, insertPatterns, zipPortfolio } from "./exports.service";
+// import { generatePortfolioData, insertPatterns, zipPortfolio } from "./exports.service";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const EXPORTS_DIR = path.resolve(process.cwd(), "tmp", "exports");
 // prefer deterministic resolution with fallbacks and env override

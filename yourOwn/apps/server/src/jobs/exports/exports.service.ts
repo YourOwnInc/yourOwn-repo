@@ -41,35 +41,36 @@ export async function generatePortfolioData(sessionId: string) {
 
 // Figure out how to insert Patterns from /packages into the portfolio workspace
 
-export async function insertPatterns(args: {
-  workspaceDir: string;
-  portfolioData: any;
-}) {
-  // TODO (recommended):
-  // - get used patternIds from portfolioData.layout.placements
-    const { workspaceDir, portfolioData } = args;
-    const usedPatternIds = Array.from(new Set(
-      portfolioData.layout.placements.map((p: any) => p.patternId)
-    ));
-    console.log("Used pattern IDs:", usedPatternIds);   
+// export async function insertPatterns(args: {
+//   workspaceDir: string;
+//   portfolioData: any;
+// }) {
+//   // TODO (recommended):
+//   // - get used patternIds from portfolioData.layout.placements
+//     const { workspaceDir, portfolioData } = args;
+//     const usedPatternIds = Array.from(new Set(
+//       portfolioData.layout.placements.map((p: any) => p.patternId)
+//     ));
+//     console.log("Used pattern IDs:", usedPatternIds);   
 
-  // - copy required pattern components from packages/.. into workspace/src/patterns
-    const patternsDir = path.join(workspaceDir, "src", "patterns");
+//   // - copy required pattern components from packages/.. into workspace/src/patterns
+//     const patternsDir = path.join(workspaceDir, "src", "patterns");
 
-    await fs.ensureDir(patternsDir);
-    for (const patternId of usedPatternIds) {
-        const pattern = PATTERN_REGISTRY[patternId];
-        if (!pattern) {
-            console.warn(`Pattern ID "${patternId}" not found in registry.`);
-            continue;
-        }
-        const patternSrcPath = path.resolve(__dirname, `../../../../../packages/ui-patterns/src/patterns/${patternId}`);
-        await fs.copy(patternSrcPath, path.join(patternsDir, patternId));
-    }
+//     await fs.ensureDir(patternsDir);
+    
+//     for (const patternId of usedPatternIds) {
+//         const pattern = PATTERN_REGISTRY[patternId];
+//         if (!pattern) {
+//             console.warn(`Pattern ID "${patternId}" not found in registry.`);
+//             continue;
+//         }
+//         const patternSrcPath = path.resolve(__dirname, `../../../../../packages/ui-patterns/src/patterns/${patternId}`);
+//         await fs.copy(patternSrcPath, path.join(patternsDir, patternId));
+//     }
 
-  // - generate workspace/src/patterns-bridge.ts with PATTERN_REGISTRY
-  return ;
-}
+//   // - generate workspace/src/patterns-bridge.ts with PATTERN_REGISTRY
+//   return ;
+// }
 
 export async function zipPortfolio(args: { workspaceDir: string; zipPath: string }) {
   const { workspaceDir, zipPath } = args;
@@ -82,7 +83,6 @@ export async function zipPortfolio(args: { workspaceDir: string; zipPath: string
     const archive = archiver("zip", { zlib: { level: 9 } });
 
     output.on("close", () => resolve());
-    archive.on("error", (err) => reject(err));
 
     archive.pipe(output);
     archive.directory(workspaceDir, false);
