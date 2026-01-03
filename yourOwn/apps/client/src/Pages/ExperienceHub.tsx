@@ -20,7 +20,7 @@ export default function ExperienceHub() {
     });
   };
 
-  if (isLoading) return <div className="p-8">Loading Hub...</div>;
+  // if (isLoading) return <div className="p-8">Loading Hub...</div>;
 
   return (
     <div className="p-10 space-y-16 bg-gray-50 min-h-screen">
