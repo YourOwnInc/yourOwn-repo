@@ -1,1 +1,1 @@
-export {PATTERN_REGISTRY} from "@yourown/ui-patterns";
+export {PATTERN_REGISTRY, LAYOUT_REGISTRY} from "@yourown/ui-patterns";
