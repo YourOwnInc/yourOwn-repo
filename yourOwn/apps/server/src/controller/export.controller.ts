@@ -1,69 +1,68 @@
+// src/modules/export/export.controller.ts
 import { Request, Response } from "express";
-import path from "path";
+import crypto from "crypto";
 import fs from "fs-extra";
-import archiver from "archiver";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
+import path from "path";
+import { createExportJob, getExportJob } from "../jobs/exports/export.store";
+import { enqueueExport } from "../jobs/exports/exports.queue";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// POST /api/exports
+export async function startExportJob(req: Request, res: Response) {
+  // You decide where sessionId comes from (body, auth, route param)
+  const sessionId = req.body?.sessionId;
+  if (!sessionId) return res.status(400).json({ error: "Missing sessionId" });
 
-export async function zipTemplate(req: Request, res: Response) {
-  try {
-    // the client sends { html: { ...data... } }
-    const exportData = req.body.html;
-    if (!exportData) {
-      return res.status(400).json({ error: "Missing html data in body" });
-    }
+  const exportId = crypto.randomUUID();
+  createExportJob({ id: exportId, sessionId });
 
-    // 1. Make a temporary directory for this export
-    const tempDir = path.join(__dirname, "..", "..", "tmp", `export-${Date.now()}`);
-    await fs.ensureDir(tempDir);
+  // enqueue background processing
+  enqueueExport(exportId);
 
-    // 2. Make a simple HTML file from the JSON
-    const userName = exportData.userName || "portfolio";
-    const entries = exportData.entries || [];
-
-    const html = `
-<!DOCTYPE html>
-<html>
-  <head><title>${userName}'s Export</title></head>
-  <body>
-    <h1>${userName}'s Portfolio</h1>
-    <pre>${JSON.stringify(entries, null, 2)}</pre>
-  </body>
-</html>
-`;
-
-    await fs.writeFile(path.join(tempDir, "index.html"), html, "utf8");
-    await fs.writeFile(
-      path.join(tempDir, "raw.json"),
-      JSON.stringify(exportData, null, 2),
-      "utf8"
-    );
-
-    // 3. Prepare the response for ZIP download
-    res.setHeader("Content-Type", "application/zip");
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename="${userName.toLowerCase()}-export.zip"`
-    );
-
-    // 4. Compress the temp folder
-    const archive = archiver("zip", { zlib: { level: 9 } });
-    archive.pipe(res);
-    archive.directory(tempDir, false);
-    await archive.finalize();
-
-    // 5. Clean temp dir after streaming
-    archive.on("end", async () => {
-      await fs.remove(tempDir);
-    });
-  } catch (err) {
-    console.error("EXPORT ERROR:", err);
-    if (!res.headersSent) {
-      res.status(500).json({ error: "Failed to export ZIP" });
-    }
-  }
+  return res.status(202).json({
+    exportId,
+    statusUrl: `/api/exports/${exportId}`,
+    downloadUrl: `/api/exports/${exportId}/download`,
+  });
 }
+
+// GET /api/exports/:exportId
+export async function getExportStatus(req: Request, res: Response) {
+  const { exportId } = req.params;
+  const job = getExportJob(exportId);
+
+  if (!job) return res.status(404).json({ error: "Export not found" });
+
+  return res.json({
+    exportId: job.id,
+    sessionId: job.sessionId,
+    status: job.status,
+    progress: job.progress,
+    error: job.error ?? null,
+    // only provide downloadUrl when completed
+    downloadUrl: job.status === "COMPLETED" ? `/api/exports/${job.id}/download` : null,
+  });
+}
+
+// GET /api/exports/:exportId/download
+export async function downloadExport(req: Request, res: Response) {
+  const { exportId } = req.params;
+  const job = getExportJob(exportId);
+
+  if (!job) return res.status(404).json({ error: "Export not found" });
+
+  if (job.status !== "COMPLETED" || !job.zipPath) {
+    return res.status(409).json({ error: "Export not ready", status: job.status });
+  }
+
+  const zipPath = job.zipPath;
+  const exists = await fs.pathExists(zipPath);
+  if (!exists) return res.status(410).json({ error: "Export file missing" });
+
+  // Stream download
+  res.setHeader("Content-Type", "application/zip");
+  res.setHeader("Content-Disposition", `attachment; filename="yourown-export-${exportId}.zip"`);
+
+  return res.sendFile(path.resolve(zipPath));
+}
+
 

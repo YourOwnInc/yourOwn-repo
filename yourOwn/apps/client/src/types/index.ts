@@ -1,3 +1,5 @@
+import { Placement } from "../domain/types";
+
 // User types
 export type UserId = string;
 
@@ -74,15 +76,7 @@ export interface PortfolioEntry extends ExperienceEntry {
   images?: string[]; // Base64 image data for export
 }
 
-// API Response types
-export interface ApiResponse<T> {
-  data?: T;
-  error?: {
-    code: string;
-    message: string;
-    details?: unknown;
-  };
-}
+
 
 export interface RegisterBody {
   email: string;
@@ -112,6 +106,24 @@ export interface AddExperienceEntryBody {
   description?: string;
   tags?: string[];
 }
+
+// path: apps/client/src/domain/types.ts
+
+export type LayoutId = "bento-v1" | "split-v1"; // Registry keys
+
+export type LayoutDefinition = {
+  id: LayoutId;
+  name: string;
+  slots: string[]; // List of available slot IDs (e.g., ["hero", "side-1"])
+};
+
+// Update LayoutModel to include the blueprint ID
+export type LayoutModel = {
+  layoutId: LayoutId; // NEW: Tells us which blueprint to use
+  slots: string[];
+  placements: Placement[];
+  theme?: string;
+};
 
 // Local storage keys
 export const STORAGE_KEYS = {

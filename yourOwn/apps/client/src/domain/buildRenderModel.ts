@@ -1,5 +1,5 @@
 import { PortfolioModel, RenderNode } from "./types";
-import { PATTERNS } from "../patterns/PATTERNS";
+import { PATTERNS } from "../patterns.LEGACY/PATTERNS";
 
 export function buildRenderModel(model: PortfolioModel): RenderNode[] {
   const byId = new Map(model.experiences.map((e) => [e.id, e]));

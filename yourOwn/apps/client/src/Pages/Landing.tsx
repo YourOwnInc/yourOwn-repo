@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedText, AnimatedTextSequence } from '../components/AnimatedText';
 import { useUser } from '../contexts/UserContext';
 import { sessionService } from '../services/sessionService';
+import  BuildingNav from "../components/landing/signedInLanding";
 
 type LandingStep = 'hero' | 'welcome' | 'name' | 'bio';
 
@@ -16,6 +17,8 @@ export default function Landing() {
   const [heroComplete, setHeroComplete] = useState(false);
   const [welcomeComplete, setWelcomeComplete] = useState(false);
   const [startingSession, setStartingSession] = useState(false);
+
+
 
   // Hero section texts
   const heroTexts = [
@@ -87,6 +90,11 @@ export default function Landing() {
       }, 500);
     }
   };
+
+    if(user)
+  {
+    return <BuildingNav className="mt-10"/>
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-bl  from-[#F5EBCB] via-[#F9FAE3] to-[#92BFD0] text-white font-sans overflow-hidden">

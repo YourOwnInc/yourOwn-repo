@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ExperienceDTO, PatternId, Placement, Slot } from "../domain/types";
-import { PATTERNS } from "../patterns/PATTERNS";
+import { PATTERNS } from "../patterns.LEGACY/PATTERNS";
 
 export default function SlotPicker({
   slot,

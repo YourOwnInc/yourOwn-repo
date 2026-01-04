@@ -39,7 +39,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/layout', layoutRoutes);
 app.use('/api', experienceRoutes);
-app.use('/api/export', exportRoutes);
+app.use('/api/exports', exportRoutes);
 
 
 app.get('/api/health', (_req, res) => {
