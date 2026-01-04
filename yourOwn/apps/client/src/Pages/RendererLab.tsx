@@ -6,6 +6,7 @@ import { PortfolioRenderer, PortfolioRenderData } from "../../../../renderer/src
 const SCENARIOS: Record<string, PortfolioRenderData> = {
   "Job-summary": {
     layout: {
+      id: "simple-2-slot",
       slots: [
         { id: "s1", area: "header" },
         { id: "s2", area: "main" },
@@ -93,37 +94,37 @@ export const RendererLab = () => {
   const data = useMemo(() => SCENARIOS[scenarioKey], [scenarioKey]);
 
   return (
-    <div className="flex h-screen">
-      <div className="w-72 bg-gray-100 p-4 border-r">
-        <h2 className="font-bold mb-4">🧪 Renderer Lab</h2>
+    // <div className="flex h-screen">
+    //   <div className="w-72 bg-gray-100 p-4 border-r">
+    //     <h2 className="font-bold mb-4">🧪 Renderer Lab</h2>
 
-        <div className="flex flex-col gap-2">
-          {Object.keys(SCENARIOS).map((key) => (
-            <button
-              key={key}
-              onClick={() => setParams({ scenario: key })}
-              className={`p-2 text-left rounded ${
-                scenarioKey === key ? "bg-blue-500 text-black" : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              {key}
-            </button>
-          ))}
-        </div>
+    //     <div className="flex flex-col gap-2">
+    //       {Object.keys(SCENARIOS).map((key) => (
+    //         <button
+    //           key={key}
+    //           onClick={() => setParams({ scenario: key })}
+    //           className={`p-2 text-left rounded ${
+    //             scenarioKey === key ? "bg-blue-500 text-black" : "bg-gray-200 text-gray-700"
+    //           }`}
+    //         >
+    //           {key}
+    //         </button>
+    //       ))}
+    //     </div>
 
-        <div className="mt-8 text-xs text-gray-500 space-y-1">
-          <p>Active Layout: {data.layout.slots.length} slots</p>
-          <p>Active Exps: {data.experiences.length} items</p>
-          <p className="break-all">Share: ?scenario={encodeURIComponent(scenarioKey)}</p>
-        </div>
-      </div>
+    //     <div className="mt-8 text-xs text-gray-500 space-y-1">
+    //       <p>Active Layout: {data.layout.slots.length} slots</p>
+    //       <p>Active Exps: {data.experiences.length} items</p>
+    //       <p className="break-all">Share: ?scenario={encodeURIComponent(scenarioKey)}</p>
+    //     </div>
+    //   </div>
 
-      <div className="flex-1 p-8 bg-gray-50 overflow-auto">
+      
         <div className="border border-dashed border-gray-400 p-2 min-h-[500px] bg-white shadow-lg text-black">
           <PortfolioRenderer data={data} />
         </div>
-      </div>
+      
 
-    </div>
+    
   );
 };
