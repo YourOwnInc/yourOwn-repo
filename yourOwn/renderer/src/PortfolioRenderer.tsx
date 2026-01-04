@@ -1,11 +1,12 @@
 // PortfolioRenderer.tsx
 import React, { useMemo } from "react";
-import { PATTERN_REGISTRY } from "./patterns-bridge";
-import portfolioData from "../public/portfolio.json";
+import { PATTERN_REGISTRY, LAYOUT_REGISTRY } from "./patterns-bridge";
+import portfolioData from "./data/portfolio.json";
+
 
 type Slot = { id: string; area: string };
 type Placement = { slotId: string; experienceId: string; patternId: string };
-type Layout = { slots: Slot[]; placements: Placement[] };
+type Layout = { id: string; slots: Slot[]; placements: Placement[] };
 type Experience = { id: string; kind: string; title?: string; [k: string]: any };
 
 export type PortfolioRenderData = {
@@ -30,53 +31,26 @@ export const PortfolioRenderer = ({ data }: Props) => {
 
   const { layout, experiences } = data;
 
-  console.log("data:", data );
-  const experienceMap = useMemo(
-    () => Object.fromEntries(experiences.map((e) => [e.id, e])),
-    [experiences]
-  );
+   // 1. Find the Layout Component (Default to bento if missing)
+  const LayoutBlueprint = LAYOUT_REGISTRY[layout.id] || LAYOUT_REGISTRY["bento-v1"];
 
-  const placementMap = useMemo(
-    () => Object.fromEntries(layout.placements.map((p) => [p.slotId, p])),
-    [layout.placements]
-  );
+  // 2. Prepare the Slot Map by matching placements to patterns
+  const slotMap = useMemo(() => {
+    const map: Record<string, React.ReactNode> = {};
 
-  const containerStyles: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
-    height: "100%",
-    overflow: "auto",
-  };
+    layout.placements.forEach((p) => {
+      const exp = experiences.find((e) => e.id === p.experienceId);
+      const Pattern = PATTERN_REGISTRY[p.patternId];
 
-  const sectionStyles: React.CSSProperties = {
-    width: "100%",
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexShrink: 0,
-  };
+      if (exp && Pattern) {
+        map[p.slotId] = <Pattern data={exp} />;
+      }
+    });
+    
+    return map;
+  }, [layout.placements, experiences]);
 
-  return (
-    <div style={containerStyles}>
-      {layout.slots.map((slot) => {
-        const placement = placementMap[slot.id];
-        if (!placement) return null;
+  // 3. Render the Blueprint with the prepared slots
+  return <LayoutBlueprint slots={slotMap} />;
 
-        const expData = experienceMap[placement.experienceId];
-
-        const PatternComponent =
-          PATTERN_REGISTRY[placement.patternId] ;
-
-          console.log("PatternComponent: ", PatternComponent);
-
-        return (
-          <div key={slot.id} style={sectionStyles}>
-            <PatternComponent data={expData} />
-          </div>
-        );
-      })}
-    </div>
-  );
 };

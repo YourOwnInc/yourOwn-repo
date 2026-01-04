@@ -1,12 +1,12 @@
 // apps/client/src/Pages/PortfolioBuilder.tsx
 import { usePortfolioStore } from '../domain/usePortfolioStore';
-import { useExperiences } from '../hooks/useExperiences';
 import PortfolioGrid from '../components/PortfolioGrid';
+import { useExperiences } from '../hooks/useExperienceHooks';
 
 export default function PortfolioBuilder() {
   // 1. Get Domain State (this hook now uses context internally)
   const {  loading, error, removeExperience } = usePortfolioStore();
-  const { experiences } = useExperiences();
+ const { data: experiences = []} = useExperiences();
 
   // if (loading) return <div className="p-8 text-white">Syncing with server...</div>;
   // if (error) return <div className="p-8 text-red-500">Error: {error}</div>;

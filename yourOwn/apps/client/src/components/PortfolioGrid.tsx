@@ -15,7 +15,7 @@ import {
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
 import { PortfolioEntry,  } from '../types';
-import ExperienceCard from './ExperienceCard';
+import ExperienceCard from './experiences/ExperienceCard';
 // Should i use protflioEntry or ExperienceDTO here? 
 // 
 
