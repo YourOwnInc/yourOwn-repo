@@ -6,14 +6,16 @@ import { PortfolioRenderer, PortfolioRenderData } from "../../../../renderer/src
 const SCENARIOS: Record<string, PortfolioRenderData> = {
   "Job-summary": {
     layout: {
-      id: "simple-2-slot",
+      id: "bento-v1",
       slots: [
         { id: "s1", area: "header" },
         { id: "s2", area: "main" },
+
       ],
       placements: [
         { slotId: "s1", experienceId: "exp1", patternId: "hero-basic" },
         { slotId: "s2", experienceId: "exp2", patternId: "job-summary",},
+
       ],
     },
     experiences: [
