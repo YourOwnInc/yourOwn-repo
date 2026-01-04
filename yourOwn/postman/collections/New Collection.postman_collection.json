@@ -38,17 +38,8 @@
       "name": "New Request Copy",
       "id": "fe6f348a-d6e1-42e3-9231-b18c4d230b8e",
       "request": {
-        "method": "POST",
+        "method": "GET",
         "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"sessionId\": \"a2b428b1-47a4-4d05-901e-239cf3851ea4\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
         "url": {
           "raw": "{{base_url}}/api/exports/:exportId",
           "host": [
@@ -62,7 +53,7 @@
           "variable": [
             {
               "key": "exportId",
-              "value": "e835dec9-4535-43e7-9205-ac8353cfc191",
+              "value": "093aa04d-e8cf-45be-981f-802542647b40",
               "uuid": "f730d279-78da-46e8-8e32-fdbe0531b475"
             }
           ]
