@@ -65,6 +65,7 @@ export async function processExportJob(exportId: string) {
     await fs.ensureDir(path.dirname(dataPath));
     await fs.writeJson(dataPath, data, { spaces: 2 });
 
+
     // 3) Insert/copy patterns used
     updateExportJob(exportId, { progress: 55 });
     await insertPatterns({ workspaceDir, portfolioData: data });
