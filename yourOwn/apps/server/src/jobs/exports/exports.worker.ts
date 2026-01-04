@@ -7,30 +7,33 @@ import { getExportJob, updateExportJob } from "./export.store";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const EXPORTS_DIR = path.resolve(process.cwd(), "tmp", "exports");
-// prefer deterministic resolution with fallbacks and env override
-const TEMPLATE_DIR = (() => {
-  // allow override from env
-  if (process.env.RENDERER_TEMPLATE_DIR) return path.resolve(process.env.RENDERER_TEMPLATE_DIR);
 
-  // candidates to try (ordered)
+const EXPORTS_DIR = path.resolve(process.cwd(), "tmp", "exports");
+
+const TEMPLATE_DIR = (() => {
+  // 1. Highest priority: Environment Variable (Perfect for Cloud/AWS)
+  if (process.env.RENDERER_TEMPLATE_DIR) {
+    return path.resolve(process.env.RENDERER_TEMPLATE_DIR);
+  }
+
+  // 2. Deployment-friendly detection
+  // process.cwd() is the root of your project where the 'node' command was run
+  const root = process.cwd();
+  
   const candidates = [
-    path.resolve(process.cwd(), "renderer"),                              // when server started from repo root
-    path.resolve(process.cwd(), "..", "..", "renderer"),                  // if started from apps/server
-    path.resolve(__dirname, "..", "..", "..", "renderer"),                // relative to this file (safe)
-    path.resolve(__dirname, "..", "..", "..", "..", "renderer"),          // another possible layout
+    path.join(root, "renderer"),                    // Standard local dev
+    path.join(root, "apps", "renderer"),             // Monorepo layout
+    path.join(root, "dist", "renderer"),             // Production build layout
+    path.resolve(root, "..", "renderer"),           // Cloud runner / nested folder
   ];
 
   for (const p of candidates) {
     if (fs.pathExistsSync(p)) return p;
   }
 
-  // none found — throw clear error so you can fix path or set env var
-  throw new Error(
-    `Renderer template directory not found. Tried: ${candidates.join(", ")}. ` +
-    `Set RENDERER_TEMPLATE_DIR env var to point to your renderer folder.`
-  );
+
 })();
+
 
 export async function processExportJob(exportId: string) {
   const job = getExportJob(exportId);
@@ -64,6 +67,7 @@ export async function processExportJob(exportId: string) {
     const dataPath = path.join(workspaceDir, "src", "data", "portfolio.json");
     await fs.ensureDir(path.dirname(dataPath));
     await fs.writeJson(dataPath, data, { spaces: 2 });
+
 
     // 3) Insert/copy patterns used
     updateExportJob(exportId, { progress: 55 });

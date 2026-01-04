@@ -1,8 +1,8 @@
 // PortfolioRenderer.tsx
 import React, { useMemo } from "react";
-import { PATTERN_REGISTRY } from "./patterns-bridge";
+import { PATTERN_REGISTRY, LAYOUT_REGISTRY } from "./patterns-bridge";
 import portfolioData from "./data/portfolio.json";
-import { LAYOUT_REGISTRY } from "../../packages/layouts/layoutRegistry";
+
 
 type Slot = { id: string; area: string };
 type Placement = { slotId: string; experienceId: string; patternId: string };

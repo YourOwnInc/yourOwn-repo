@@ -121,12 +121,13 @@ export const RendererLab = () => {
         </div>
       </div>
 
-      <div className="flex-1 p-8 bg-gray-50 overflow-auto">
+      
         <div className="border border-dashed border-gray-400 p-2 min-h-[500px] bg-white shadow-lg text-black">
           <PortfolioRenderer data={data} />
         </div>
+      
       </div>
 
-    </div>
+    
   );
 };

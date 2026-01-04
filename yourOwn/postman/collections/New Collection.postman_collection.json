@@ -1,0 +1,65 @@
+{
+  "info": {
+    "_postman_id": "cc417f35-8033-4833-897c-6cb107b54018",
+    "name": "Exports",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "New Request",
+      "id": "67ffb9e4-4cd7-4275-9dfe-3400d25ee354",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"sessionId\": \"a2b428b1-47a4-4d05-901e-239cf3851ea4\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/exports/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "exports",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request Copy",
+      "id": "fe6f348a-d6e1-42e3-9231-b18c4d230b8e",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/exports/:exportId",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "exports",
+            ":exportId"
+          ],
+          "variable": [
+            {
+              "key": "exportId",
+              "value": "093aa04d-e8cf-45be-981f-802542647b40",
+              "uuid": "f730d279-78da-46e8-8e32-fdbe0531b475"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
