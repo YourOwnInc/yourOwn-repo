@@ -14,7 +14,7 @@ export default function ExperienceHub() {
     addExp({
       title: "Portfolio MVP",
       summary: "Built with TanStack Query",
-      kind: "job",
+      kind: "internship",
       start: new Date().toISOString(),
       end: new Date().toISOString(),
     });
@@ -25,12 +25,13 @@ export default function ExperienceHub() {
   return (
     <div className="p-10 space-y-16 bg-gray-50 min-h-screen">
       <header className="flex justify-between items-end">
+        
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Experience Hub</h1>
           <p className="text-gray-500"></p>
           
         </div>
-       <p className="text-gray-500"> <SocialDock /> </p>
+
         
         <button 
           className="bg-black text-white px-6 py-2 rounded-lg font-medium"
@@ -40,6 +41,7 @@ export default function ExperienceHub() {
         </button>
 
       </header>
+        
 
       {categories.map((cat) => {
         const filtered = experiences.filter((e: any) => e.kind === cat);
@@ -67,6 +69,11 @@ export default function ExperienceHub() {
           </section>
         );
       })}
+
+<div className="fixed bottom-8  centered w-full flex justify-center mb-4">
+      <p className="text-gray-500 "> <SocialDock /> </p> 
+      </div>
+
     </div>
   );
 }
