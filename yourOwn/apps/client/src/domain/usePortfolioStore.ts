@@ -70,12 +70,12 @@ export function usePortfolioStore() {
     await assignItem(sessionId, p);
     setLayout((prev) => {
       if (!prev) return prev;
-      const others = prev.placements.filter(x => x.position !== p.position);
+      const others = prev.placements.filter(x => x.slotId !== p.slotId);
       return { ...prev, placements: [...others, p] };
     });
   }, [sessionId]);
 
-  const model: PortfolioModel | null = useMemo(() => {
+  const model: PortfolioModel | null  = useMemo(() => {
     if (!layout) return null;
     return { layout, experiences };
   }, [layout, experiences]);

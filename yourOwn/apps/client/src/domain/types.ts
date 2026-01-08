@@ -19,14 +19,15 @@ export type Slot = {
 }
 
 export type Placement = {
-    position: SlotId;
+    slotId: string;
     experienceId: ExperienceId;
-    patternId: PatternId;
+    patternId: string;
 }
 
 
 // Layout model stored by server
 export type LayoutModel = {
+  id: string;
   sessionId: SessionId;
   slots: Slot[];
   placements: Placement[];
