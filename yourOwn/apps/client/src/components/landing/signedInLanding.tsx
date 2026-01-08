@@ -8,7 +8,7 @@ export default function BuilderNav({ className = "" }: BuilderNavProps) {
   const navigate = useNavigate();
 
   const navItems = [
-    { label: 'Preview', path: '/portfoliobuilder' },
+    { label: 'Preview', path: '/preview' },
     { label: 'Experiences', path: '/experiences' },
     { label: 'Sandbox', path: '/lab' },
   ];
