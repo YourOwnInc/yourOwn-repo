@@ -2,6 +2,8 @@ import {Router} from 'express';
 import * as SC from "../controller/session.controller";
 import * as EC from "../controller/experience-entry.controller"
 import { requireAuth} from  "../middleware/auth"
+import * as LC from "../controller/layout.controller"
+import { lchown } from 'node:fs';
 
 
 const router = Router();
@@ -16,6 +18,9 @@ router.get("/:sessionId/experiences/:id", requireAuth, EC.getExperience);
 router.put("/:sessionId/experiences/:id", requireAuth, EC.updateExperience);
 router.patch("/:sessionId/experiences/:id", requireAuth, EC.updateExperience);
 router.delete("/:sessionId/experiences/:id", requireAuth, EC.deleteExperience);
+
+router.get("/:sessionId/manifest", requireAuth, LC.getPreviewManifest);
+router.post("/:sessionId/layouts", requireAuth, LC.createNewTab)
 
 // these might be the same things
 // Might take one out. you have to have a userId to save a session.

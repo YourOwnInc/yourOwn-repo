@@ -8,6 +8,5 @@ export const PATTERN_REGISTRY: Record<string, any> = {
     'hero-basic': HeroBasic,
     'generic-card': GenericCard,
     'default': DefaultPattern, 
-    // Add more patterns here 
-    'job-summary': JobSummary,
+
 }

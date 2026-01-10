@@ -38,7 +38,7 @@ app.use('/dev', devRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/layout', layoutRoutes);
-app.use('/api', experienceRoutes);
+app.use('/api/experiences', experienceRoutes);
 app.use('/api/exports', exportRoutes);
 
 

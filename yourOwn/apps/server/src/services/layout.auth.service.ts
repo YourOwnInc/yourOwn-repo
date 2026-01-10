@@ -30,3 +30,26 @@ export async function verifyLayoutOwnership(layoutId: string, authUser: { role: 
 
   return layout;
 }
+
+export async function verifyLayoutNameOwnership(
+  layoutName: string, 
+  authUser: { role: string; sessionId?: string; userId?: string }
+) {
+  // Find the layout using the composite keys
+  // We use findFirst or findUnique depending on how sessionId is indexed
+  const layout = await prisma.layout.findFirst({
+    where: {
+      LayoutId: layoutName,
+      session: authUser.role === 'GUEST' 
+        ? { id: authUser.sessionId } 
+        : { claimedByUserId: authUser.userId }
+    },
+    select: { id: true, sessionId: true }
+  });
+
+  if (!layout) {
+    throw new Error("FORBIDDEN"); // Or NOT_FOUND if you want to be specific
+  }
+
+  return layout; // Returns the full object including the real UUID
+}

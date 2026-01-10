@@ -9,10 +9,10 @@ const r = Router();
 
 // Resource-first, context via header/auth middleware
 r.post(":sessionId/experiences", requireAuth, ctrl.createExperience);
-r.get("/experiences", requireAuth, ctrl.listExperiences);
-r.get("/experiences/:id", requireAuth, ctrl.getExperience);
-r.put("/experiences/:id", requireAuth, ctrl.updateExperience);
-r.patch("/experiences/:id", requireAuth, ctrl.updateExperience);
-r.delete("/experiences/:id", requireAuth, ctrl.deleteExperience);
+r.get("/", requireAuth, ctrl.listExperiences);
+r.get("/:id", requireAuth, ctrl.getExperience);
+r.put("/:id", requireAuth, ctrl.updateExperience);
+r.patch("/:id", requireAuth, ctrl.updateExperience);
+r.delete("/:id", requireAuth, ctrl.deleteExperience);
 
 export default r;
