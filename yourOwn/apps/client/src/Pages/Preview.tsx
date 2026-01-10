@@ -1,6 +1,6 @@
 // apps/client/src/components/InteractivePreview.tsx
 import { usePortfolioStore } from "../domain/usePortfolioStore";
-import { PortfolioRenderer } from "../Features/preview/components/PreviewRenderer";
+import { PortfolioRenderer } from "../Features/portfolio-preview/components/PreviewRenderer";
 
 export const InteractivePreview = () => {
   // 1. Consume the live state from your store

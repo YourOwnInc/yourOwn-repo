@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { assignItem, getLayout } from "../services/layoutService";
+import { assignItem, getLayout } from "../Features/portfolio-preview/services/layoutService";
 import { createExperience, deleteExperience, listExperiences, updateExperience,  } from "../services/experienceService";
 import type { ExperienceDTO, SessionId, LayoutModel, Placement, PortfolioModel } from "./types";
 import { useUser} from "../contexts/UserContext";

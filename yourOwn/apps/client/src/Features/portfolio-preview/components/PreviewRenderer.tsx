@@ -1,7 +1,7 @@
 // PortfolioRenderer.tsx
 import React, { useMemo } from "react";
 import { LAYOUT_REGISTRY } from "../../../../../../packages/layouts/layoutRegistry";
-import { PATTERN_REGISTRY } from "../../../../../../packages/ui-patterns/src/registry";
+import { PATTERN_REGISTRY } from "@yourown/ui-patterns/src/registry";
 import { PortfolioModel } from "../../../domain/types";
 
 
