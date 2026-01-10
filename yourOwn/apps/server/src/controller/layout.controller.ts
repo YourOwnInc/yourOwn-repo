@@ -6,15 +6,26 @@ import * as layoutRepo from "../repositories/layout.repo";
 //import * as expRepo from "../repositories/experience-entry.repo";
 import * as layoutService from "../services/layout.services";
 import { AuthenticatedRequest } from "../middleware/auth";
+// src/controllers/layout.controller.ts
+import { SyncLayoutSchema } from "../repositories/layout.repo";
 
-const assignSchema = z.object({
-  position: z.string().min(1),
-  experienceId: z.string().min(1),
-  patternId: z.string().min(1),
-  sessionId: z.string().min(1),
-});
 
-// 
+export async function sync(req: Request, res: Response) {
+  // Validate the body before calling the repository
+  const result = SyncLayoutSchema.safeParse(req.body);
+
+  if (!result.success) {
+    return res.status(400).json({ error: result.error.format() });
+  }
+
+  // fetch data from params and body 
+  const { layoutId } = req.params;
+  const { slots, placements } = result.data;
+
+  const updated = await layoutRepo.syncLayoutState(layoutId, slots, placements);
+  return res.json(updated);
+}
+
 export async function createLayout(re: Request, res: Response) {
 
 }
