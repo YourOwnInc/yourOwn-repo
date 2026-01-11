@@ -1,9 +1,9 @@
 import { PortfolioRenderer } from "./PreviewRenderer";
 import { useHydratedPage } from "../hooks/useHydratedPage";
-import { PortfolioModel } from "../../../domain/types";
+import { PortfolioModel , HydratedLayoutDTO} from "../../../domain/types";
 
 interface PortfolioViewerProps {
-  data: PortfolioModel;
+  data: HydratedLayoutDTO;
 }
 
 // features/portfolio-preview/components/PortfolioViewer.tsx
@@ -13,5 +13,5 @@ console.log("data in viwer ", data );
 //   if (isLoading) return <SkeletonLoader />;
   
   // Directly render the server data
-  return <PortfolioRenderer layout={data.layout} experiences={data.experiences} />;
+  return <PortfolioRenderer {...data} />;
 };

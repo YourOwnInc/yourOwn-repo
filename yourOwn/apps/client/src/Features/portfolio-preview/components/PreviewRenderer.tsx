@@ -2,7 +2,8 @@
 import React, { useMemo } from "react";
 import { LAYOUT_REGISTRY } from "../../../../../../packages/layouts/layoutRegistry";
 import { PATTERN_REGISTRY } from "@yourown/ui-patterns/src/registry";
-import { PortfolioModel } from "../../../domain/types";
+import { PortfolioModel, HydratedLayoutDTO } from "../../../domain/types";
+import { LayoutTemplate } from "lucide-react";
 
 
 
@@ -11,37 +12,31 @@ type Placement = { slotId: string; experienceId: string; patternId: string };
 type Layout = { layoutName: string; id: string,  slots: Slot[]; placements: Placement[] };
 type Experience = { id: string; kind: string; title?: string; [k: string]: any };
 
-export type PortfolioRenderData = {
-  layout: Layout;
-  experiences: Experience[];
-};
+interface PortfolioViewerProps {
+  data: HydratedLayoutDTO;
+}
 
-type Props = {
-  /** Dev-only override. In production export, omit this so it uses portfolio.json */
-  data?: PortfolioRenderData;
-};
-
-export const PortfolioRenderer = (data : PortfolioModel) => {
-  console.log("data given to renderer", data);
-
+// Use destructuring in the function signature to get properties from the flat object
+export const PortfolioRenderer = ({ 
+  layoutName, 
+  experienceLibrary, 
+  placements,
+  slots
+}: HydratedLayoutDTO) => {
   
-  if(!data) {
-    console.log("Missing render Data");
-    return <div> Missing render Data </div>
-  
-  }
+  console.log("Placements in renderer:", placements);
+  console.log("Exp in renderer:", experienceLibrary);
 
-  const { layout, experiences } = data;
+  // 1. Find the Layout Component
+  const LayoutBlueprint = LAYOUT_REGISTRY[layoutName] || LAYOUT_REGISTRY["home"];
 
-   // 1. Find the Layout Component (Default to bento if missing)
-  const LayoutBlueprint = LAYOUT_REGISTRY[layout.layoutName] || LAYOUT_REGISTRY["home"];
-
-  // 2. Prepare the Slot Map by matching placements to patterns
+  // 2. Prepare the Slot Map
   const slotMap = useMemo(() => {
     const map: Record<string, React.ReactNode> = {};
 
-    layout.placements.forEach((p) => {
-      const exp = experiences.find((e) => e.id === p.experienceId);
+    // placements is now a top-level array, not nested under 'layout'
+    placements?.forEach((p) => {
+      const exp = experienceLibrary.find((e) => e.id === p.experienceId);
       const Pattern = PATTERN_REGISTRY[p.patternId];
 
       if (exp && Pattern) {
@@ -50,9 +45,11 @@ export const PortfolioRenderer = (data : PortfolioModel) => {
     });
     
     return map;
-  }, [layout.placements, experiences]);
+  }, [placements, experienceLibrary]);
 
-  // 3. Render the Blueprint with the prepared slots
+  console.log("slotMap", slotMap);
+
+  if (!LayoutBlueprint) return <div>Missing Layout Blueprint</div>;
+
   return <LayoutBlueprint slots={slotMap} />;
-
 };

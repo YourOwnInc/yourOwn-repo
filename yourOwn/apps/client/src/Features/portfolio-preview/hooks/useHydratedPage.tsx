@@ -1,9 +1,9 @@
 // src/features/portfolio-preview/hooks/useHydratedPage.ts
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { fetchHydratedPage } from "../services/layoutService";
-import { PortfolioModel } from "../../../domain/types";
+import { PortfolioModel, HydratedLayoutDTO } from "../../../domain/types";
 
-export function useHydratedPage(layoutName: string): UseQueryResult<PortfolioModel, Error> {
+export function useHydratedPage(layoutName: string): UseQueryResult<HydratedLayoutDTO, Error> {
   return useQuery({
     queryKey: ['layout', 'hydrated', layoutName],
     queryFn: () => fetchHydratedPage(layoutName), // Service call is now externalized

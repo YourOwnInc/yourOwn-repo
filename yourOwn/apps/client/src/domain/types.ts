@@ -51,3 +51,15 @@ export type ManifestData = {
 
 }
 
+/** * Matches the actual JSON structure from your server screenshot.
+ * The layout properties and the library are siblings.
+ */
+export type HydratedLayoutDTO = {
+  id: string;             // The Layout UUID
+  layoutName: string;     // e.g., "home"
+  slots: Slot[];
+  placements: Placement[];
+  experienceLibrary: ExperienceDTO[]; 
+  theme?: string;
+};
+

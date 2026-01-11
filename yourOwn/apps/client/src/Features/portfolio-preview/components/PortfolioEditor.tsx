@@ -3,12 +3,12 @@ import { useEffect } from "react";
 import { PortfolioRenderer } from "./PreviewRenderer";
 
 import { useSyncLayout } from "../hooks/useSyncLayout";
-import { PortfolioModel, Placement } from "../../../domain/types";
+import { PortfolioModel, Placement, HydratedLayoutDTO } from "../../../domain/types";
 import { usePortfolioManifest } from "../hooks/usePortfolioManifest";
 import { useUser } from "../../../contexts/UserContext";
 
 interface PortfolioEditorProps {
-  initialData: PortfolioModel;
+  initialData: HydratedLayoutDTO;
 }
 
 export const PortfolioEditor = ({ initialData }: PortfolioEditorProps) => {
