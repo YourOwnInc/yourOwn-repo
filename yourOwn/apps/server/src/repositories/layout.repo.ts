@@ -64,7 +64,14 @@ export async function findOrCreateLayoutForSession(sessionId: string, layoutId: 
     });
   }
 
-  return layout;
+  console.log("slots in findOrcreate  Layout repo", layout.slots);
+
+  return {
+    id: layout.id,
+    layoutName: layout.LayoutId,
+    slots: layout.slots,
+    placements: layout.placements,
+  };
 }
 
 /**

@@ -11,7 +11,7 @@ import ExperienceForm from "./ExperienceForm";
 // TO BE EXPANDED:
 // When we focus on the desing of the website, we will change this function 
 export default function ExeriencesPage({sessionId}: { sessionId: SessionId}) {
-    const {experiences, addExperience, editExperience, removeExperience } = usePortfolioStore(sessionId); // inserts sessionId to prop so that all service calls use that id 
+    const {experiences, editExperience, removeExperience } = usePortfolioStore(); // inserts sessionId to prop so that all service calls use that id 
     const [mode, setMode] = useState<"list" | "add" | "edit">("list");
     const [editing, setEditing] = useState<ExperienceDTO | null>(null);
 
@@ -32,7 +32,7 @@ export default function ExeriencesPage({sessionId}: { sessionId: SessionId}) {
             <h2>New Experience (Quick)</h2>
             <ExperienceForm
             onSubmit={async (payload) => {
-                await addExperience(payload);
+              
                 onCreateDone();
             }}
             onCancel={() => setMode("list")}

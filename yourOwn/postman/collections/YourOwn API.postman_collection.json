@@ -5,47 +5,32 @@
     "description": "API collection for the YourOwn portfolio application. This API manages user sessions, experiences (projects, jobs, internships, volunteering), layouts, and exports.\n\n## Base URL\n`http://localhost:5000`\n\n## Authentication\nMost endpoints require a Bearer token obtained from the `/api/sessions/start` endpoint. Include the token in the `Authorization` header.\n\n## Headers\n- `Authorization: Bearer <token>` - Required for authenticated endpoints\n- `X-Session-Id: <sessionId>` - Required for layout endpoints\n- `Content-Type: application/json` - Required for POST/PUT/PATCH requests",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:5000",
-      "type": "string"
-    },
-    {
-      "key": "token",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "sessionId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "experienceId",
-      "value": "",
-      "type": "string"
-    }
-  ],
   "item": [
     {
       "name": "Health",
       "item": [
         {
           "name": "Health Check",
+          "id": "2cfe32d5-e61d-4be9-b848-f5296982a53f",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/health",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "health"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "health"
+              ]
             },
             "description": "Check if the API server is running and healthy."
           },
           "response": []
         }
       ],
+      "id": "34ed7531-75f7-4847-8d6f-a7f3dd983cae",
       "description": "Health check endpoints for monitoring API status."
     },
     {
@@ -68,6 +53,7 @@
               }
             }
           ],
+          "id": "994913df-2d5d-4315-b780-4a5b060d44aa",
           "request": {
             "method": "POST",
             "header": [
@@ -82,8 +68,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/sessions/start",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "sessions", "start"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                "start"
+              ]
             },
             "description": "Start a new guest session. Returns a JWT token and session ID that should be used for subsequent authenticated requests."
           },
@@ -91,13 +83,20 @@
         },
         {
           "name": "Get Session by ID",
+          "id": "15055887-2aaf-426d-9420-fb2f227208e7",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/sessions/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "sessions", ":id"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id",
@@ -112,13 +111,19 @@
         },
         {
           "name": "Get All Sessions",
+          "id": "5e1f27bc-8104-4533-bfcc-a51628997222",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/sessions",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "sessions"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sessions"
+              ]
             },
             "description": "Retrieve all sessions."
           },
@@ -126,6 +131,7 @@
         },
         {
           "name": "Claim Session",
+          "id": "86e1fce4-5391-4461-9679-f49af21db3d5",
           "request": {
             "method": "PUT",
             "header": [
@@ -136,8 +142,16 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/sessions/save/:id/claim",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "sessions", "save", ":id", "claim"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                "save",
+                ":id",
+                "claim"
+              ],
               "variable": [
                 {
                   "key": "id",
@@ -151,6 +165,7 @@
           "response": []
         }
       ],
+      "id": "1e990ce1-0672-47d3-bfd8-26ae55083a3d",
       "description": "Session management endpoints. Sessions are used to track user activity and can be claimed by registered users."
     },
     {
@@ -172,6 +187,7 @@
               }
             }
           ],
+          "id": "93e7db2c-198d-4e9f-adde-d89cc755cc7f",
           "request": {
             "method": "POST",
             "header": [
@@ -190,8 +206,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/sessions/:sessionId/experiences",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "sessions", ":sessionId", "experiences"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":sessionId",
+                "experiences"
+              ],
               "variable": [
                 {
                   "key": "sessionId",
@@ -206,6 +229,7 @@
         },
         {
           "name": "List Experiences",
+          "id": "171b90a9-1d72-443b-b56a-ee63bab77058",
           "request": {
             "method": "GET",
             "header": [
@@ -216,14 +240,14 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/sessions/:sessionId/experiences",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "sessions", ":sessionId", "experiences"],
-              "variable": [
-                {
-                  "key": "sessionId",
-                  "value": "{{sessionId}}",
-                  "description": "Session UUID"
-                }
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":sessionId",
+                "experiences"
               ],
               "query": [
                 {
@@ -231,6 +255,13 @@
                   "value": "project",
                   "description": "Filter by experience type (internship, project, job, volunteering)",
                   "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Session UUID"
                 }
               ]
             },
@@ -240,6 +271,7 @@
         },
         {
           "name": "Get Experience by ID",
+          "id": "938c7d66-7504-4547-9dad-b4ec6e80e51a",
           "request": {
             "method": "GET",
             "header": [
@@ -250,8 +282,16 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/sessions/:sessionId/experiences/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "sessions", ":sessionId", "experiences", ":id"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":sessionId",
+                "experiences",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "sessionId",
@@ -271,6 +311,7 @@
         },
         {
           "name": "Update Experience (PUT)",
+          "id": "774ae035-5607-42ef-9236-c40b3b47be50",
           "request": {
             "method": "PUT",
             "header": [
@@ -289,8 +330,16 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/sessions/:sessionId/experiences/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "sessions", ":sessionId", "experiences", ":id"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":sessionId",
+                "experiences",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "sessionId",
@@ -310,6 +359,7 @@
         },
         {
           "name": "Update Experience (PATCH)",
+          "id": "b5dd62dc-3597-4537-912e-355174cf3425",
           "request": {
             "method": "PATCH",
             "header": [
@@ -328,8 +378,16 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/sessions/:sessionId/experiences/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "sessions", ":sessionId", "experiences", ":id"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":sessionId",
+                "experiences",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "sessionId",
@@ -349,6 +407,7 @@
         },
         {
           "name": "Delete Experience",
+          "id": "93276d77-a9d0-4807-8121-52a36b3cfee5",
           "request": {
             "method": "DELETE",
             "header": [
@@ -359,8 +418,16 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/sessions/:sessionId/experiences/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "sessions", ":sessionId", "experiences", ":id"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":sessionId",
+                "experiences",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "sessionId",
@@ -379,6 +446,7 @@
           "response": []
         }
       ],
+      "id": "a17bca29-49e1-4dd2-8718-874625812314",
       "description": "Experience management endpoints. Experiences represent portfolio items like projects, jobs, internships, and volunteering activities."
     },
     {
@@ -386,6 +454,7 @@
       "item": [
         {
           "name": "Get Layout",
+          "id": "ba5430d5-62eb-4836-ad23-780f20dc1433",
           "request": {
             "method": "GET",
             "header": [
@@ -397,8 +466,13 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/layout",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "layout"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "layout"
+              ]
             },
             "description": "Get the layout configuration for a session. Returns template ID, theme, slots, and placements."
           },
@@ -406,6 +480,7 @@
         },
         {
           "name": "Assign Experience to Layout",
+          "id": "46a33f5e-49b8-4b66-932b-0b70aa901048",
           "request": {
             "method": "PUT",
             "header": [
@@ -425,14 +500,68 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/layout/assign",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "layout", "assign"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "layout",
+                "assign"
+              ]
             },
             "description": "Assign an experience to a specific position in the layout.\n\n**Request Body:**\n- `sessionId` (required): Session UUID\n- `experienceId` (required): Experience UUID to assign\n- `position` (required): Layout position identifier\n- `patternId` (required): Pattern/template ID for rendering"
           },
           "response": []
+        },
+        {
+          "name": "[layouts].[id].[sync]",
+          "id": "c56192f7-d10c-439e-91d4-5b9b4e0890d9",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"slots\": [\r\n    { \"id\": \"slot-1\", \"area\": \"header\" },\r\n    { \"id\": \"slot-2\", \"area\": \"main\" },\r\n    { \"id\": \"slot-3\", \"area\": \"sidebar\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"slot-1\",\r\n      \"experienceId\": \"14cbb544-a6a8-4210-8b6c-b1c52845d8d1\",\r\n      \"patternId\": \"hero-basic\"\r\n    },\r\n    {\r\n      \"slotId\": \"slot-2\",\r\n      \"experienceId\": \"42694446-5d17-477d-a15f-a201f99b16fe\",\r\n      \"patternId\": \"card-universal\"\r\n    },\r\n        {\r\n      \"slotId\": \"slot-3\",\r\n      \"experienceId\": \"14cbb544-a6a8-4210-8b6c-b1c52845d8d1\",\r\n      \"patternId\": \"hero-basic\"\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/layouts/:layoutId/sync",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "layouts",
+                ":layoutId",
+                "sync"
+              ],
+              "variable": [
+                {
+                  "key": "layoutId",
+                  "value": "b17191bc-581e-4194-8c77-e508ce429241",
+                  "uuid": "f2d4c015-e9d0-4359-ba4f-222bc673804a"
+                }
+              ]
+            }
+          },
+          "response": []
         }
       ],
+      "id": "38b3e61e-8a48-4b8e-876d-cff8197b5ab7",
       "description": "Layout management endpoints. Layouts define how experiences are displayed in the portfolio."
     },
     {
@@ -440,6 +569,7 @@
       "item": [
         {
           "name": "Register User",
+          "id": "7ce744b5-ba59-4a83-ba38-9c545c5fbe71",
           "request": {
             "method": "POST",
             "header": [
@@ -454,14 +584,21 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/users/register",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "users", "register"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
             },
             "description": "Register a new user by associating a session with a user account.\n\n**Request Body:**\n- `sessionId` (required): Valid session UUID to associate with the new user"
           },
           "response": []
         }
       ],
+      "id": "8e422f0a-4df4-452c-a100-7c6ce888329a",
       "description": "User management endpoints for registration and authentication."
     },
     {
@@ -469,6 +606,7 @@
       "item": [
         {
           "name": "Export Portfolio as ZIP",
+          "id": "b921e51d-f1c3-46c8-a438-17f71062fef2",
           "request": {
             "method": "POST",
             "header": [
@@ -483,14 +621,20 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/export",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "export"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "export"
+              ]
             },
             "description": "Export portfolio data as a downloadable ZIP file containing HTML and JSON files.\n\n**Request Body:**\n- `html` (required): Object containing export data\n  - `userName`: Name to display in the export\n  - `entries`: Array of experience entries to include"
           },
           "response": []
         }
       ],
+      "id": "f2aba0c4-6133-4b3c-829e-04def57b81b1",
       "description": "Export endpoints for downloading portfolio data."
     },
     {
@@ -498,20 +642,53 @@
       "item": [
         {
           "name": "Seed Database",
+          "id": "9f38c35c-5d07-4ac4-a3ce-e33ae84c1b7b",
           "request": {
             "method": "POST",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/dev/seed",
-              "host": ["{{baseUrl}}"],
-              "path": ["dev", "seed"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dev",
+                "seed"
+              ]
             },
             "description": "Development endpoint to seed the database with sample data. Creates a new session with sample experiences (a project and an education entry)."
           },
           "response": []
         }
       ],
+      "id": "deee4ed6-396d-40fa-bd42-4cc1e8b0a917",
       "description": "Development and testing endpoints. These should not be used in production."
+    }
+  ],
+  "variable": [
+    {
+      "id": "f1dbc8d7-0fbf-4968-9e9e-3e5372c6bfaa",
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "id": "ec5c3850-8bc0-4e7b-a588-1ab719b359fa",
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "0eafea2e-93e6-4f70-be36-937ffac2addd",
+      "key": "sessionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "78b694ef-75ed-4cb1-a44b-7a8d208612e8",
+      "key": "experienceId",
+      "value": "",
+      "type": "string"
     }
   ]
 }

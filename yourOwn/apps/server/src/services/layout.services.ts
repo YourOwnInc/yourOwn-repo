@@ -7,7 +7,7 @@ import {
 import * as layoutRepo from "../repositories/layout.repo";
 import * as sessionRepo from "../repositories/session.repo";
 import * as experienceRepo from "../";
-import { prisma } from "../lib/prisma";
+import {prisma } from "../lib/prisma"
 
 type OwnerWhere = { userId: string };
 
@@ -53,6 +53,8 @@ export async function addNewTabPage(sessionId: string, layoutName: string) {
 export async function getHydratedLayout(sessionId: string, layoutName: string) {
   // 1. Fetch layout with its slots and placements
   const layout = await layoutRepo.findOrCreateLayoutForSession(sessionId, layoutName);
+
+  console.log("layout obj in hydrateLyaout service ", layout );
 
   // 2. Extract unique experience IDs from the placements
   const experienceIds = [...new Set(layout.placements.map(p => p.experienceId))];

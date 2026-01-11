@@ -28,7 +28,7 @@ export type Placement = {
 // Layout model stored by server
 export type LayoutModel = {
   id: string;
-  sessionId: SessionId;
+  layoutName: string;
   slots: Slot[];
   placements: Placement[];
   theme?: string;
@@ -45,3 +45,9 @@ export type PortfolioModel = {
   layout: LayoutModel;
   experiences: ExperienceDTO[];
 };
+
+// manifest body 
+export type ManifestData = {
+
+}
+

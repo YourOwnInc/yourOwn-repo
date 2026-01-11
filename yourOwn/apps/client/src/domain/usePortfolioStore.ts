@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { assignItem, getLayout } from "../Features/portfolio-preview/services/layoutService";
 import { createExperience, deleteExperience, listExperiences, updateExperience,  } from "../services/experienceService";
 import type { ExperienceDTO, SessionId, LayoutModel, Placement, PortfolioModel } from "./types";
 import { useUser} from "../contexts/UserContext";
@@ -15,36 +14,6 @@ export function usePortfolioStore() {
 
   useEffect(() => {
 
-    let cancelled = false;
-    (async () => {
-      // Guard: do nothing until a session exists
-      if (!sessionId) {
-        setLayout(null);
-        setExperiences([]);
-        setLoading(false);
-        return;
-      }
-
-      setLoading(true);
-      console.log("SessionId given to get exp", sessionId );
-      try {
-        const [l, exps] = await Promise.all([getLayout(sessionId), listExperiences(sessionId)]);
-        if (!cancelled) {
-          setLayout(l);
-          setExperiences(exps);
-          setError(null);
-        }
-      } catch (err: any) {
-        if (!cancelled) {
-          setError(err?.message ?? String(err));
-          setLayout(null);
-          setExperiences([]);
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => { cancelled = true; };
   }, [sessionId]);
 
   const addExperience = useCallback(async (payload: Omit<ExperienceDTO, "id" | "sessionId">) => {
@@ -65,20 +34,6 @@ export function usePortfolioStore() {
 
   }, [])
 
-  const upsertPlacement = useCallback(async (p: Placement) => {
-    if (!sessionId) throw new Error("Cannot upsert placement: sessionId is required");
-    await assignItem(sessionId, p);
-    setLayout((prev) => {
-      if (!prev) return prev;
-      const others = prev.placements.filter(x => x.slotId !== p.slotId);
-      return { ...prev, placements: [...others, p] };
-    });
-  }, [sessionId]);
 
-  const model: PortfolioModel | null  = useMemo(() => {
-    if (!layout) return null;
-    return { layout, experiences };
-  }, [layout, experiences]);
-
-  return { loading, layout, experiences, model, error, addExperience, upsertPlacement, editExperience, removeExperience };
+  return { loading, layout, experiences, error,  editExperience, removeExperience };
 }

@@ -6,9 +6,9 @@ import { PortfolioModel } from "../../../domain/types";
 
 
 
-type Slot = { id: string; area: string };
+type Slot = { clientSlotId: string; area: string };
 type Placement = { slotId: string; experienceId: string; patternId: string };
-type Layout = { id: string; slots: Slot[]; placements: Placement[] };
+type Layout = { layoutName: string; id: string,  slots: Slot[]; placements: Placement[] };
 type Experience = { id: string; kind: string; title?: string; [k: string]: any };
 
 export type PortfolioRenderData = {
@@ -22,9 +22,9 @@ type Props = {
 };
 
 export const PortfolioRenderer = (data : PortfolioModel) => {
-  console.log("Renderer");
+  console.log("data given to renderer", data);
 
-  console.log("Patterrn Registry: ", PATTERN_REGISTRY);
+  
   if(!data) {
     console.log("Missing render Data");
     return <div> Missing render Data </div>
@@ -34,7 +34,7 @@ export const PortfolioRenderer = (data : PortfolioModel) => {
   const { layout, experiences } = data;
 
    // 1. Find the Layout Component (Default to bento if missing)
-  const LayoutBlueprint = LAYOUT_REGISTRY[layout.id] || LAYOUT_REGISTRY["bento-v1"];
+  const LayoutBlueprint = LAYOUT_REGISTRY[layout.layoutName] || LAYOUT_REGISTRY["home"];
 
   // 2. Prepare the Slot Map by matching placements to patterns
   const slotMap = useMemo(() => {
