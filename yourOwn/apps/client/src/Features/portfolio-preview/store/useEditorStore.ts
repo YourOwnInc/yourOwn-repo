@@ -1,43 +1,46 @@
-// import { create } from 'zustand';
-// import { LayoutModel, ExperienceEntry, Placement, HydratedLayoutDTO } from '../types';
+import { create } from 'zustand';
+import { HydratedLayoutDTO, Placement, ExperienceDTO } from '../../../domain/types';
 
-// interface EditorState {
-//   layoutUuid: string | null;
-//   layout: LayoutModel | null;
-//   experiences: ExperienceEntry[];
-//   isDirty: boolean; // Tracks if there are unsaved changes
+interface EditorState {
+  // Core state
+  layoutUuid: string | null;
+  layoutName: string;
+  placements: Placement[];
+  experienceLibrary: ExperienceDTO[];
   
-//   // Actions
-//   setEditorData: (data: HydratedLayoutDTO) => void;
-//   upsertPlacement: (placement: Placement) => void;
-//   clearDirty: () => void;
-// }
+  // UI State
+  isDirty: boolean;
 
-// export const useEditorStore = create<EditorState>((set) => ({
-//   layoutUuid: null,
-//   layout: null,
-//   experiences: [],
-//   isDirty: false,
+  // Actions
+  setEditorData: (data: HydratedLayoutDTO) => void;
+  updatePlacement: (p: Placement) => void;
+  saveChanges: () => void;
+}
 
-//   setEditorData: (data) => set({
-//     layoutUuid: data.layout.id, // Store the UUID here for sync calls
-//     layout: data.layout,
-//     experiences: data.experienceLibrary,
-//     isDirty: false
-//   }),
+export const useEditorStore = create<EditorState>((set) => ({
+  layoutUuid: null,
+  layoutName: 'home',
+  placements: [],
+  experienceLibrary: [],
+  isDirty: false,
 
-//   upsertPlacement: (p) => set((state) => {
-//     if (!state.layout) return state;
-    
-//     const otherPlacements = state.layout.placements.filter(x => x.slotId !== p.slotId);
-//     return {
-//       isDirty: true,
-//       layout: {
-//         ...state.layout,
-//         placements: [...otherPlacements, p]
-//       }
-//     };
-//   }),
+  // Initialize the store with the flat DTO from the server
+  setEditorData: (data) => set({
+    layoutUuid: data.id,
+    layoutName: data.layoutName,
+    placements: data.placements,
+    experienceLibrary: data.experienceLibrary,
+    isDirty: false
+  }),
 
-//   clearDirty: () => set({ isDirty: false }),
-// }));
+  // Upsert logic for editing a specific slot
+  updatePlacement: (newPlacement) => set((state) => {
+    const filtered = state.placements.filter(p => p.slotId !== newPlacement.slotId);
+    return {
+      placements: [...filtered, newPlacement],
+      isDirty: true
+    };
+  }),
+
+  saveChanges: () => set({ isDirty: false }),
+}));

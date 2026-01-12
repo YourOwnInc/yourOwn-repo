@@ -1,55 +1,65 @@
-// features/portfolio-preview/components/PortfolioEditor.tsx
 import { useEffect } from "react";
 import { PortfolioRenderer } from "./PreviewRenderer";
-
+import { useEditorStore } from "../store/useEditorStore";
 import { useSyncLayout } from "../hooks/useSyncLayout";
-import { PortfolioModel, Placement, HydratedLayoutDTO } from "../../../domain/types";
-import { usePortfolioManifest } from "../hooks/usePortfolioManifest";
-import { useUser } from "../../../contexts/UserContext";
+import { HydratedLayoutDTO } from "../../../domain/types";
 
 interface PortfolioEditorProps {
   initialData: HydratedLayoutDTO;
 }
 
 export const PortfolioEditor = ({ initialData }: PortfolioEditorProps) => {
+  const { 
+    layoutUuid, 
+    layoutName, 
+    placements, 
+    experienceLibrary, 
+    setEditorData, 
+    isDirty 
+  } = useEditorStore();
 
-//   // Use the store to manage the 'Draft' state
-//   const { layout, experiences, setModel, upsertPlacement } = usePortfolioStore();
-//   const layoutId = initialData.layout.id;
-//   const syncMutation = useSyncLayout(layoutId);
+  const syncMutation = useSyncLayout(layoutUuid || "");
 
-//   // 1. Initialize the store with server data on mount
-//   useEffect(() => {
-//     if (initialData) {
-//       // Assuming setModel handles the mapping of PortfolioModel to store state
-//       setModel(initialData);
-//     }
-//   }, [initialData, setModel]);
+  // 1. Sync server data to store on mount
+  useEffect(() => {
+    if (initialData) {
+      setEditorData(initialData);
+    }
+  }, [initialData, setEditorData]);
 
-//   // 2. Handle layout changes (e.g., changing a pattern or swapping an experience)
-//   const onHandleChange = (newPlacement: Placement) => {
-//     upsertPlacement(newPlacement); // Local update (Instant UI feedback)
-    
-//     // Optional: Sync to DB. In a stable editor, you might want a 'Save' button 
-//     // instead of syncing on every single change to reduce API load.
-//     if (layout) {
-//         syncMutation.mutate({ ...layout, placements: [...layout.placements, newPlacement] });
-//     }
-//   };
+  // 2. Automated sync when dirty (or use a 'Save' button)
+  const handleSave = () => {
+    syncMutation.mutate({
+      placements,
+    });
+  };
 
-//   // Guard: Don't render if the store hasn't initialized yet
-//   if (!layout) return <div>Initializing Editor...</div>;
+  if (!layoutUuid) return <div>Initializing Editor Store...</div>;
 
   return (
-    <div className="editor-container relative border-2 border-dashed border-blue-400">
-      <div className="editor-badge absolute top-0 right-0 bg-blue-500 text-white px-2 py-1 text-xs">
-        EDIT MODE
+    <div className="editor-view relative min-h-screen border-4 border-blue-500/30">
+      {/* UI Controls Overlay */}
+      <div className="fixed bottom-8 right-8 z-50 flex gap-4">
+        {isDirty && (
+          <button 
+            onClick={handleSave}
+            className="bg-green-600 text-white px-6 py-2 rounded-full shadow-lg hover:bg-green-700 transition"
+          >
+            {syncMutation.isLoading ? "Saving..." : "Save Changes"}
+          </button>
+        )}
       </div>
-      
-      {/* Pass the STORE state (the draft) to the renderer, not the initialData */}
-      {/* <PortfolioRenderer layout={layout} experiences={experiences} /> */}
-      
-      {/* Future: Add Drag-and-Drop or Pattern Selector UI here */}
+
+      {/* The Renderer now pulls from the STORE. 
+        When updatePlacement is called, this will re-render instantly.
+      */}
+      <PortfolioRenderer 
+        id={layoutUuid}
+        layoutName={layoutName}
+        placements={placements}
+        experienceLibrary={experienceLibrary}
+        slots={initialData.slots} // Slots stay constant from the initial load
+      />
     </div>
   );
 };
