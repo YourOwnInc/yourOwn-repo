@@ -1,66 +1,33 @@
-import React, { useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
-import { PortfolioRenderer, PortfolioRenderData } from "../../../../renderer/src/PortfolioRenderer";
-// RendererLab.tsx
+// apps/client/src/components/InteractivePreview.tsx
+import { usePortfolioStore } from "../domain/usePortfolioStore";
+import { PortfolioRenderer } from "../Features/portfolio-preview/components/PreviewRenderer";
 
-const SCENARIOS: Record<string, PortfolioRenderData> = {
+export const InteractivePreview = () => {
+  // 1. Consume the live state from your store
+  const { model, upsertPlacement } = usePortfolioStore();
 
-  "Standard Profile": {
-    layout: {
-      id: "bento-v1",
-      slots: [
-        { id: "main", area: "header" },
-        { id: "s1", area: "main" },
-        { id: "s2", area: "main" },
-      ],
-      placements: [
-        { slotId: "main", experienceId: "exp1", patternId: "hero-basic" },
-        { slotId: "s1", experienceId: "exp2", patternId: "generic-card", },
-        { slotId: "s2", experienceId: "exp3", patternId: "generic-card", },
-      ],
-    },
-    experiences: [
-      { 
-        id: "exp1", 
-        kind: "general", 
-        title: "Alex Rivera", 
-        summary: "Full-stack engineer specializing in scalable React architectures." // Added summary for HeroBasic
-      },
-      { 
-        id: "exp2", 
-        kind: "job", 
-        title: "Senior Developer", 
-        organization: "Tech Corp Inc." // Added organization for GenericCard
-      },
-       { 
-        id: "exp3", 
-        kind: "Project", 
-        title: "AI SSAS BSBS", 
-        organization: "Tech Corp Inc." // Added organization for GenericCard
-      },
-    ],
-  },
-};
+  // 2. The handler that "knows" something changed
+  const onDragEnd = (result: any) => {
+    const { draggableId, destination } = result;
+    if (!destination) return;
 
-export const PreviewPage = () => {
+    // Update the placement in the store
+    // This function will trigger a state change, which re-renders this component
+    upsertPlacement({
+      experienceId: draggableId,
+      slotId: destination.droppableId,
+      patternId: "exp.card.v1" // Keep existing or update
+    });
+  };
 
-  const [params, setParams] = useSearchParams();
-
-  const scenarioKey =
-    params.get("scenario") && SCENARIOS[params.get("scenario")!]
-      ? params.get("scenario")!
-      : "Standard Profile";
-
-  const data = useMemo(() => SCENARIOS[scenarioKey], [scenarioKey]);
+  if (!model) return null;
 
   return (
-
-      
-        <div className="border border-dashed border-gray-400 p-2 min-h-[500px] bg-white shadow-lg text-black">
-          <PortfolioRenderer data={data} />
-        </div>
-      
-
-    
+    <div className="preview-editor-wrapper">
+      {/* Pass the live model to the renderer. 
+          As placements change in 'model', the Renderer updates instantly.
+      */}
+      <PortfolioRenderer {...model} />
+    </div>
   );
 };

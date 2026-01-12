@@ -1,11 +1,12 @@
 // routes/layout.routes.ts
 import { Router } from "express";
-import { resolveCtx } from "../middleware/ctx";
+
+import { requireAuth} from  "../middleware/auth"
 import * as ctrl from "../controller/layout.controller";
 
 const r = Router();
-
-r.get("/", resolveCtx, ctrl.getLayout);
-r.put("/assign", resolveCtx, ctrl.assign);
+r.post("/newTab", requireAuth,ctrl.createNewTab );
+r.get("/hydrate/:layoutName",requireAuth, ctrl.getHydratedPage );
+r.put("/:layoutId/sync", requireAuth,  ctrl.sync);
 
 export default r;

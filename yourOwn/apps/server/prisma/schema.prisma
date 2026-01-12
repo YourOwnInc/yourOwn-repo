@@ -62,7 +62,9 @@ model Experience {
   sessionId String     @db.Uuid
   session   Session    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
-  layoutItems LayoutItem[]
+  // RELATIONSHIP TO PLACEMENTS
+  // This defines the "other side" of the Placement.experience relationship
+  placements Placement[]
 
   title     String
   summary   String?
@@ -84,7 +86,7 @@ model Session {
   claimedBy   User?    @relation(fields: [claimedByUserId], references: [id], onDelete: SetNull)
 
   experiences Experience[]
-  layout      Layout?   // <- singular
+  layouts      Layout[]   // <- singular
 
   profile Profile?
 
@@ -99,30 +101,42 @@ model Layout {
   sessionId String   @db.Uuid
   session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
-  templateId String?
+  LayoutId  String   @default  ("home")
 
-  items LayoutItem[]
+  slots Slot[]
+  placements Placement[]
 
-  @@unique([sessionId])
-  @@index([templateId])
+  @@unique([sessionId, LayoutId])
+  @@index([LayoutId])
 }
 
-model LayoutItem {
-  id           String      @id @default(uuid()) @db.Uuid
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+model Placement {
+  id     String     @id @default(uuid()) @db.Uuid // Db internal 
+  createdAt   DateTime  @default(now())
 
-  layoutId     String      @db.Uuid
-  layout       Layout      @relation(fields: [layoutId], references: [id], onDelete: Cascade)
+  layoutId  String  @db.Uuid
+  layout    Layout  @relation(fields: [layoutId], references: [id], onDelete: Cascade)
 
-  experienceId String      @db.Uuid
-  experience   Experience  @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  // RELATIONAL LINK
+  experienceId String     @db.Uuid
+  experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
 
-  position     Int
-  patternId    String?
-  patternProps Json?
+  // HUMAN READABLE KEYS (What the user edits in JSON)
+  slotId       String     // e.g., "header-slot"
+  patternId    String     // e.g., "hero-banner"
 
-  @@unique([layoutId, experienceId])
-  @@index([layoutId, position])
+  @@index([layoutId])
 }
+
+model Slot{
+  id  String  @id @default(uuid())  @db.Uuid
+  layoutId    String  @db.Uuid
+  layout   Layout   @relation(fields: [layoutId], references: [id], onDelete: Cascade)
+
+  clientSlotId String //  e.g., "slot-1", "header" from your JSON
+  area         String // e.g., "sidebar"
+
+  @@index([layoutId])
+}
+
 

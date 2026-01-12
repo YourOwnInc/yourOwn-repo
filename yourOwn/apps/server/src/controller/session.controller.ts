@@ -26,7 +26,7 @@ export async function startSession(req: Request, res: Response, next: NextFuncti
 
     // create a layout with the assoicated sessionId 
     let sessionId = session.id;
-    const newLayout = await layoutService.createLayout(sessionId);
+    const newLayout = await layoutService.initializeSessionLayout(sessionId);
 
     // return the generated UUID to the client
     res.status(201).json({token, sessionId, newLayout});
