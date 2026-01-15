@@ -1,0 +1,403 @@
+{
+  "info": {
+    "_postman_id": "65800b2c-f4c9-46c3-b420-43a03635126f",
+    "name": "sandbox",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Experiences",
+      "item": [
+        {
+          "name": "Create Experience Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "e042c278-a58e-4e92-8280-31480dec96b2",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('experienceId', response.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "7801744f-f547-4a64-b6b9-f846e2c3ee19",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "7db5e653-bbdb-44ab-ae84-1bde2be25813",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"start\": \"2024-06-01T00:00:00.000Z\",\n  \"end\": \"2024-08-31T00:00:00.000Z\",\n  \"kind\": \"internship\",\n  \"title\": \"cryptoMine\",\n  \"content\": {\n    \"summary\": {\n      \"title\": \"Cyrptogeek\",\n      \"shortDescription\": \"My modernized take on the classic weather app project\",\n      \"icon\": \"☔\",\n      \"slug\": \"raincheck\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}}/api/sessions/:sessionId/experiences",
+              "host": [
+                "{{base_url}}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":sessionId",
+                "experiences"
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Session UUID"
+                }
+              ]
+            },
+            "description": "Create a new experience entry (project, job, internship, or volunteering).\n\n**Request Body:**\n- `title` (required): Title of the experience\n- `summary` (optional): Description of the experience\n- `start` (optional): Start date in ISO 8601 format\n- `end` (optional): End date in ISO 8601 format\n- `kind` (optional): Type of experience - one of: `internship`, `project`, `job`, `volunteering`"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Experience Copy Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "e042c278-a58e-4e92-8280-31480dec96b2",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('experienceId', response.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "7801744f-f547-4a64-b6b9-f846e2c3ee19",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "80271e33-286e-42e0-9211-cbd0e05db00b",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Projects Header\", \n  \"kind\": \"text-content\",\n  \"content\": {\n    \"title\": \"Projects\",\n    \"description\": \"I've worked on a variety of projects over the years, but these are the ones I'm most proud of. Many are open-source, so if something catches your eye, feel free to explore the code.\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sessions/:sessionId/experiences",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":sessionId",
+                "experiences"
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Session UUID"
+                }
+              ]
+            },
+            "description": "Create a new experience entry (project, job, internship, or volunteering).\n\n**Request Body:**\n- `title` (required): Title of the experience\n- `summary` (optional): Description of the experience\n- `start` (optional): Start date in ISO 8601 format\n- `end` (optional): End date in ISO 8601 format\n- `kind` (optional): Type of experience - one of: `internship`, `project`, `job`, `volunteering`"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Experience Copy Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "e042c278-a58e-4e92-8280-31480dec96b2",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('experienceId', response.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "7801744f-f547-4a64-b6b9-f846e2c3ee19",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "d9d9645f-797b-469a-b12e-2f4574949e9d",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"start\": \"2024-06-01T00:00:00.000Z\",\n  \"end\": \"2024-08-31T00:00:00.000Z\",\n  \"title\": \"Munchyroll\",\n  \"kind\": \"project\",\n  \"content\": {\n    \"summary\": {\n      \"title\": \"Munchyroll\",\n      \"shortDescription\": \"A simple and fast anime streaming web app\",\n      \"icon\": \"🍱\",\n      \"slug\": \"munchyroll\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sessions/:sessionId/experiences",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":sessionId",
+                "experiences"
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Session UUID"
+                }
+              ]
+            },
+            "description": "Create a new experience entry (project, job, internship, or volunteering).\n\n**Request Body:**\n- `title` (required): Title of the experience\n- `summary` (optional): Description of the experience\n- `start` (optional): Start date in ISO 8601 format\n- `end` (optional): End date in ISO 8601 format\n- `kind` (optional): Type of experience - one of: `internship`, `project`, `job`, `volunteering`"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Experience Copy Copy Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "e042c278-a58e-4e92-8280-31480dec96b2",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('experienceId', response.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "7801744f-f547-4a64-b6b9-f846e2c3ee19",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "de3e2900-3a4f-4b42-ad29-69393da07181",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Projects Header\", \n  \"kind\": \"text-content\",\n  \"content\": {\n    \"title\": \"Projects\",\n    \"description\": \"I've worked on a variety of projects over the years, but these are the ones I'm most proud of. Many are open-source, so if something catches your eye, feel free to explore the code.\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sessions/:sessionId/experiences",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":sessionId",
+                "experiences"
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Session UUID"
+                }
+              ]
+            },
+            "description": "Create a new experience entry (project, job, internship, or volunteering).\n\n**Request Body:**\n- `title` (required): Title of the experience\n- `summary` (optional): Description of the experience\n- `start` (optional): Start date in ISO 8601 format\n- `end` (optional): End date in ISO 8601 format\n- `kind` (optional): Type of experience - one of: `internship`, `project`, `job`, `volunteering`"
+          },
+          "response": []
+        }
+      ],
+      "id": "568bf65a-eaf0-4d8d-b929-c1a9c356b2eb"
+    },
+    {
+      "name": "layouts",
+      "item": [
+        {
+          "name": "[layouts].[id].[sync] Copy",
+          "id": "3471ed8f-b2f3-42a9-9469-515fe22d83e7",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"layoutName\": \"projects\",\r\n  \"slots\": [\r\n    { \"id\": \"slot-header\", \"area\": \"header\" },\r\n    { \"id\": \"slot-p1\", \"area\": \"project-1\" },\r\n    { \"id\": \"slot-p2\", \"area\": \"project-2\" },\r\n    { \"id\": \"slot-p3\", \"area\": \"project-3\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"slot-header\",\r\n      \"experienceId\": \"a61ccde7-a3d3-405e-955e-c79cb098b9da\",\r\n      \"patternId\": \"header-basic\"\r\n    },\r\n    {\r\n      \"slotId\": \"slot-p1\",\r\n      \"experienceId\": \"f63f7d2b-c604-4fa8-88db-34262a2842d6\",\r\n      \"patternId\": \"project-card\"\r\n    },\r\n    {\r\n      \"slotId\": \"slot-p2\",\r\n      \"experienceId\": \"3eed1a32-e061-4e95-ae1b-35011b0e7ea1\",\r\n      \"patternId\": \"project-card\"\r\n    },\r\n    {\r\n      \"slotId\": \"slot-p3\",\r\n      \"experienceId\": \"c0c08155-6e19-4c16-8e98-c98fcb5dcd0e\",\r\n      \"patternId\": \"project-card\"\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/layouts/:layoutId/sync",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "layouts",
+                ":layoutId",
+                "sync"
+              ],
+              "variable": [
+                {
+                  "key": "layoutId",
+                  "value": "c81f089b-86c6-445a-bee0-418937713735"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "d3a4ca8b-07a8-4f21-a162-29d2b2969fef"
+    },
+    {
+      "name": "New Request",
+      "id": "327e6e26-758c-4c49-b37b-bcd7fd2daeec",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    }
+  ]
+}

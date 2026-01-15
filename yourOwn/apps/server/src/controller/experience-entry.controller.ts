@@ -25,6 +25,7 @@ export async function createExperience(
     kind?: string | null;
     tags?: string[] | null;
     [key: string]: any;
+    content?:  any;
   }
   interface CreatedExperience { id: string; [key: string]: any }
 
@@ -43,6 +44,8 @@ export async function createExperience(
     
     const body: ExperienceCreateBody = ExperienceCreateSchema.parse(req.body);
 
+    console.log("body content", body);
+
     const created: CreatedExperience = await svc.createExperience({
       sessionId,
       title: body.title,
@@ -50,6 +53,7 @@ export async function createExperience(
       start: body.start ?? null, // zod already transformed ISO -> Date|null
       end: body.end ?? null,
       kind: mapKind(body.kind),
+      content: body.content,
     });
 
     return res.status(201)

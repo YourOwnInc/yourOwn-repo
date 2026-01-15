@@ -65,7 +65,7 @@ export async function getHydratedLayout(sessionId: string, layoutName: string) {
   // 3. Fetch full experience objects for these IDs
   // Assuming you have a batch fetch repo function
   const experiences = await prisma.experience.findMany({
-    where: { id: { in: experienceIds } }
+    where: { id: { in: experienceIds } },
   });
 
   return {

@@ -5,6 +5,21 @@ import { prisma } from "../lib/prisma";
 // The controller guarantees exactly one of these
 
 
+
+
+
+// The controller guarantees exactly one of these
+type Owner = { userId?: string | null; sessionId?: string | null };
+const ofOwner = (o: Owner) => (o.userId ? { userId: o.userId } : { sessionId: o.sessionId });
+export type CreateExperienceInput = Owner & {
+  title: string;
+  summary?: string | null;
+  start?: Date | null;
+  end?: Date | null;
+  kind?: string | null;
+  content?: any; // Add this line for JSON support
+};
+
 export async function createExperience(input: CreateExperienceInput) {
   const data: any = {
     title: input.title,
@@ -12,6 +27,7 @@ export async function createExperience(input: CreateExperienceInput) {
     start: input.start ?? null,
     end: input.end ?? null,
     kind: (input.kind as any) ?? null,
+    content: input.content ?? {}, // Default to empty object if not provided
   };
 
   if (input.userId) {
@@ -23,20 +39,6 @@ export async function createExperience(input: CreateExperienceInput) {
 
   return prisma.experience.create({ data });
 }
-
-
-
-// The controller guarantees exactly one of these
-type Owner = { userId?: string | null; sessionId?: string | null };
-const ofOwner = (o: Owner) => (o.userId ? { userId: o.userId } : { sessionId: o.sessionId });
-
-export type CreateExperienceInput = Owner & {
-  title: string;
-  summary?: string | null;
-  start?: Date | null;
-  end?: Date | null;
-  kind?: string | null; // map to your Prisma enum if you have one
-};
 
 // ...
 
@@ -72,6 +74,7 @@ export async function updateExperienceOwned(
     end?: Date | null;
     kind?: string | null;
     tags?: string[];
+    content?: any;
   }
 ) {
   // Build a “set only provided fields” object
@@ -82,7 +85,8 @@ export async function updateExperienceOwned(
   if (typeof patch.end !== "undefined") data.end = patch.end;
   if (typeof patch.kind !== "undefined") data.kind = patch.kind as any;
   if (typeof patch.tags !== "undefined") data.tags = patch.tags;
-
+  if (typeof patch.content !== "undefined") data.content = patch.content;
+  
   return prisma.experience.update({
     where: { id, ...ofOwner(owner) } as any, // Prisma doesn’t allow compound where in update without a unique; fallback to updateMany
     data,

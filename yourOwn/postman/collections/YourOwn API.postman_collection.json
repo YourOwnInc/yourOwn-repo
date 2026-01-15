@@ -177,13 +177,28 @@
             {
               "listen": "test",
               "script": {
+                "id": "9b5039fc-82a8-44ca-bceb-92da2be36a42",
                 "exec": [
                   "if (pm.response.code === 201) {",
                   "    const response = pm.response.json();",
                   "    pm.collectionVariables.set('experienceId', response.id);",
                   "}"
                 ],
-                "type": "text/javascript"
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "9c460943-d4fe-44c2-ac90-8b423c5cec70",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -205,9 +220,9 @@
               "raw": "{\n  \"title\": \"Software Engineer Intern\",\n  \"summary\": \"Developed REST APIs and microservices\",\n  \"start\": \"2024-06-01T00:00:00.000Z\",\n  \"end\": \"2024-08-31T00:00:00.000Z\",\n  \"kind\": \"internship\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/sessions/:sessionId/experiences",
+              "raw": "{{base_url}}/api/sessions/:sessionId/experiences",
               "host": [
-                "{{baseUrl}}"
+                "{{base_url}}"
               ],
               "path": [
                 "api",
@@ -610,8 +625,7 @@
               "variable": [
                 {
                   "key": "sessionId",
-                  "value": "a2b428b1-47a4-4d05-901e-239cf3851ea4",
-                  "uuid": "b8800594-4f2f-4ff2-ad09-8f3219f8e36c"
+                  "value": "a2b428b1-47a4-4d05-901e-239cf3851ea4"
                 }
               ]
             }

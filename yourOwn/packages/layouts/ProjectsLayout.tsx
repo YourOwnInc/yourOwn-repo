@@ -1,19 +1,17 @@
 export const Projects: React.FC<{ slots: Record<string, React.ReactNode> }> = ({ slots }) => (
-  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-6 min-h-screen">
-    {/* MAIN HERO: Top on mobile, Left 8-cols on desktop */}
-    <div className="md:col-span-8 md:row-span-2 border text-black overflow-hidden bg-white shadow-sm">
-      {slots["main"] || <div className="p-20 text-center text-gray-300">Main Content</div>}
-    </div>
+    <div className="min-h-screen bg-black text-white px-6 py-16 md:px-12">
+      <div className="max-w-5xl mx-auto">
+        {/* Header Slot: For Title and Description */}
+        <div className="mb-16">
+          {slots["slot-header"]}
+        </div>
 
-    {/* SIDEBAR ITEMS: Stays on side on desktop */}
-    <div className="md:col-span-4 space-y-6">
-      <div className="h-64 border text-black bg-gray-50">{slots["slot-1"]}</div>
-      <div className="h-64 border text-black bg-gray-50">{slots["slot-3"]}</div>
+        {/* Project Grid: A responsive grid of individual project slots */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {slots["slot-p1"]}
+          {slots["slot-p2"]}
+          {slots["slot-p3"]}
+        </div>
+      </div>
     </div>
-
-    {/* FOOTER STRIP: Full width desktop */}
-    <div className="md:col-span-12 h-32 border text-white bg-black text-white">
-      {slots["footer"]}
-    </div>
-  </div>
 );
