@@ -9,6 +9,7 @@ import * as sessionRepo from "../repositories/session.repo";
 import * as experienceRepo from "../";
 import {prisma } from "../lib/prisma"
 
+
 type OwnerWhere = { userId: string };
 
 /**
@@ -59,14 +60,30 @@ export async function getHydratedLayout(sessionId: string, layoutName: string) {
   // 2. Extract unique experience IDs from the placements
   const experienceIds = [...new Set(layout.placements.map(p => p.experienceId))];
 
-  // 3. Fetch full experience objects for these IDs
-  // Assuming you have a batch fetch repo function
-  const experiences = await prisma.experience.findMany({
-    where: { id: { in: experienceIds } }
-  });
+  const profileIds = [
+    ...new Set(
+      layout.placements
+        .map(p => p.patternId)
+        .filter((id): id is string => id != null)
+    )
+  ]
+
+  
+// 3. Fetch content in parallel for better performance
+  const [experiences, profiles] = await Promise.all([
+    prisma.experience.findMany({
+      where: { id: { in: experienceIds } }
+    }),
+    prisma.profile.findMany({
+      where: { id: { in: profileIds } }
+    })
+  ]);
 
   return {
     ...layout,
-    experienceLibrary: experiences // The client uses this to look up content by ID
+    // The "Library" approach allows the client to look up content by ID
+    // regardless of which slot it sits in.
+    experienceLibrary: experiences,
+    profileLibrary: profiles 
   };
 }

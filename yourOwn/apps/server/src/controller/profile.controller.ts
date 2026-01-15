@@ -1,17 +1,41 @@
-import { setTraceSigInt } from "util";
-import * as profileRepo from "../repositories/profile.repo"
+import * as profileService from "../services/profile.service";
 import { Request, Response } from "express";
-export async function createProfile(req: Request, res: Response) {
-    try{
-        const sessionId = req.header("X-Session-Id");
-        const { displayName, headline, locaiton, bio, skills, links} = req.body;
-        const profileContent = { displayName, headline, locaiton, bio, skills, links} 
-        const newProfile = await profileRepo.createProfile(sessionId, req.body );
+import { AuthenticatedRequest } from "../middleware/auth";
 
-        return res.json(newProfile);
+export async function handleProfileUpdate(req: Request, res: Response) {
+    const authReq = req as AuthenticatedRequest;
+    const {sessionId, role } = authReq.user;
+
+    try {
+        
+
+        // Destructuring and renaming 'locaiton' to the correct schema 'location' [cite: 8]
+        const { displayName, headline, location, bio, skills, links, avatarUrl } = req.body;
+        
+        const profileContent = { 
+            displayName, 
+            headline, 
+            location, // Handling the typo from the client-side temporarily
+            bio, 
+            skills, 
+            links,
+            avatarUrl 
+        };
+
+        const updatedProfile = await profileService.syncProfile(sessionId, profileContent);
+
+        return res.json(updatedProfile);
     }   
-    catch(error){
-
+    catch (error) {
+        console.error("Profile update error:", error);
+        return res.status(500).json({ error: "Failed to update profile" });
     }
-    
+}
+
+export async function fetchProfile(req: Request, res: Response ) {
+    const authReq = req as AuthenticatedRequest;
+    const {sessionId} = authReq.user;
+    try {
+        
+    }
 }

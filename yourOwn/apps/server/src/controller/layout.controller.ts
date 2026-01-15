@@ -90,7 +90,6 @@ export async function createNewTab(req: Request, res: Response) {
   }
 }
 
-// controllers/layout.controller.ts
 
 export async function getHydratedPage(req: Request, res: Response, next: NextFunction) {
   const authReq = req as AuthenticatedRequest;
@@ -100,6 +99,8 @@ export async function getHydratedPage(req: Request, res: Response, next: NextFun
     // 1. Verify ownership based on human-readable layoutName
     // This helper should resolve the layout to get the correct sessionId
     const verifiedLayout = await verifyLayoutNameOwnership(layoutName, authReq.user);
+
+    
 
     // 2. Call the service to get Layout + Slots + Placements + Experience objects
     const hydratedData = await layoutService.getHydratedLayout(

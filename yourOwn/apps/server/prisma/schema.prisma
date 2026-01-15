@@ -44,6 +44,8 @@ model Profile {
   bio         String?         // 2–3 sentence summary
   avatarUrl   String?
 
+  placements Placement[]      // relationship with placement
+
   // Keep simple as arrays/JSON for MVP
   skills      String[] @db.Text
   links       Json      // {email, github, linkedin, website, twitter, ...}
@@ -118,14 +120,20 @@ model Placement {
   layout    Layout  @relation(fields: [layoutId], references: [id], onDelete: Cascade)
 
   // RELATIONAL LINK
-  experienceId String     @db.Uuid
-  experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  experienceId String?     @db.Uuid
+  experience   Experience? @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+
+  profileId    String?     @db.Uuid
+  profile      Profile?    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+
 
   // HUMAN READABLE KEYS (What the user edits in JSON)
   slotId       String     // e.g., "header-slot"
   patternId    String     // e.g., "hero-banner"
 
   @@index([layoutId])
+  @@index([profileId]) // helpful for query performance 
 }
 
 model Slot{
