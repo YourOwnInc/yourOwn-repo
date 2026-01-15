@@ -552,8 +552,112 @@
               "variable": [
                 {
                   "key": "layoutId",
-                  "value": "b17191bc-581e-4194-8c77-e508ce429241",
-                  "uuid": "f2d4c015-e9d0-4359-ba4f-222bc673804a"
+                  "value": "b17191bc-581e-4194-8c77-e508ce429241"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "New Request",
+          "id": "9d6c643b-8045-4c73-82ad-18c9e2a862f3",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[sessions].[id].[layouts].[new tab]",
+          "id": "d3e81f53-4df0-4bc0-9dc2-c7803d2a5e78",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"layoutName\": \"about\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sessions/:sessionId/layouts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":sessionId",
+                "layouts"
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "a2b428b1-47a4-4d05-901e-239cf3851ea4",
+                  "uuid": "b8800594-4f2f-4ff2-ad09-8f3219f8e36c"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[layouts].[id].[sync.[about]",
+          "id": "b6bf80ad-9f0d-4f0d-9ef5-3256aeebd74a",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"slots\": [\r\n    { \"id\": \"slot-1\", \"area\": \"header\" },\r\n    { \"id\": \"slot-2\", \"area\": \"main\" },\r\n    { \"id\": \"slot-3\", \"area\": \"sidebar\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"slot-1\",\r\n      \"experienceId\": \"14cbb544-a6a8-4210-8b6c-b1c52845d8d1\",\r\n      \"patternId\": \"hero-basic\"\r\n    },\r\n    {\r\n      \"slotId\": \"slot-2\",\r\n      \"experienceId\": \"42694446-5d17-477d-a15f-a201f99b16fe\",\r\n      \"patternId\": \"card-universal\"\r\n    },\r\n        {\r\n      \"slotId\": \"slot-3\",\r\n      \"experienceId\": \"14cbb544-a6a8-4210-8b6c-b1c52845d8d1\",\r\n      \"patternId\": \"hero-basic\"\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/layouts/:layoutId/sync",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "layouts",
+                ":layoutId",
+                "sync"
+              ],
+              "variable": [
+                {
+                  "key": "layoutId",
+                  "value": "b17191bc-581e-4194-8c77-e508ce429241"
                 }
               ]
             }
