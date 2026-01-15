@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateProfile, upsertLink, deleteLink } from "../services/profileApiService";
+import { updateProfile, upsertLink, deleteLink } from "../services/profileService";
 
 
 export const profileKeys = {

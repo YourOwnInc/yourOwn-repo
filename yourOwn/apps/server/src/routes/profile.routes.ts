@@ -5,7 +5,8 @@ import * as PC from "../controller/profile.controller"
 
 const router = Router();
 
-router.get("/",requireAuth,  PC.fetchProfile);
+router.get("/:profileId",requireAuth,  PC.handleGetProfileDetail);
+router.get("",requireAuth,  PC.handleGetSummaries);
+
 
 router.post("/:profileId", PC.handleProfileUpdate);
-
