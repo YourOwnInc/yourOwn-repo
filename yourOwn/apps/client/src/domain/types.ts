@@ -19,15 +19,16 @@ export type Slot = {
 }
 
 export type Placement = {
-    position: SlotId;
+    slotId: string;
     experienceId: ExperienceId;
-    patternId: PatternId;
+    patternId: string;
 }
 
 
 // Layout model stored by server
 export type LayoutModel = {
-  sessionId: SessionId;
+  id: string;
+  layoutName: string;
   slots: Slot[];
   placements: Placement[];
   theme?: string;
@@ -44,3 +45,25 @@ export type PortfolioModel = {
   layout: LayoutModel;
   experiences: ExperienceDTO[];
 };
+
+export type TabsDTO = {
+  id: string,
+  name: string,
+}
+// manifest body 
+export type ManifestData = {
+  tabs: TabsDTO[]
+}
+
+/** * Matches the actual JSON structure from your server screenshot.
+ * The layout properties and the library are siblings.
+ */
+export type HydratedLayoutDTO = {
+  id: string;             // The Layout UUID
+  layoutName: string;     // e.g., "home"
+  slots: Slot[];
+  placements: Placement[];
+  experienceLibrary: ExperienceDTO[]; 
+  theme?: string;
+};
+

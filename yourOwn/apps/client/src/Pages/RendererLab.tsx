@@ -126,7 +126,7 @@ export const RendererLab = () => {
           <PortfolioRenderer data={data} />
         </div>
       
-      </div>
+    </div>
 
     
   );

@@ -7,86 +7,69 @@ import {
 import * as layoutRepo from "../repositories/layout.repo";
 import * as sessionRepo from "../repositories/session.repo";
 import * as experienceRepo from "../";
+import {prisma } from "../lib/prisma"
 
 type OwnerWhere = { userId: string };
 
 /**
- * Return the layout for a session, creating an empty one if needed.
- * Also enforces that the session belongs to the owner.
+ * Initializes a session with its first "home" tab.
+ * Called by startSession in the sessionController.
  */
-export async function getSessionLayout(
-  sessionId: string,
-  owner: OwnerWhere
-) {
-  // Ownership guard
-  const session = await sessionRepo.getSession(sessionId);
-  if (!session) {
-    const err = new Error("BAD_CREDENTIALS");
-    (err as any).code = "BAD_CREDENTIALS";
-    throw err;
+export async function initializeSessionLayout(sessionId: string) {
+  // Ensure the primary "home" layout exists
+  const layout = await layoutRepo.findOrCreateLayoutForSession(sessionId, "home");
+  
+  if (!layout) {
+    throw new Error("FAILED_TO_INITIALIZE_LAYOUT");
   }
-
-  const layout = await layoutRepo.findOrCreateLayoutForSession(sessionId);
   return layout;
 }
 
-export async function getLayoutItems(
-  layoutId: string
-){
-  const items = await layoutRepo.fetchItems(layoutId)
+/**
+ * Logic for creating a new tab/page.
+ * Service layer enforces unique naming or limits.
+ */
+export async function addNewTabPage(sessionId: string, layoutName: string) {
 
-  if(!items) {
-    const err = new Error("BAD_CREDENTIALS")
+  //Business Rule: Check if tab name exisits in layout registry. Cannot have unique tab
+  
+  // Business Rule: Check if user already has a tab with this name
+  const existingTabs = await layoutRepo.getAllSessionTabs(sessionId);
+  const exists = existingTabs.some(t => t.LayoutId === layoutName);
+  
+  if (exists) {
+    const err = new Error("TAB_ALREADY_EXISTS");
+    (err as any).code = 409;
     throw err;
   }
 
-  return items;
+  // Use repo to create the new layout
+  return await layoutRepo.createNewLayout(sessionId, layoutName);
 }
 
-export async function createLayout(sessionId: string ) {
-  const layout = await layoutRepo.findOrCreateLayoutForSession(sessionId)
-
-  if(!layout) {
-    const err = new Error("Error creating layout for session")
-    throw err
-  }
-  return layout
-}
+// src/services/layout.services.ts
 
 /**
- * Replace all layout items for a session's layout.
+ * Fetches a layout and "hydrates" it by attaching all referenced experiences.
+ * Optimized for single-page rendering.
+ */
+export async function getHydratedLayout(sessionId: string, layoutName: string) {
+  // 1. Fetch layout with its slots and placements
+  const layout = await layoutRepo.findOrCreateLayoutForSession(sessionId, layoutName);
 
-export async function updateSessionLayout(
-  sessionId: string,
-  input: UpdateLayoutInput,
-  owner: OwnerWhere
-) {
-  // 1. Ownership guard
-  const session = await sessionRepo.getSession(sessionId);
-  if (!session ) {
-    const err = new Error("BAD_CREDENTIALS");
-    (err as any).code = "BAD_CREDENTIALS";
-    throw err;
-  }
+  console.log("layout obj in hydrateLyaout service ", layout );
 
-  // 2. Normalize layout items (e.g., fill positions, sort, etc.)
-  const normalizedItems = normalizeLayoutItems(input.items);
+  // 2. Extract unique experience IDs from the placements
+  const experienceIds = [...new Set(layout.placements.map(p => p.experienceId))];
 
-  // 3. Business rule: no duplicate experiences in the layout
-  assertNoDuplicateExperiences(normalizedItems);
+  // 3. Fetch full experience objects for these IDs
+  // Assuming you have a batch fetch repo function
+  const experiences = await prisma.experience.findMany({
+    where: { id: { in: experienceIds } }
+  });
 
-  // 3b. Guard that all experiences belong to this owner
-  const experienceIds = normalizedItems
-    .map((it) => it.experienceId)
-    .filter(Boolean);
-
-
-  // 4. Find or create layout and replace items
-  const layout = await layoutRepo.findOrCreateLayoutForSession(sessionId);
-  await layoutRepo.replaceLayoutItems(layout.id, normalizedItems);
-
-  // 5. Return updated layout DTO
-  return getSessionLayout(sessionId, owner);
+  return {
+    ...layout,
+    experienceLibrary: experiences // The client uses this to look up content by ID
+  };
 }
-
-**/

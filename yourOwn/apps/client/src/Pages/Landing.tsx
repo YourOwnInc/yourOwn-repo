@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedText, AnimatedTextSequence } from '../components/AnimatedText';
 import { useUser } from '../contexts/UserContext';
 import { sessionService } from '../services/sessionService';
-import  BuildingNav from "../components/landing/signedInLanding";
+import  BuildingNav from "../components/landing/buildingNav";
 
 type LandingStep = 'hero' | 'welcome' | 'name' | 'bio';
 

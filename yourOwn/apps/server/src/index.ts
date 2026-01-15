@@ -37,8 +37,8 @@ app.use('/dev', devRoutes);
 // where routes will live
 app.use('/api/users', userRoutes);
 app.use('/api/sessions', sessionRoutes);
-app.use('/api/layout', layoutRoutes);
-app.use('/api', experienceRoutes);
+app.use('/api/layouts', layoutRoutes);
+app.use('/api/experiences', experienceRoutes);
 app.use('/api/exports', exportRoutes);
 
 
