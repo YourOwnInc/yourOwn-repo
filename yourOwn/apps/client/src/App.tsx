@@ -7,6 +7,7 @@ import ExperienceHub from './Pages/ExperienceHub';
 import { PortfolioPage } from './Features/portfolio-preview/Pages/PortfolioPage';
 import { ProfilePreview } from './Features/Profile/Pages/profilePreview';
 
+
 function AppContent() {
   const { onboardingComplete } = useUser();
 
@@ -17,8 +18,10 @@ function AppContent() {
         <Route path="/portfoliobuilder" element={<PortfolioBuilder />} />
         <Route path="/lab" element={<RendererLab />} />
         <Route path="/experiences" element={<ExperienceHub  />} />
-        <Route path="/preview" element={<PortfolioPage />} />
         <Route path="/profile" element={<ProfilePreview />} />
+        <Route path="/preview" element={<PortfolioPage />}>
+            <Route path=":LayoutName" element={<PortfolioPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

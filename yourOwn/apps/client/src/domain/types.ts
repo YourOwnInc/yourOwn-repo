@@ -46,9 +46,13 @@ export type PortfolioModel = {
   experiences: ExperienceDTO[];
 };
 
+export type TabsDTO = {
+  id: string,
+  name: string,
+}
 // manifest body 
 export type ManifestData = {
-
+  tabs: TabsDTO[]
 }
 
 /** * Matches the actual JSON structure from your server screenshot.

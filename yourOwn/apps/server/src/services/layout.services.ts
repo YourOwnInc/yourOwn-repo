@@ -31,6 +31,9 @@ export async function initializeSessionLayout(sessionId: string) {
  * Service layer enforces unique naming or limits.
  */
 export async function addNewTabPage(sessionId: string, layoutName: string) {
+
+  //Business Rule: Check if tab name exisits in layout registry. Cannot have unique tab
+  
   // Business Rule: Check if user already has a tab with this name
   const existingTabs = await layoutRepo.getAllSessionTabs(sessionId);
   const exists = existingTabs.some(t => t.LayoutId === layoutName);

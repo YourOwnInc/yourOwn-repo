@@ -74,6 +74,9 @@ model Experience {
   end       DateTime?
   kind      String   @db.Text @default("other")
 
+  // Flexible storage for summary/detial content 
+  content   Json?   @default("{}")
+
   @@index([sessionId])
   @@index([kind])
   @@index([title])

@@ -18,6 +18,10 @@ export type CreateExperienceInput = Owner & {
   start?: Date | null;
   end?: Date | null;
   kind?: string | null; // map enums earlier; keep service generic
+  content?: {
+    summary?: any;
+    details?: any;
+  } | null;
 };
 
 export async function createExperience(input: CreateExperienceInput) {
@@ -44,6 +48,7 @@ export async function updateExperienceOwned(
     start?: Date | null; // undefined = untouched; null = clear
     end?: Date | null;
     kind?: string | null;
+    content?: any;
   }
 ) {
   authenticate(owner);
