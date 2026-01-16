@@ -1,9 +1,8 @@
-import * as profileService from "../services/profile.service";
+import { setTraceSigInt } from "util";
+import * as profileRepo from "../repositories/profile.repo"
 import { Request, Response } from "express";
 import { AuthenticatedRequest } from "../middleware/auth";
-
-import * as profileRepo from "../repositories/profile.repo";
-
+import * as profileService from "../services/profile.service"
 
 export async function handleProfileUpdate(req: Request, res: Response) {
     const authReq = req as AuthenticatedRequest;
@@ -36,11 +35,20 @@ export async function handleProfileUpdate(req: Request, res: Response) {
     }
 }
 
-export async function fetchProfile(req: Request, res: Response ) {
-    const authReq = req as AuthenticatedRequest;
-    const {sessionId} = authReq.user;
-    try {
-
+export async function handleCreateProfile(req: Request, res: Response) {
+    const {sessionId} = (req as AuthenticatedRequest).user;
+    try{
+            const newProfile = await profileRepo.createProfile(sessionId, req.body);
+                
+        return res.status(201).json(newProfile);
+    } catch (error: any) {
+            // Handle P2002 (Unique constraint failed) if session already has a profile
+            if (error.code === 'P2002') {
+                return res.status(409).json({ error: "A profile already exists for this session." });
+            }
+            
+            console.error("Profile creation error:", error);
+            return res.status(500).json({ error: "Failed to create profile" });
     }
 }
 
@@ -61,7 +69,7 @@ export async function handleGetSummaries(req: Request, res: Response) {
 export async function handleGetProfileDetail(req: Request, res: Response) {
     const { profileId } = req.params;
     try {
-        const profile = await profileRepo.getFullProfileById(id);
+        const profile = await profileRepo.getFullProfileById(profileId);
         if (!profile) return res.status(404).json({ error: "Profile not found" });
         return res.json(profile);
     } catch (error) {
@@ -70,29 +78,29 @@ export async function handleGetProfileDetail(req: Request, res: Response) {
 }
 
 
-// PUT /api/profiles/:id/links
-export async function handleUpsertLink(req: Request, res: Response) {
-    const { id } = req.params;
-    const newLink = req.body; // { id?, platform, url, label }
+// // PUT /api/profiles/:id/links
+// export async function handleUpsertLink(req: Request, res: Response) {
+//     const { id } = req.params;
+//     const newLink = req.body; // { id?, platform, url, label }
 
-    try {
-        const profile = await profileRepo.getFullProfileById(id);
-        if (!profile) return res.status(404).json({ error: "Profile not found" });
+//     try {
+//         const profile = await profileRepo.getFullProfileById(id);
+//         if (!profile) return res.status(404).json({ error: "Profile not found" });
 
-        // Logic to update the JSON links array
-        let currentLinks = Array.isArray(profile.links) ? [...profile.links] : [];
+//         // Logic to update the JSON links array
+//         let currentLinks = Array.isArray(profile.links) ? [...profile.links] : [];
         
-        if (newLink.id) {
-            // Update existing link
-            currentLinks = currentLinks.map(l => l.id === newLink.id ? { ...l, ...newLink } : l);
-        } else {
-            // Add new link with a generated ID if missing
-            currentLinks.push({ ...newLink, id: crypto.randomUUID() });
-        }
+//         if (newLink.id) {
+//             // Update existing link
+//             currentLinks = currentLinks.map(l => l.id === newLink.id ? { ...l, ...newLink } : l);
+//         } else {
+//             // Add new link with a generated ID if missing
+//             currentLinks.push({ ...newLink, id: crypto.randomUUID() });
+//         }
 
-        const updated = await profileRepo.updateProfileLinks(id, currentLinks);
-        return res.json(updated);
-    } catch (error) {
-        return res.status(500).json({ error: "Failed to update links" });
-    }
-}
+//         const updated = await profileRepo.updateProfileLinks(id, currentLinks);
+//         return res.json(updated);
+//     } catch (error) {
+//         return res.status(500).json({ error: "Failed to update links" });
+//     }
+// }

@@ -9,7 +9,7 @@ export const ProfileList = ({ profiles }: { profiles: ProfileSummary[] }) => {
            <div className="flex items-center gap-4">
               <img src={p.avatarUrl} className="w-12 h-12 rounded-full" />
               <div>
-                <h4 className="font-semibold">{p.displayName}</h4>
+                <h4 className="font-semibold text-black">{p.displayName}</h4>
 
               </div>
            </div>

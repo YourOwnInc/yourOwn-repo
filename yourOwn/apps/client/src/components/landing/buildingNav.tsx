@@ -10,7 +10,7 @@ export default function BuilderNav({ className = "" }: BuilderNavProps) {
   const navItems = [
     { label: 'Preview', path: '/preview' },
     { label: 'Experiences', path: '/experiences' },
-    { label: 'Sandbox', path: '/lab' },
+    { label: 'Profile', path: '/profile' },
   ];
 
   return (

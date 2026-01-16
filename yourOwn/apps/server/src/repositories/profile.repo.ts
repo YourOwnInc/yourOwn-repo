@@ -1,7 +1,7 @@
 import { JsonArray } from "@prisma/client/runtime/library";
 import { prisma } from "../lib/prisma"
 
-e/repo/profile.repo.ts
+
 
 /**
  * Upserts a profile based on its unique internal ID.
@@ -35,10 +35,25 @@ export async function upsertProfile(data: any, profileId?: string) {
   });
 }
 
-export async function getProfileSummary(userId: string) {
+export async function createProfile(sessionId: string, data: any ) {
+  return await prisma.profile.create({
+    data: {
+      sessionId: sessionId,
+      displayName: data.displayName || "New Profile",
+      headline: data.headline || "",
+      location: data.location || "",
+      bio: data.bio || "",
+      avatarUrl: data.avatarUrl || "",
+      skills: data.skills || [], // Expected as String[]
+      links: data.links || [],   // Expected as Json (Array of objects)
+    },
+    });
+}
+
+export async function getProfileSummary(sessionId: string) {
   return await prisma.profile.findMany({
     where: {
-      userId: userId
+      sessionId: sessionId
     },
     select: {
       id:true,

@@ -3,7 +3,7 @@ import { Github, Linkedin, Instagram, Globe, Youtube, Twitter, ExternalLink } fr
 import { ProfileLink } from '../types/profile.types';
 
 const ICON_MAP = {
-  github: <Github className="w-5 h-5" />,
+  github: <Github className="w-5 text-black h-5" />,
   linkedin: <Linkedin className="w-5 h-5 text-blue-600" />,
   instagram: <Instagram className="w-5 h-5 text-pink-500" />,
   youtube: <Youtube className="w-5 h-5 text-red-600" />,

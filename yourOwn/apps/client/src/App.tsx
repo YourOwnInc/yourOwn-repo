@@ -5,6 +5,7 @@ import PortfolioBuilder from './Pages/PortfolioBuilder';
 import {RendererLab} from './Pages/RendererLab';
 import ExperienceHub from './Pages/ExperienceHub';
 import { PortfolioPage } from './Features/portfolio-preview/Pages/PortfolioPage';
+import { ProfilePreview } from './Features/Profile/Pages/profilePreview';
 
 function AppContent() {
   const { onboardingComplete } = useUser();
@@ -17,6 +18,7 @@ function AppContent() {
         <Route path="/lab" element={<RendererLab />} />
         <Route path="/experiences" element={<ExperienceHub  />} />
         <Route path="/preview" element={<PortfolioPage />} />
+        <Route path="/profile" element={<ProfilePreview />} />
       </Routes>
     </BrowserRouter>
   );

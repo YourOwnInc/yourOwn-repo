@@ -1,22 +1,31 @@
-import { useQuery } from "@tanstack/react-query";
-import { getUserProfiles, getProfileById } from "../services/profileService";
+// src/features/profile/hooks/useProfileActions.ts
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateProfile, upsertLink, deleteLink } from "../services/profileService";
+import { profileKeys } from "./useProfiles";
 
-export const profileKeys = {
-    all: ["profiles"] as const,
-    detail: (id: string )=> [...profileKeys.all, id] as const,
-}
+export function useProfileActions(profileId?: string) {
+  const queryClient = useQueryClient();
 
-export function useProfiles( ) {
-    return useQuery({
-        queryKey: profileKeys.all,
-        queryFn: getUserProfiles,
-    })
-}
-
-export function useProfileDetail(id: string) {
-  return useQuery({
-    queryKey: profileKeys.detail(id),
-    queryFn: () => getProfileById(id),
-    enabled: !!id, // Only run if an ID is actually provided
+  const updateProfileMutation = useMutation({
+    mutationFn: (data: any) => updateProfile(profileId!, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: profileKeys.lists() });
+      if (profileId) {
+        queryClient.invalidateQueries({ queryKey: profileKeys.detail(profileId) });
+      }
+    },
   });
+
+  const upsertLinkMutation = useMutation({
+    mutationFn: (linkData: any) => upsertLink(profileId!, linkData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: profileKeys.detail(profileId!) });
+    },
+  });
+
+  return {
+    updateProfile: updateProfileMutation,
+    upsertLink: upsertLinkMutation,
+    isUpdating: updateProfileMutation.isPending || upsertLinkMutation.isPending,
+  };
 }

@@ -26,17 +26,30 @@ export async function getUserProfiles(): Promise<ProfileDTO[]> {
 /**
  * Fetches a specific profile by its ID.
  */
-export async function getProfileById(id: string): Promise<ProfileDTO> {
-  const res = await fetch(`${BASE}/profiles/${id}`, {
+export async function getProfileById(profileId: string): Promise<ProfileDTO> {
+  const res = await fetch(`${BASE}/profiles/${profileId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: getAuthHeader(),
     },
   });
-  if (!res.ok) throw new Error(`Failed to fetch profile: ${id}`);
+  if (!res.ok) throw new Error(`Failed to fetch profile: ${profileId}`);
   return res.json();
 }
+
+export async function getProfileManifest() {
+  const res = await fetch(`${BASE}/profiles`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: getAuthHeader(),
+    }
+  })
+  return res.json();
+}
+
+
 
 /**
  * Updates high-level profile metadata (name, bio, etc.)

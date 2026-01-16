@@ -552,8 +552,7 @@
               "variable": [
                 {
                   "key": "layoutId",
-                  "value": "b17191bc-581e-4194-8c77-e508ce429241",
-                  "uuid": "f2d4c015-e9d0-4359-ba4f-222bc673804a"
+                  "value": "b17191bc-581e-4194-8c77-e508ce429241"
                 }
               ]
             }
@@ -663,6 +662,117 @@
       ],
       "id": "deee4ed6-396d-40fa-bd42-4cc1e8b0a917",
       "description": "Development and testing endpoints. These should not be used in production."
+    },
+    {
+      "name": "Profiles",
+      "item": [
+        {
+          "name": "[profiles].[summaries]",
+          "id": "070ad204-6eb3-47ef-8779-fef4a3e6099b",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/profiles/summary",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "profiles",
+                "summary"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[layouts].[id].[sync] Copy Copy",
+          "id": "48685073-20d0-4337-9de4-08fe6176dee2",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"displayName\": \"Luis Alarcon\",\r\n  \"headline\": \"Software Engineering Student\",\r\n  \"location\": \"Dallas, TX\",\r\n  \"bio\": \"Building YourOwn to redefine profile ownership.\",\r\n  \"avatarUrl\": \"https://api.dicebear.com/7.x/avataaars/svg?seed=Luis\",\r\n  \"skills\": [\"React\", \"TypeScript\", \"Node.js\"],\r\n  \"links\": [\r\n    {\r\n      \"id\": \"link_1\",\r\n      \"platform\": \"github\",\r\n      \"url\": \"https://github.com/LuisAlar\",\r\n      \"label\": \"GitHub\"\r\n    },\r\n     {\r\n      \"id\": \"link_1\",\r\n      \"platform\": \"linkedin\",\r\n      \"url\": \"https://https://www.linkedin.com/in/luis-alberto-alarcon-mandujano-68316b359/\",\r\n      \"label\": \"LinkedIn\"\r\n    } ,\r\n    {\r\n      \"id\": \"link_1\",\r\n      \"platform\": \"instagram\",\r\n      \"url\": \"https://www.instagram.com/_luisalarcon_/\",\r\n      \"label\": \"Instagram\"\r\n    } \r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/profiles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "profiles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[profiles].[summaries] Copy",
+          "id": "ee833b62-18d3-455d-abb3-695ccdc597c2",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/profiles/:profileId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "profiles",
+                ":profileId"
+              ],
+              "variable": [
+                {
+                  "key": "profileId",
+                  "value": "943d0215-9fe5-4bc3-b510-3b31b1724404",
+                  "uuid": "ed4b5578-c8fa-4461-a09e-9760d4fd361a"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "008e59cd-7430-426c-b4f2-a6bd1ba01ea9"
     }
   ],
   "variable": [
