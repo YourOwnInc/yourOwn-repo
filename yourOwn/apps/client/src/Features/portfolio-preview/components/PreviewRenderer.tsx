@@ -23,33 +23,42 @@ export const PortfolioRenderer = ({
   placements,
   slots
 }: HydratedLayoutDTO) => {
-  
-  console.log("Placements in renderer:", placements);
-  console.log("Exp in renderer:", experienceLibrary);
 
-  // 1. Find the Layout Component
+
+
   const LayoutBlueprint = LAYOUT_REGISTRY[layoutName] || LAYOUT_REGISTRY["home"];
+const slotMap = useMemo(() => {
+  const map: Record<string, React.ReactNode> = {};
 
-  // 2. Prepare the Slot Map
-  const slotMap = useMemo(() => {
-    const map: Record<string, React.ReactNode> = {};
-
-    // placements is now a top-level array, not nested under 'layout'
-    placements?.forEach((p) => {
-      const exp = experienceLibrary.find((e) => e.id === p.experienceId);
-      const Pattern = PATTERN_REGISTRY[p.patternId];
-
-      if (exp && Pattern) {
-        map[p.slotId] = <Pattern data={exp} />;
-      }
-    });
-    
+  if (!placements || placements.length === 0) {
+ 
     return map;
-  }, [placements, experienceLibrary]);
+  }
 
-  console.log("slotMap", slotMap);
+  // FIX: Flatten the library in case it's nested (Array of Arrays)
+  const flatLibrary = experienceLibrary?.flat(Infinity) || [];
+  
+ 
 
-  if (!LayoutBlueprint) return <div>Missing Layout Blueprint</div>;
+  placements.forEach((p, idx) => {
+    // Search in the flattened library instead
+    const exp = flatLibrary.find((e) => e.id === p.experienceId);
+    
+    const Pattern = PATTERN_REGISTRY[p.patternId];
+
+    if (exp && Pattern) {
+      map[p.slotId] = <Pattern data={exp} />;
+    }
+    
+  });
+  
+  return map;
+}, [placements, experienceLibrary]);
+
+  if (!LayoutBlueprint) {
+    console.error("❌ [PortfolioRenderer] Missing Layout Blueprint for:", layoutName);
+    return <div>Missing Layout Blueprint</div>;
+  }
 
   return <LayoutBlueprint slots={slotMap} />;
 };

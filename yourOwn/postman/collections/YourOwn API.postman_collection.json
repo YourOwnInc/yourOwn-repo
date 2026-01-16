@@ -542,11 +542,11 @@
                 }
               ]
             },
-            "method": "POST",
+            "method": "PUT",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"slots\": [\r\n    { \"id\": \"slot-1\", \"area\": \"header\" },\r\n    { \"id\": \"slot-2\", \"area\": \"main\" },\r\n    { \"id\": \"slot-3\", \"area\": \"sidebar\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"slot-1\",\r\n      \"experienceId\": \"14cbb544-a6a8-4210-8b6c-b1c52845d8d1\",\r\n      \"patternId\": \"hero-basic\"\r\n    },\r\n    {\r\n      \"slotId\": \"slot-2\",\r\n      \"experienceId\": \"42694446-5d17-477d-a15f-a201f99b16fe\",\r\n      \"patternId\": \"card-universal\"\r\n    },\r\n        {\r\n      \"slotId\": \"slot-3\",\r\n      \"experienceId\": \"14cbb544-a6a8-4210-8b6c-b1c52845d8d1\",\r\n      \"patternId\": \"hero-basic\"\r\n    }\r\n  ]\r\n}",
+              "raw": "{\r\n  \"slots\": [\r\n    { \"id\": \"main\", \"area\": \"header\" },\r\n    { \"id\": \"slot-1\", \"area\": \"main\" },\r\n    { \"id\": \"slot-2\", \"area\": \"sidebar\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"main\",\r\n      \"experienceId\": \"14cbb544-a6a8-4210-8b6c-b1c52845d8d1\",\r\n      \"patternId\": \"hero-basic\"\r\n    },\r\n    {\r\n      \"slotId\": \"slot-1\",\r\n      \"experienceId\": \"42694446-5d17-477d-a15f-a201f99b16fe\",\r\n      \"patternId\": \"generic-card\"\r\n    },\r\n        {\r\n      \"slotId\": \"slot-2\",\r\n      \"experienceId\": \"42694446-5d17-477d-a15f-a201f99b16fe\",\r\n      \"patternId\": \"generic-card\"\r\n    }\r\n\r\n  ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -567,7 +567,8 @@
               "variable": [
                 {
                   "key": "layoutId",
-                  "value": "b17191bc-581e-4194-8c77-e508ce429241"
+                  "value": "b17191bc-581e-4194-8c77-e508ce429241",
+                  "uuid": "f2d4c015-e9d0-4359-ba4f-222bc673804a"
                 }
               ]
             }
@@ -882,8 +883,7 @@
               "variable": [
                 {
                   "key": "profileId",
-                  "value": "943d0215-9fe5-4bc3-b510-3b31b1724404",
-                  "uuid": "ed4b5578-c8fa-4461-a09e-9760d4fd361a"
+                  "value": "943d0215-9fe5-4bc3-b510-3b31b1724404"
                 }
               ]
             }

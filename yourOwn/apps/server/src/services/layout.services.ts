@@ -55,38 +55,25 @@ export async function addNewTabPage(sessionId: string, layoutName: string) {
  * Optimized for single-page rendering.
  */
 export async function getHydratedLayout(sessionId: string, layoutName: string) {
-  // 1. Fetch layout with its slots and placements
   const layout = await layoutRepo.findOrCreateLayoutForSession(sessionId, layoutName);
 
-  console.log("layout obj in hydrateLyaout service ", layout );
+  // 1. Collect all unique IDs from placements
+  const experienceIds = [...new Set(layout.placements.map(p => p.experienceId).filter(Boolean))] as string[];
+  const profileIds = [...new Set(layout.placements.map(p => p.profileId).filter(Boolean))] as string[];
 
-  // 2. Extract unique experience IDs from the placements
-  const experienceIds = [...new Set(layout.placements.map(p => p.experienceId))];
-
-  const profileIds = [
-    ...new Set(
-      layout.placements
-        .map(p => p.patternId)
-        .filter((id): id is string => id != null)
-    )
-  ]
-
-  
-// 3. Fetch content in parallel for better performance
+  // 2. Fetch both types in parallel
+  // Use destructuring [experiences, profiles] to keep the result flat
   const [experiences, profiles] = await Promise.all([
-    prisma.experience.findMany({
-      where: { id: { in: experienceIds } }
-    }),
-    prisma.profile.findMany({
-      where: { id: { in: profileIds } }
-    })
+    prisma.experience.findMany({ where: { id: { in: experienceIds } } }),
+    prisma.profile.findMany({ where: { id: { in: profileIds } } }),
   ]);
+
+  // 3. Add a "kind" property to Profiles if they don't have one in the DB
+  // This helps your Pattern components distinguish data types
+  const mappedProfiles = profiles.map(p => ({ ...p, kind: 'profile' }));
 
   return {
     ...layout,
-    // The "Library" approach allows the client to look up content by ID
-    // regardless of which slot it sits in.
-    experienceLibrary: experiences,
-    profileLibrary: profiles 
+    experienceLibrary: [...experiences, ...mappedProfiles], // Returns a single flat array
   };
 }

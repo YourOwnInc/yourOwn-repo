@@ -7,7 +7,7 @@ import * as layoutRepo from "../repositories/layout.repo";
 import * as layoutService from "../services/layout.services";
 import { AuthenticatedRequest } from "../middleware/auth";
 // src/controllers/layout.controller.ts
-import { SyncLayoutSchema } from "../repositories/layout.repo";
+import { SyncLayoutSchema } from "../schemas/layout.schema";
 import { verifyLayoutOwnership, verifyLayoutNameOwnership } from "../services/layout.auth.service";
 import { error } from "node:console";
 import {prisma } from "../lib/prisma"
@@ -37,8 +37,12 @@ export async function sync(req: Request, res: Response) {
 
   // fetch data from params and body 
   const { slots, placements } = result.data;
+  // filter out placements with missing required fields
+  const validPlacements = placements.filter(p => 
+    p.experienceId && p.profileId && p.slotId && p.patternId
+  );
   // calls repo to sync data 
-  const updated = await layoutRepo.syncLayoutState(layoutId, slots, placements);
+  const updated = await layoutRepo.syncLayoutState(layoutId, slots, validPlacements as { slotId: string; profileId: string; experienceId: string; patternId: string }[]);
   // returns updated info 
   return res.json(updated);
 }

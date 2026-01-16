@@ -8,7 +8,7 @@ export const Home: React.FC<{ slots: Record<string, React.ReactNode> }> = ({ slo
     {/* SIDEBAR ITEMS: Stays on side on desktop */}
     <div className="md:col-span-4 space-y-6">
       <div className="h-64 border text-black bg-gray-50">{slots["slot-1"]}</div>
-      <div className="h-64 border text-black bg-gray-50">{slots["slot-3"]}</div>
+      <div className="h-64 border text-black bg-gray-50">{slots["slot-2"]}</div>
     </div>
 
     {/* FOOTER STRIP: Full width desktop */}
