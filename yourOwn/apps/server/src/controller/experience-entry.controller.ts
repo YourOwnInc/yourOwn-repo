@@ -1,64 +1,54 @@
 // src/controllers/experience-entry.controller.ts
-import { Request, Response } from "express";
-import { ExperienceCreateSchema, ExperienceUpdateSchema } from "../schemas/experience.schema";
-import { ownerWhere } from "../middleware/ctx";
+
+import { Request, Response, NextFunction } from "express";
+import { ExperienceCreateSchema, ExperienceUpdateSchema, ExperienceCreateBody } from "../schemas/experience.schema";
 import * as svc from "../services/experience-entry.service";
-import { randomUUID } from "crypto";
-import express from "express";
 import { AuthenticatedRequest } from "../middleware/auth";
-
-
+import { ownerWhere } from "../middleware/ctx";
 // optional mapper if your Prisma enum differs from client strings
 function mapKind(k?: string | null) { return k ?? null; }
+// src/controllers/experience-entry.controller.ts
 
-export async function createExperience(
-  req: Request,
-  res: Response,
-  next: express.NextFunction
-) {
 
-  interface ExperienceCreateBody {
-    title: string;
-    summary?: string | null;
-    start?: Date | null;
-    end?: Date | null;
-    kind?: string | null;
-    tags?: string[] | null;
-    [key: string]: any;
-    content?:  any;
-  }
-  interface CreatedExperience { id: string; [key: string]: any }
-
+export async function createExperience(req: Request, res: Response, next: NextFunction) {
   const authReq = req as AuthenticatedRequest;
-  const role = authReq.user.role;
-  const {sessionId} = req.params;
+  const { role, sessionId: userSessionId } = authReq.user;
+  const { sessionId } = req.params;
 
   try {
-    // Check if user is a guest
-    // Check if sessionId mattches 
-    if(role === 'GUEST'){
-      if( sessionId !== authReq.user.sessionId) {
-        return res.status(403).json({ error: { code: "FORBIDDEN", message: "You do not have permission to create experience for this session" }});
-      }
+    // 1. Auth Logic: Check if GUEST is accessing their own session
+    if (role === 'GUEST' && sessionId !== userSessionId) {
+      return res.status(403).json({ 
+        error: { code: "FORBIDDEN", message: "You do not have permission for this session" }
+      });
     }
     
-    const body: ExperienceCreateBody = ExperienceCreateSchema.parse(req.body);
+    // 2. Validation: The Body is now automatically typed as ExperienceCreateBody
+    const body = ExperienceCreateSchema.parse(req.body);
 
-    console.log("body content", body);
-
-    const created: CreatedExperience = await svc.createExperience({
+    // 3. Service Call: Pass the whole body object + session context
+    const created = await svc.createExperience({
+      ...body,
       sessionId,
-      title: body.title,
-      summary: body.summary ?? null,
-      start: body.start ?? null, // zod already transformed ISO -> Date|null
-      end: body.end ?? null,
-      kind: mapKind(body.kind),
-      content: body.content,
     });
 
-    return res.status(201)
-      .location(`/experiences/${created.id}`)
-      .json(created);
+    return res.status(201).location(`/experiences/${created.id}`).json(created);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateExperience(req: Request, res: Response, next: NextFunction) {
+  const authReq = req as AuthenticatedRequest;
+  const { sessionId, id } = req.params; // id = experience ID
+  
+  try {
+    const patch = ExperienceUpdateSchema.parse(req.body);
+
+    const updated = await svc.updateExperienceOwned(id, { sessionId }, patch);
+
+    if (!updated) return res.status(404).json({ error: { code: "NOT_FOUND", message: "Experience not found" }});
+    return res.json(updated);
   } catch (err) {
     next(err);
   }
@@ -100,25 +90,6 @@ export async function getExperience(req: Request, res: Response) {
   const item = await svc.getExperienceOwned(id,{sessionId});
   if (!item) return res.status(404).json({ error: { code: "NOT_FOUND", message: "Experience not found" }});
   return res.json(item);
-}
-
-export async function updateExperience(req: Request, res: Response) {
-  const authReq = req as AuthenticatedRequest;
-  const userId = authReq.user.userId;
-  const {sessionId, experienceId}  = req.params;
-  const id = req.params.id; // experince ID 
-  const patch = ExperienceUpdateSchema.parse(req.body);
-
-  const updated = await svc.updateExperienceOwned(id, {sessionId, userId}, {
-    title: patch.title,
-    summary: patch.summary ?? null,
-    start: typeof patch.start === "undefined" ? undefined : (patch.start ?? null),
-    end:   typeof patch.end   === "undefined" ? undefined : (patch.end   ?? null),
-    kind:  typeof patch.kind  === "undefined" ? undefined : mapKind(patch.kind),
-    });
-
-  if (!updated) return res.status(404).json({ error: { code: "NOT_FOUND", message: "Experience not found" }});
-  return res.json(updated);
 }
 
 export async function deleteExperience(req: Request, res: Response) {

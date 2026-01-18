@@ -471,7 +471,17 @@
           "name": "Get Layout",
           "id": "ba5430d5-62eb-4836-ad23-780f20dc1433",
           "request": {
-            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
             "header": [
               {
                 "key": "X-Session-Id",
@@ -479,14 +489,70 @@
                 "description": "Session UUID"
               }
             ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"layoutName\" : \"about\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": "{{baseUrl}}/api/layout",
+              "raw": "{{base_url}}/api/layouts/delete",
               "host": [
-                "{{baseUrl}}"
+                "{{base_url}}"
               ],
               "path": [
                 "api",
-                "layout"
+                "layouts",
+                "delete"
+              ]
+            },
+            "description": "Get the layout configuration for a session. Returns template ID, theme, slots, and placements."
+          },
+          "response": []
+        },
+        {
+          "name": "[deleteLayout]",
+          "id": "555cb8c1-5f51-4755-b490-1f53e7202ba1",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-Session-Id",
+                "value": "{{sessionId}}",
+                "description": "Session UUID"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"layoutName\" : \"home\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}}/api/layouts/delete",
+              "host": [
+                "{{base_url}}}"
+              ],
+              "path": [
+                "api",
+                "layouts",
+                "delete"
               ]
             },
             "description": "Get the layout configuration for a session. Returns template ID, theme, slots, and placements."
@@ -567,8 +633,7 @@
               "variable": [
                 {
                   "key": "layoutId",
-                  "value": "b17191bc-581e-4194-8c77-e508ce429241",
-                  "uuid": "f2d4c015-e9d0-4359-ba4f-222bc673804a"
+                  "value": "b17191bc-581e-4194-8c77-e508ce429241"
                 }
               ]
             }
@@ -605,7 +670,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"layoutName\": \"about\"\r\n}",
+              "raw": "{\r\n  \"layoutName\": \"home\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -647,11 +712,11 @@
                 }
               ]
             },
-            "method": "POST",
+            "method": "PUT",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"slots\": [\r\n    { \"id\": \"slot-1\", \"area\": \"header\" },\r\n    { \"id\": \"slot-2\", \"area\": \"main\" },\r\n    { \"id\": \"slot-3\", \"area\": \"sidebar\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"slot-1\",\r\n      \"experienceId\": \"14cbb544-a6a8-4210-8b6c-b1c52845d8d1\",\r\n      \"patternId\": \"hero-basic\"\r\n    },\r\n    {\r\n      \"slotId\": \"slot-2\",\r\n      \"experienceId\": \"42694446-5d17-477d-a15f-a201f99b16fe\",\r\n      \"patternId\": \"card-universal\"\r\n    },\r\n        {\r\n      \"slotId\": \"slot-3\",\r\n      \"experienceId\": \"14cbb544-a6a8-4210-8b6c-b1c52845d8d1\",\r\n      \"patternId\": \"hero-basic\"\r\n    }\r\n  ]\r\n}",
+              "raw": "{\r\n  \"slots\": [\r\n    { \"id\": \"hero\", \"area\": \"header\" },\r\n    { \"id\": \"primary-experience\", \"area\": \"main\" },\r\n    { \"id\": \"secondary-focus\", \"area\": \"sidebar\" },\r\n    { \"id\": \"socials\", \"area\": \"sidebar\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"hero\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"hero\"\r\n\r\n    },\r\n    {\r\n      \"slotId\": \"primary-experience\",\r\n      \"experienceId\": \"88cab2d2-1d51-4b30-b6d3-b9b6891bec59\",\r\n      \"patternId\": \"primary-experience\"\r\n\r\n    },\r\n    {\r\n      \"slotId\": \"secondary-focus\",\r\n      \"experienceId\": \"702fb8be-2477-4256-a2c8-73bad841ff46\",\r\n      \"patternId\": \"primary-experience\"\r\n    },\r\n    {\r\n      \"slotId\": \"socials\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"social-link-card\"\r\n\r\n    }\r\n  ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -672,7 +737,7 @@
               "variable": [
                 {
                   "key": "layoutId",
-                  "value": "b17191bc-581e-4194-8c77-e508ce429241"
+                  "value": "5a36d2b6-2d37-4d1e-876c-65afb9581163"
                 }
               ]
             }
@@ -817,8 +882,44 @@
           "response": []
         },
         {
-          "name": "[layouts].[id].[sync] Copy Copy",
-          "id": "48685073-20d0-4337-9de4-08fe6176dee2",
+          "name": "[profiles].[summaries] Copy",
+          "id": "ee833b62-18d3-455d-abb3-695ccdc597c2",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/profiles/:profileId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "profiles",
+                ":profileId"
+              ],
+              "variable": [
+                {
+                  "key": "profileId",
+                  "value": "943d0215-9fe5-4bc3-b510-3b31b1724404"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[layouts].[id].[first create ]",
+          "id": "66023c51-9a93-46b7-bb3a-1fc00a008ba9",
           "request": {
             "auth": {
               "type": "bearer",
@@ -855,8 +956,8 @@
           "response": []
         },
         {
-          "name": "[profiles].[summaries] Copy",
-          "id": "ee833b62-18d3-455d-abb3-695ccdc597c2",
+          "name": "[layouts].[id].[upsert]",
+          "id": "48685073-20d0-4337-9de4-08fe6176dee2",
           "request": {
             "auth": {
               "type": "bearer",
@@ -868,23 +969,25 @@
                 }
               ]
             },
-            "method": "GET",
+            "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"displayName\": \"Luis Alarcon\",\r\n  \"headline\": \"Software Engineering Student\",\r\n  \"location\": \"Dallas, TX\",\r\n  \"bio\": \"Building YourOwn to redefine profile ownership.\",\r\n  \"avatarUrl\": \"https://api.dicebear.com/7.x/avataaars/svg?seed=Luis\",\r\n  \"skills\": [\"React\", \"TypeScript\", \"Node.js\"],\r\n  \"links\": [\r\n    {\r\n      \"id\": \"link_1\",\r\n      \"platform\": \"github\",\r\n      \"url\": \"https://github.com/LuisAlar\",\r\n      \"label\": \"GitHub\"\r\n    },\r\n     {\r\n      \"id\": \"link_1\",\r\n      \"platform\": \"linkedin\",\r\n      \"url\": \"https://https://www.linkedin.com/in/luis-alberto-alarcon-mandujano-68316b359/\",\r\n      \"label\": \"LinkedIn\"\r\n    } ,\r\n    {\r\n      \"id\": \"link_1\",\r\n      \"platform\": \"instagram\",\r\n      \"url\": \"https://www.instagram.com/_luisalarcon_/\",\r\n      \"label\": \"Instagram\"\r\n    } \r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": "{{base_url}}/api/profiles/:profileId",
+              "raw": "{{base_url}}/api/profiles",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "api",
-                "profiles",
-                ":profileId"
-              ],
-              "variable": [
-                {
-                  "key": "profileId",
-                  "value": "943d0215-9fe5-4bc3-b510-3b31b1724404"
-                }
+                "profiles"
               ]
             }
           },

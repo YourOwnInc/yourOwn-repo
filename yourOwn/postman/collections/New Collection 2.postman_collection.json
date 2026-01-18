@@ -1,0 +1,345 @@
+{
+  "info": {
+    "_postman_id": "da633e3a-63f9-4f92-b402-bcb35135bfea",
+    "name": "OwnExperiences",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "[experience].[add exp to session] Copy",
+      "event": [
+        {
+          "id": "e589bbfb-ebf4-4397-a7ef-08e1a2e289e9",
+          "listen": "test",
+          "script": {
+            "id": "ef79b17e-0084-4b86-b94f-27c148c87136",
+            "exec": [
+              "// Test: Verify response status is successful",
+              "pm.test(\"Experience creation successful\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              "",
+              "// Parse the response",
+              "const responseData = pm.response.json();",
+              "",
+              "// Test: Verify experience was created successfully",
+              "pm.test(\"Experience data exists in response\", function () {",
+              "    pm.expect(responseData).to.be.an('object');",
+              "    pm.expect(responseData).to.not.be.empty;",
+              "});",
+              "",
+              "// Test: Verify the experience is tied to the correct session",
+              "pm.test(\"Experience is tied to correct session\", function () {",
+              "    const sessionId = pm.collectionVariables.get(\"sessionId\");",
+              "    pm.expect(sessionId).to.not.be.undefined;",
+              "    ",
+              "    // Check if response contains session reference",
+              "    if (responseData.sessionId) {",
+              "        pm.expect(responseData.sessionId).to.eql(sessionId);",
+              "    } else if (responseData.session) {",
+              "        pm.expect(responseData.session).to.include(sessionId);",
+              "    }",
+              "    ",
+              "    console.log(\"Experience created for session: \" + sessionId);",
+              "});",
+              "",
+              "// Test: Verify experience ID exists (if applicable)",
+              "pm.test(\"Experience ID exists in response\", function () {",
+              "    const hasId = responseData.id || responseData.experienceId || responseData._id;",
+              "    pm.expect(hasId).to.not.be.undefined;",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "83c789dc-209f-45b3-973f-8c38b4a29c1e",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "aaf1dfed-c805-4131-bd71-368a620944b5",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{current_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Session-Id",
+            "value": "e18c0e71-735b-48f6-a76c-c86cde2e9c49",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Xtensible Solutions\",\r\n  \"type\": \"WORK\",\r\n  \"startDate\": \"2023-06-01T00:00:00Z\",\r\n  \"endDate\": \"2023-08-31T00:00:00Z\",\r\n  \"isCurrent\": false,\r\n  \"roleTitle\": \"Solutions Engineer Intern\",\r\n  \"organization\": \"Xtensible Solutions\",\r\n  \"location\": \"Remote\",\r\n  \"summaryShort\": \"Optimized technical workflows and automated data entry during a three-month internship.\",\r\n  \"summaryLong\": \"During my time at Xtensible Solutions, I acted as a bridge between business requirements and technical execution, focusing heavily on internal tool optimization.\",\r\n  \"problemStatement\": \"The engineering team was losing approximately 10 hours per week on manual data synchronization between legacy systems.\",\r\n  \"solutionDetails\": \"I designed and deployed a suite of modular Python scripts and integrated them into the existing CI/CD pipeline to automate synchronization tasks.\",\r\n  \"impactBullets\": [\r\n    \"Reduced manual data entry time by 85% through custom automation scripts.\",\r\n    \"Drafted 15+ pages of technical documentation to streamline future intern onboarding.\",\r\n    \"Presented workflow audits to senior leadership that identified three major operational bottlenecks.\"\r\n  ],\r\n  \"techStack\": [\"Python\", \"Automation\", \"CI/CD\", \"Workflow Auditing\", \"Technical Writing\"],\r\n  \"metadata\": {\r\n    \"employmentType\": \"Internship\",\r\n    \"links\": {\r\n      \"github\": \"\",\r\n      \"live\": \"\",\r\n      \"demo\": \"\"\r\n    }\r\n  }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/sessions/:sessionId/experiences",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "sessions",
+            ":sessionId",
+            "experiences"
+          ],
+          "variable": [
+            {
+              "key": "sessionId",
+              "value": "a2b428b1-47a4-4d05-901e-239cf3851ea4"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[experience].[add exp to session] Copy Copy",
+      "event": [
+        {
+          "id": "e589bbfb-ebf4-4397-a7ef-08e1a2e289e9",
+          "listen": "test",
+          "script": {
+            "id": "ef79b17e-0084-4b86-b94f-27c148c87136",
+            "exec": [
+              "// Test: Verify response status is successful",
+              "pm.test(\"Experience creation successful\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              "",
+              "// Parse the response",
+              "const responseData = pm.response.json();",
+              "",
+              "// Test: Verify experience was created successfully",
+              "pm.test(\"Experience data exists in response\", function () {",
+              "    pm.expect(responseData).to.be.an('object');",
+              "    pm.expect(responseData).to.not.be.empty;",
+              "});",
+              "",
+              "// Test: Verify the experience is tied to the correct session",
+              "pm.test(\"Experience is tied to correct session\", function () {",
+              "    const sessionId = pm.collectionVariables.get(\"sessionId\");",
+              "    pm.expect(sessionId).to.not.be.undefined;",
+              "    ",
+              "    // Check if response contains session reference",
+              "    if (responseData.sessionId) {",
+              "        pm.expect(responseData.sessionId).to.eql(sessionId);",
+              "    } else if (responseData.session) {",
+              "        pm.expect(responseData.session).to.include(sessionId);",
+              "    }",
+              "    ",
+              "    console.log(\"Experience created for session: \" + sessionId);",
+              "});",
+              "",
+              "// Test: Verify experience ID exists (if applicable)",
+              "pm.test(\"Experience ID exists in response\", function () {",
+              "    const hasId = responseData.id || responseData.experienceId || responseData._id;",
+              "    pm.expect(hasId).to.not.be.undefined;",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "83c789dc-209f-45b3-973f-8c38b4a29c1e",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "e5f40604-9eed-44aa-a650-1de73a8cc5fd",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{current_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Session-Id",
+            "value": "e18c0e71-735b-48f6-a76c-c86cde2e9c49",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Orbital Mentorship\",\r\n  \"type\": \"WORK\",\r\n  \"startDate\": \"2023-09-01T00:00:00Z\",\r\n  \"endDate\": null,\r\n  \"isCurrent\": true,\r\n  \"roleTitle\": \"Operations Lead\",\r\n  \"organization\": \"Orbital Mentorship\",\r\n  \"location\": \"On-site / Hybrid\",\r\n  \"summaryShort\": \"Leading operational strategy and technical preparation for a high-growth mentorship platform.\",\r\n  \"summaryLong\": \"As the Operations Lead, I oversee the intersection of human mentorship and the systems required to scale the program effectively without losing personal touch.\",\r\n  \"problemStatement\": \"Rapid program growth led to coordinator burnout and fragmented communication channels across the mentor-mentee network.\",\r\n  \"solutionDetails\": \"I implemented a unified project management framework and automated communication triggers to handle routine scheduling and follow-ups.\",\r\n  \"impactBullets\": [\r\n    \"Spearheaded technical logistics for the ATEC Pitch Fest, ensuring a seamless presentation for 10+ teams.\",\r\n    \"Unified fragmented communication into a single project management source of truth.\",\r\n    \"Managed resource allocation and timelines for over 50 active mentorship cycles.\"\r\n  ],\r\n  \"techStack\": [\"Project Management\", \"Operations Strategy\", \"Workflow Automation\", \"Stakeholder Management\"],\r\n  \"metadata\": {\r\n    \"links\": {\r\n      \"github\": \"\",\r\n      \"live\": \"https://atecpitchfest.example.com\",\r\n      \"demo\": \"\"\r\n    }\r\n  }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/sessions/:sessionId/experiences",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "sessions",
+            ":sessionId",
+            "experiences"
+          ],
+          "variable": [
+            {
+              "key": "sessionId",
+              "value": "a2b428b1-47a4-4d05-901e-239cf3851ea4"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[experience].[add exp to session] Copy Copy Copy",
+      "event": [
+        {
+          "id": "e589bbfb-ebf4-4397-a7ef-08e1a2e289e9",
+          "listen": "test",
+          "script": {
+            "id": "ef79b17e-0084-4b86-b94f-27c148c87136",
+            "exec": [
+              "// Test: Verify response status is successful",
+              "pm.test(\"Experience creation successful\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              "",
+              "// Parse the response",
+              "const responseData = pm.response.json();",
+              "",
+              "// Test: Verify experience was created successfully",
+              "pm.test(\"Experience data exists in response\", function () {",
+              "    pm.expect(responseData).to.be.an('object');",
+              "    pm.expect(responseData).to.not.be.empty;",
+              "});",
+              "",
+              "// Test: Verify the experience is tied to the correct session",
+              "pm.test(\"Experience is tied to correct session\", function () {",
+              "    const sessionId = pm.collectionVariables.get(\"sessionId\");",
+              "    pm.expect(sessionId).to.not.be.undefined;",
+              "    ",
+              "    // Check if response contains session reference",
+              "    if (responseData.sessionId) {",
+              "        pm.expect(responseData.sessionId).to.eql(sessionId);",
+              "    } else if (responseData.session) {",
+              "        pm.expect(responseData.session).to.include(sessionId);",
+              "    }",
+              "    ",
+              "    console.log(\"Experience created for session: \" + sessionId);",
+              "});",
+              "",
+              "// Test: Verify experience ID exists (if applicable)",
+              "pm.test(\"Experience ID exists in response\", function () {",
+              "    const hasId = responseData.id || responseData.experienceId || responseData._id;",
+              "    pm.expect(hasId).to.not.be.undefined;",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "83c789dc-209f-45b3-973f-8c38b4a29c1e",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "8a73d307-afc2-475d-8fdb-ad0335982552",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{current_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Session-Id",
+            "value": "e18c0e71-735b-48f6-a76c-c86cde2e9c49",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"YourOwn\",\r\n  \"type\": \"PROJECT\",\r\n  \"startDate\": \"2024-01-01T00:00:00Z\",\r\n  \"endDate\": null,\r\n  \"isCurrent\": true,\r\n  \"roleTitle\": \"Team Lead & System Architect\",\r\n  \"organization\": \"Personal Project\",\r\n  \"location\": \"Remote\",\r\n  \"summaryShort\": \"A 'dogfooded' portfolio CMS designed for developers to own their professional identity and data.\",\r\n  \"summaryLong\": \"YourOwn is a full-stack platform that separates life data from visual presentation, allowing for dynamic, multi-layout portfolio generation.\",\r\n  \"problemStatement\": \"Existing portfolio builders are either too rigid for developers or too complex for quick updates, often resulting in stale 'outdated' sites.\",\r\n  \"solutionDetails\": \"Architected a decoupled system using a 'Display-First' approach, populating the data layer via a robust API before building the management UI.\",\r\n  \"impactBullets\": [\r\n    \"Designed a flexible PostgreSQL/Prisma schema to support dynamic multi-layout presentations.\",\r\n    \"Implemented seamless client-side state management using React Query for optimized fetching.\",\r\n    \"Created a portable JSON export system to ensure users maintain total ownership of their data.\"\r\n  ],\r\n  \"techStack\": [\"React Query\", \"Node.js\", \"Prisma\", \"PostgreSQL\", \"System Architecture\", \"API Design\"],\r\n  \"metadata\": {\r\n    \"links\": {\r\n      \"github\": \"https://github.com/your-repo/yourown\",\r\n      \"live\": \"\",\r\n      \"demo\": \"path/to/architecture-diagram.png\"\r\n    }\r\n  }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/sessions/:sessionId/experiences",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "sessions",
+            ":sessionId",
+            "experiences"
+          ],
+          "variable": [
+            {
+              "key": "sessionId",
+              "value": "a2b428b1-47a4-4d05-901e-239cf3851ea4"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

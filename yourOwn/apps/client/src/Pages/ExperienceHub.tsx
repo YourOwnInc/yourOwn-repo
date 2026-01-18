@@ -14,7 +14,7 @@ export default function ExperienceHub() {
     addExp({
       title: "Portfolio MVP",
       summary: "Built with TanStack Query",
-      kind: "internship",
+      type: "internship",
       start: new Date().toISOString(),
       end: new Date().toISOString(),
     });
@@ -44,7 +44,7 @@ export default function ExperienceHub() {
         
 
       {categories.map((cat) => {
-        const filtered = experiences.filter((e: any) => e.kind === cat);
+        const filtered = experiences.filter((e: any) => e.type === cat);
         if (filtered.length === 0) return null;
 
         return (

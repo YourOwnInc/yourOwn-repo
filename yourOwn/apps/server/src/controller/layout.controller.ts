@@ -29,6 +29,8 @@ export async function sync(req: Request, res: Response) {
 
     // validate request body 
     const result = SyncLayoutSchema.safeParse(req.body);
+
+    console.log("results ", result)
     // returns format error 
     if (!result.success) {
       return res.status(400).json({error: result.error.format()})
@@ -37,12 +39,9 @@ export async function sync(req: Request, res: Response) {
 
   // fetch data from params and body 
   const { slots, placements } = result.data;
-  // filter out placements with missing required fields
-  const validPlacements = placements.filter(p => 
-    p.experienceId && p.profileId && p.slotId && p.patternId
-  );
+ 
   // calls repo to sync data 
-  const updated = await layoutRepo.syncLayoutState(layoutId, slots, validPlacements as { slotId: string; profileId: string; experienceId: string; patternId: string }[]);
+  const updated = await layoutRepo.syncLayoutState(layoutId, slots, placements as { slotId: string; profileId: string; experienceId: string; patternId: string }[]);
   // returns updated info 
   return res.json(updated);
 }

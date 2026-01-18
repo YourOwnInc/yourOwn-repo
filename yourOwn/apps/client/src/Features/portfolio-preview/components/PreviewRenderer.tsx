@@ -10,7 +10,7 @@ import { LayoutTemplate } from "lucide-react";
 type Slot = { clientSlotId: string; area: string };
 type Placement = { slotId: string; experienceId: string; patternId: string };
 type Layout = { layoutName: string; id: string,  slots: Slot[]; placements: Placement[] };
-type Experience = { id: string; kind: string; title?: string; [k: string]: any };
+type Experience = { id: string; type: string; title?: string; [k: string]: any };
 
 interface PortfolioViewerProps {
   data: HydratedLayoutDTO;
@@ -39,15 +39,21 @@ const slotMap = useMemo(() => {
   const flatLibrary = experienceLibrary?.flat(Infinity) || [];
   
  
-
+  // IMPROVE: find a better way to assing both and exp or profile. make it more rebust
   placements.forEach((p, idx) => {
     // Search in the flattened library instead
     const exp = flatLibrary.find((e) => e.id === p.experienceId);
+
+    const profile = flatLibrary.find((e) => e.id === p.profileId);
     
     const Pattern = PATTERN_REGISTRY[p.patternId];
 
     if (exp && Pattern) {
       map[p.slotId] = <Pattern data={exp} />;
+    }
+
+    if(profile && Pattern) {
+      map[p.slotId] = <Pattern data={profile} />;
     }
     
   });

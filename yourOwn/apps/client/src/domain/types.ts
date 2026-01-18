@@ -7,7 +7,7 @@ export type ExperienceDTO = {
     id: ExperienceId;
     title: string;
     summary?: string;
-    kind?: string;
+    type?: string;
     start?: string; // ISO
     end?: string;   // ISO
 }
@@ -21,6 +21,7 @@ export type Slot = {
 export type Placement = {
     slotId: string;
     experienceId: ExperienceId;
+    profileId: string;
     patternId: string;
 }
 

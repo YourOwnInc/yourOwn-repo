@@ -38,7 +38,7 @@ export async function findOrCreateLayoutForSession(sessionId: string, layoutId: 
     });
   }
 
-  console.log("slots in findOrcreate  Layout repo", layout.slots);
+  console.log("placement in findOrcreate  Layout repo", layout);
 
  return {
     id: layout.id,
@@ -112,6 +112,7 @@ export async function syncLayoutState(
         layoutId,
         slotId: p.slotId,
         experienceId: p.experienceId,
+        profileId: p.profileId,
         patternId: p.patternId
       }))
     });

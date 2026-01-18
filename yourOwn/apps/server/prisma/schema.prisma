@@ -44,6 +44,14 @@ model Profile {
   bio         String?         // 2–3 sentence summary
   avatarUrl   String?
 
+  tagline          String?
+  bioShort         String? @db.Text
+  bioLong          String? @db.Text
+  philosophy       String? @db.Text
+  currentlyLearning String[]
+  interests        String[]
+
+
   placements Placement[]      // relationship with placement
 
   // Keep simple as arrays/JSON for MVP
@@ -55,33 +63,71 @@ model Profile {
   @@unique([userId])
 }
 
-model Experience {
-  id        String     @id @default(uuid()) @db.Uuid
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-
-  // MVP: tie experiences only to sessions
-  sessionId String     @db.Uuid
-  session   Session    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-
-  // RELATIONSHIP TO PLACEMENTS
-  // This defines the "other side" of the Placement.experience relationship
-  placements Placement[]
-
-  title     String
-  summary   String?
-  start     DateTime?
-  end       DateTime?
-  kind      String   @db.Text @default("other")
-
-  // Flexible storage for summary/detial content 
-  content   Json?   @default("{}")
-
-  @@index([sessionId])
-  @@index([kind])
-  @@index([title])
+enum ExperienceType {
+  WORK
+  PROJECT
+  EVENT
+  ORGANIZATION
+  COLLECTION // For photo sets, galleries, etc.
+  VOLUNTEER
 }
 
+model Experience {
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // CORE DATA (The "Facts")
+  title        String         @default("experience")
+  type         ExperienceType @default(WORK)
+  startDate    DateTime?
+  endDate      DateTime?
+  isCurrent    Boolean   @default(false)
+
+  // EXTENDED CONTENT (The "Kitchen Sink")
+  // These fields allow you to store all "ways of talking" in one place [cite: 14, 15]
+  roleTitle        String?
+  organization     String?
+  location         String?
+  summaryShort     String?   @db.Text
+  summaryLong      String?   @db.Text
+  problemStatement String?   @db.Text
+  solutionDetails  String?   @db.Text
+  impactBullets    String[]  // Array of achievements/points
+  techStack        String[]  // Array of technologies used
+  
+  // RELATIONSHIPS
+  // Keeping narratives for future-proofing, though you'll use the flat fields for now 
+  narratives Narrative[]
+  sessionId String    @db.Uuid
+  session   Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  placements Placement[]
+
+  // 3. TYPE-SPECIFIC METADATA
+  // Used for links (github, demo) or other arbitrary data 
+  metadata     Json?     
+
+  @@index([sessionId])
+  @@index([type])
+}
+
+model Narrative {
+  id           String     @id @default(uuid()) @db.Uuid
+  experienceId String     @db.Uuid
+  experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+
+  // PERSPECTIVE
+  kind         String     // e.g., "visual-story", "technical-deep-dive", "quick-bio"
+  slug         String?    // For clean URLs like /portfolio/my-project/technical
+
+  // CONTENT
+  headline     String?    // A punchy title for this specific narrative
+  bodyContent  String?    @db.Text
+  bulletPoints String[] 
+  tags         String[]   // Technologies, themes, or moods
+
+  @@index([experienceId])
+}
 
 
 model Session {

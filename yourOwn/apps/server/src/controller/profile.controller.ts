@@ -6,7 +6,7 @@ import * as profileService from "../services/profile.service"
 
 export async function handleProfileUpdate(req: Request, res: Response) {
     const authReq = req as AuthenticatedRequest;
-    const {sessionId, role } = authReq.user;
+ 
 
     try {
         
@@ -25,7 +25,7 @@ export async function handleProfileUpdate(req: Request, res: Response) {
             avatarUrl 
         };
 
-        const updatedProfile = await profileService.syncProfile(profileId, profileContent);
+        const updatedProfile = await profileService.syncProfile(profileId, req.body);
 
         return res.json(updatedProfile);
     }   

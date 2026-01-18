@@ -1,6 +1,6 @@
 import { JsonArray } from "@prisma/client/runtime/library";
 import { prisma } from "../lib/prisma"
-
+import { ProfileBody } from "../schemas/profile.schema";
 
 
 /**
@@ -34,20 +34,27 @@ export async function upsertProfile(data: any, profileId?: string) {
     },
   });
 }
-
-export async function createProfile(sessionId: string, data: any ) {
+/**
+ * Creates a profile. 
+ * Note: Use the spread operator to pass all schema fields directly to Prisma.
+ */
+export async function createProfile(sessionId: string, data: ProfileBody) {
   return await prisma.profile.create({
     data: {
+      ...data, // Spreads displayName, bioLong, philosophy, etc.
       sessionId: sessionId,
-      displayName: data.displayName || "New Profile",
-      headline: data.headline || "",
-      location: data.location || "",
-      bio: data.bio || "",
-      avatarUrl: data.avatarUrl || "",
-      skills: data.skills || [], // Expected as String[]
-      links: data.links || [],   // Expected as Json (Array of objects)
     },
-    });
+  });
+}
+
+/**
+ * Updates an existing profile using its ID.
+ */
+export async function updateProfile(profileId: string, data: Partial<ProfileBody>) {
+  return await prisma.profile.update({
+    where: { id: profileId },
+    data: data, // Prisma handles the partial update automatically
+  });
 }
 
 export async function getProfileSummary(sessionId: string) {

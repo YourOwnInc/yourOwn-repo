@@ -54,7 +54,7 @@ const handleAddNewPage = () => {
         </button>
       </header>
 
-      <main className="flex-grow">
+      <main className="flex-grow ">
         {hasNoContent ? (
           <div className="flex flex-col items-center justify-center h-full p-20">
             <h2 className="text-xl font-bold">New Page: {LayoutName}</h2>

@@ -18,7 +18,7 @@ export default function ExperienceForm({
   const [summary, setSummary] = useState(initial?.summary ?? "");
   const [start, setStart] = useState(initial?.start ?? "");
   const [end, setEnd] = useState(initial?.end ?? "");
-  const [kind, setKind] = useState<FormPayload["kind"]>(initial?.kind ?? "project");
+  const [type, setType] = useState<FormPayload["type"]>(initial?.type ?? "project");
 
   return (
     <form
@@ -31,7 +31,7 @@ export default function ExperienceForm({
           summary, 
           start: start ? new Date(start).toISOString() : undefined  , 
           end: end ? new Date(end).toISOString() : undefined, 
-          kind});
+          type});
       }}
     >
       <div><label>Title <input value={title} onChange={(e) => setTitle(e.target.value)} required /></label></div>
@@ -41,8 +41,8 @@ export default function ExperienceForm({
         <label>End <input type="date" value={end} onChange={(e) => setEnd(e.target.value)} /></label>
       </div>
       <div>
-        <label>Kind{" "}
-          <select value={kind} onChange={(e) => setKind(e.target.value as any)}>
+        <label>type{" "}
+          <select value={type} onChange={(e) => setType(e.target.value as any)}>
             <option value="project">Project</option>
             <option value="internship">Internship</option>
             <option value="job">Job</option>

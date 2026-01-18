@@ -1,3 +1,4 @@
+import { ExperienceEntry } from "../../../types";
 export type Tab = {
   id: string;
   name: string;
@@ -22,10 +23,5 @@ export type HydratedLayoutData = {
     area: string;
   }>;
   placements: Placement[];
-  experiences: Array<{
-    id: string;
-    title: string;
-    description?: string;
-    kind: string;
-  }>;
+  experiences: ExperienceEntry[]
 };
