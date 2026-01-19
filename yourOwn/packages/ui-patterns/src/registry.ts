@@ -10,6 +10,8 @@ import {ExperienceCard} from "../src/patterns/homes/ExperienceCard"
 
 import {NarrativeCard} from "../src/patterns/homes/NarrativeCard"
 import {ProfessionalHero} from "../src/patterns/homes/ProfessionalHero"
+import { ProfileIdentity} from "../src/patterns/homes/ProfileIdentity"
+import { VerticalNav} from "../src/patterns/homes/VerticalNav"
 
 import {SocialLinkCard} from "../src/patterns/SocialLinkCard"
 
@@ -25,6 +27,8 @@ export const PATTERN_REGISTRY: Record<string, any> = {
     "experience-card": ExperienceCard,
     "primary-experience": NarrativeCard,
     "hero": ProfessionalHero,
-    "social-link-card": SocialLinkCard
+    "social-link-card": SocialLinkCard,
+    "ProfileIdentity": ProfileIdentity,
+    "navigation":VerticalNav
     
 }

@@ -6,7 +6,6 @@ export type Tab = {
 
 export type ManifestData = {
   tabs: Tab[];
-  sessionId: string;
 };
 
 export type Placement = {
@@ -23,5 +22,23 @@ export type HydratedLayoutData = {
     area: string;
   }>;
   placements: Placement[];
-  experiences: ExperienceEntry[]
+  experienceLibrary: ExperienceEntry[]
 };
+
+export type PortfolioRendererData = {
+  id: string;
+  layoutName: string;
+  slots: Array<{
+    id: string;
+    area: string;
+  }>;
+  placements: Placement[];
+  experienceLibrary: ExperienceEntry[]
+  manifest: ManifestData
+};
+
+
+export interface PortfolioViewerProps {
+  contentData: HydratedLayoutData;
+  manifest: ManifestData
+}

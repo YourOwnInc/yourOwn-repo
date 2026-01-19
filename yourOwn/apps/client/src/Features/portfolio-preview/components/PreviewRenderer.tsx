@@ -2,18 +2,24 @@
 import React, { useMemo } from "react";
 import { LAYOUT_REGISTRY } from "../../../../../../packages/layouts/layoutRegistry";
 import { PATTERN_REGISTRY } from "@yourown/ui-patterns/src/registry";
-import { PortfolioModel, HydratedLayoutDTO } from "../../../domain/types";
+import { HydratedLayoutData, ManifestData } from "../types/portoflio.types";
 import { LayoutTemplate } from "lucide-react";
-
+import { useHydratedLayout } from "../hooks/useHydratedLayout";
 
 
 type Slot = { clientSlotId: string; area: string };
-type Placement = { slotId: string; experienceId: string; patternId: string };
+type Placement = 
+     | { slotId: string; experienceId: string; patternId: string , type: "pattern"}
+     | { slotId: string; layoutId: string , type: "layout" };
 type Layout = { layoutName: string; id: string,  slots: Slot[]; placements: Placement[] };
 type Experience = { id: string; type: string; title?: string; [k: string]: any };
 
 interface PortfolioViewerProps {
-  data: HydratedLayoutDTO;
+  data: HydratedLayoutData;
+}
+interface PortfolioRendererData {
+  data: HydratedLayoutData;
+  manifest: ManifestData
 }
 
 // Use destructuring in the function signature to get properties from the flat object
@@ -21,45 +27,21 @@ export const PortfolioRenderer = ({
   layoutName, 
   experienceLibrary, 
   placements,
-  slots
-}: HydratedLayoutDTO) => {
+  slots,
+}: HydratedLayoutData) => {
 
 
 
   const LayoutBlueprint = LAYOUT_REGISTRY[layoutName] || LAYOUT_REGISTRY["home"];
-const slotMap = useMemo(() => {
-  const map: Record<string, React.ReactNode> = {};
-
-  if (!placements || placements.length === 0) {
- 
-    return map;
-  }
-
-  // FIX: Flatten the library in case it's nested (Array of Arrays)
-  const flatLibrary = experienceLibrary?.flat(Infinity) || [];
+  const slotMap = useHydratedLayout(placements, experienceLibrary)
   
- 
-  // IMPROVE: find a better way to assing both and exp or profile. make it more rebust
-  placements.forEach((p, idx) => {
-    // Search in the flattened library instead
-    const exp = flatLibrary.find((e) => e.id === p.experienceId);
+  // Recursive function . checks if a slotMap has type layout 
+  Object.keys(slotMap).forEach(slotId => {
+    if(slotMap[slotId] === "RECURSIVE_RENDERER_TRIGGER") {
+      const placement = placements.find( p => p.slotId === slotId);
 
-    const profile = flatLibrary.find((e) => e.id === p.profileId);
-    
-    const Pattern = PATTERN_REGISTRY[p.patternId];
-
-    if (exp && Pattern) {
-      map[p.slotId] = <Pattern data={exp} />;
     }
-
-    if(profile && Pattern) {
-      map[p.slotId] = <Pattern data={profile} />;
-    }
-    
-  });
-  
-  return map;
-}, [placements, experienceLibrary]);
+  })
 
   if (!LayoutBlueprint) {
     console.error("❌ [PortfolioRenderer] Missing Layout Blueprint for:", layoutName);

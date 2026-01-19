@@ -716,7 +716,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"slots\": [\r\n    { \"id\": \"hero\", \"area\": \"header\" },\r\n    { \"id\": \"primary-experience\", \"area\": \"main\" },\r\n    { \"id\": \"secondary-focus\", \"area\": \"sidebar\" },\r\n    { \"id\": \"socials\", \"area\": \"sidebar\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"hero\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"hero\"\r\n\r\n    },\r\n    {\r\n      \"slotId\": \"primary-experience\",\r\n      \"experienceId\": \"88cab2d2-1d51-4b30-b6d3-b9b6891bec59\",\r\n      \"patternId\": \"primary-experience\"\r\n\r\n    },\r\n    {\r\n      \"slotId\": \"secondary-focus\",\r\n      \"experienceId\": \"702fb8be-2477-4256-a2c8-73bad841ff46\",\r\n      \"patternId\": \"primary-experience\"\r\n    },\r\n    {\r\n      \"slotId\": \"socials\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"social-link-card\"\r\n\r\n    }\r\n  ]\r\n}",
+              "raw": "{\r\n  \"slots\": [\r\n    { \"id\": \"identity\", \"area\": \"header\" },\r\n    { \"id\": \"navigation\", \"area\": \"main\" },\r\n    { \"id\": \"socials\", \"area\": \"footer\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"identity\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"ProfileIdentity\"\r\n    },\r\n    {\r\n      \"slotId\": \"navigation\",\r\n      \"experienceId\": \"manifest-bridge\",\r\n      \"patternId\": \"navigation\"\r\n    },\r\n    {\r\n      \"slotId\": \"socials\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"social-link-card\"\r\n    }\r\n  ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -737,7 +737,7 @@
               "variable": [
                 {
                   "key": "layoutId",
-                  "value": "5a36d2b6-2d37-4d1e-876c-65afb9581163"
+                  "value": "6cfa2240-1fa7-4864-9964-9e6d0fc27d05"
                 }
               ]
             }
