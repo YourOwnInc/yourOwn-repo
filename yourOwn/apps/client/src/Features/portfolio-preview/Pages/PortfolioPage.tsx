@@ -12,12 +12,13 @@ import { BaseShellProps } from "../types/shell.types";
 import { SplitPaneShell } from "../shells/SplitPaneShell";
 import { PortfolioRenderer } from "../components/PreviewRenderer";
 
-
 // src/features/portfolio-preview/pages/PortfolioPage.tsx
+import { ArrowLeft, Edit3, Eye } from "lucide-react"; // Import icons
+import { Link } from "react-router-dom";
+
 export const PortfolioPage = () => {
   const { LayoutName = "home" } = useParams();
   const [isEditMode, setIsEditMode] = useState(false);
-  const [shellType, setShellType] = useState<"standard" | "split">("split");
   const { sessionId } = useUser();
 
   const { data: manifest, isLoading: manifestLoading } = usePortfolioManifest(sessionId);
@@ -26,38 +27,39 @@ export const PortfolioPage = () => {
   if (manifestLoading || layoutLoading) return <div>Loading...</div>;
   if (!contentData || !manifest) return <div>No layout found.</div>;
 
-
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
-      {/* GLOBAL ORCHESTRATION HEADER */}
-      {/* <header className="p-2 border-b flex items-center justify-between bg-white z-50">
-        <div className="flex items-center gap-4">
-        
-         
-          
-          <select 
-            className="text-xs border rounded p-1"
-            onChange={(e) => setShellType(e.target.value as any)}
-            value={shellType}
-          >
-            <option value="standard">Standard Layout</option>
-            <option value="split">Side Profile Layout</option>
-          </select>
-        </div>
-        
-        <button onClick={() => setIsEditMode(!isEditMode)}>
-          {isEditMode ? "Preview" : "Edit"}
-        </button>
-      </header> */}
-
-      {/* SHELL SELECTION */}
-      <div className="flex-grow overflow-hidden">
+    <div className="h-screen w-full flex flex-col overflow-hidden relative">
       
+      {/* APP LAYER: Navigation Back & Mode Toggle */}
+      <div className="absolute top-4 left-4 z-[100] flex items-center gap-4">
+        {/* Back to Landing Icon */}
+        <Link 
+          to="/landing" 
+          className="p-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full hover:bg-white/20 transition-all text-white shadow-lg"
+          title="Back to Landing"
+        >
+          <ArrowLeft size={20} />
+        </Link>
+
+        {/* Edit/View Toggle - Minimalist style for your aesthetic */}
+        <button 
+          onClick={() => setIsEditMode(!isEditMode)}
+          className="flex items-center gap-2 px-3 py-1.5 bg-black border border-white/20 rounded-full text-xs font-medium text-white hover:border-white/50 transition-all shadow-lg"
+        >
+          {isEditMode ? (
+            <><Eye size={14} /> View Mode</>
+          ) : (
+            <><Edit3 size={14} /> Edit Mode</>
+          )}
+        </button>
+      </div>
+
+      {/* RENDER LAYER: Shell Selection */}
+      <div className="flex-grow overflow-hidden">
         {isEditMode ? (
-         <PortfolioEditor contentData={contentData} manifest={manifest}/>
+          <PortfolioEditor contentData={contentData} manifest={manifest}/>
         ) : (
-              <PortfolioViewer contentData={contentData} manifest={manifest}  />
-  
+          <PortfolioViewer contentData={contentData} manifest={manifest} />
         )}
       </div>
     </div>
