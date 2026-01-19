@@ -15,24 +15,19 @@ export const SplitPaneShell = ({ contentData, manifest }: BaseShellProps) => {
   if (profileLoading) return <div>Loading...</div>;
 
   return (
-    <div className="flex h-screen w-full overflow-hidden">
+    <div className="flex h-screen w-full overflow-hidden bg-background">
       <aside className="w-80 shrink-0 h-full">
-     
-    {/* Navigation stays at the top level so it's always reachable */}
-        {manifest && <PortfolioNav manifest={manifest} />}
-        {profileData && (
+        {profileData && manifest && (
           <PortfolioRenderer 
-            {...profileData} 
-            // We pass the manifest as an extra prop so the Nav pattern can consume i
+            {...profileData} // Spreads id, layoutName, slots, placements, etc.
+            manifest={manifest} // Completes the "package"
           />
         )}
-        
-  
       </aside>
-      
 
       <main className="flex-grow overflow-y-auto bg-slate-50">
-        <PortfolioRenderer {...contentData} />
+        {/* Main content might also need the manifest for its own nav patterns */}
+        {manifest && <PortfolioRenderer {...contentData} manifest={manifest} />}
       </main>
     </div>
   );

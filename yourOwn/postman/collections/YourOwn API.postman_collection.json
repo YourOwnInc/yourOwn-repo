@@ -716,7 +716,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"slots\": [\r\n    { \"id\": \"identity\", \"area\": \"header\" },\r\n    { \"id\": \"navigation\", \"area\": \"main\" },\r\n    { \"id\": \"socials\", \"area\": \"footer\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"identity\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"ProfileIdentity\"\r\n    },\r\n    {\r\n      \"slotId\": \"navigation\",\r\n      \"experienceId\": \"manifest-bridge\",\r\n      \"patternId\": \"navigation\"\r\n    },\r\n    {\r\n      \"slotId\": \"socials\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"social-link-card\"\r\n    }\r\n  ]\r\n}",
+              "raw": "{\r\n  \"slots\": [\r\n    { \"id\": \"identity\", \"area\": \"header\" },\r\n    { \"id\": \"navigation\", \"area\": \"main\" },\r\n    { \"id\": \"socials\", \"area\": \"footer\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"identity\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"ProfileIdentity\"\r\n    },\r\n    {\r\n        \"slotId\": \"navigation\",\r\n      \"patternId\": \"VerticalNav\"\r\n\r\n    },\r\n    {\r\n      \"slotId\": \"socials\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"social-link-card\"\r\n    }\r\n  ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
