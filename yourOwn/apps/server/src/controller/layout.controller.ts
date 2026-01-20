@@ -7,7 +7,7 @@ import * as layoutRepo from "../repositories/layout.repo";
 import * as layoutService from "../services/layout.services";
 import { AuthenticatedRequest } from "../middleware/auth";
 // src/controllers/layout.controller.ts
-import { SyncLayoutSchema } from "../repositories/layout.repo";
+import { SyncLayoutSchema } from "../schemas/layout.schema";
 import { verifyLayoutOwnership, verifyLayoutNameOwnership } from "../services/layout.auth.service";
 import { error } from "node:console";
 import {prisma } from "../lib/prisma"
@@ -29,6 +29,8 @@ export async function sync(req: Request, res: Response) {
 
     // validate request body 
     const result = SyncLayoutSchema.safeParse(req.body);
+
+    console.log("results ", result)
     // returns format error 
     if (!result.success) {
       return res.status(400).json({error: result.error.format()})
@@ -37,8 +39,9 @@ export async function sync(req: Request, res: Response) {
 
   // fetch data from params and body 
   const { slots, placements } = result.data;
+ 
   // calls repo to sync data 
-  const updated = await layoutRepo.syncLayoutState(layoutId, slots, placements);
+  const updated = await layoutRepo.syncLayoutState(layoutId, slots, placements as { slotId: string; profileId: string; experienceId: string; patternId: string }[]);
   // returns updated info 
   return res.json(updated);
 }
@@ -90,7 +93,6 @@ export async function createNewTab(req: Request, res: Response) {
   }
 }
 
-// controllers/layout.controller.ts
 
 export async function getHydratedPage(req: Request, res: Response, next: NextFunction) {
   const authReq = req as AuthenticatedRequest;
@@ -100,6 +102,8 @@ export async function getHydratedPage(req: Request, res: Response, next: NextFun
     // 1. Verify ownership based on human-readable layoutName
     // This helper should resolve the layout to get the correct sessionId
     const verifiedLayout = await verifyLayoutNameOwnership(layoutName, authReq.user);
+
+    
 
     // 2. Call the service to get Layout + Slots + Placements + Experience objects
     const hydratedData = await layoutService.getHydratedLayout(

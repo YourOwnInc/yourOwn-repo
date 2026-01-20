@@ -45,14 +45,34 @@ export interface MediaItem {
 // took out id's and sessionId. this data is handled in context and service layer 
 //this is for the dynamic data the user inputs 
 export interface ExperienceEntry {
-  type?: string; // "project", "internship", etc.
-  title: string;
-  summary: string;
-  start?: string;
-  end?: string;
-  media?: MediaItem[];
-  images?: string[]; // Base64 image data for export
-  kind?: string;
+  id: string;
+  type: string; // "WORK", "PROJECT", "EVENT"
+  
+  // THE FACTS
+  title: string;        // e.g., "Xtensible Solutions"
+  roleTitle?: string;   // e.g., "Solutions Engineer Intern"
+  organization?: string;
+  location?: string;
+  startDate?: string;
+  endDate?: string;
+  isCurrent?: boolean;
+
+  // THE CONTENT (Everything you might want to show)
+  summaryShort?: string;
+  summaryLong?: string;
+  problemStatement?: string;
+  solutionDetails?: string;
+  impactBullets?: string[]; 
+  techStack?: string[];
+
+  // MEDIA & LINKS
+  links?: {
+    github?: string;
+    live?: string;
+    demo?: string;
+  };
+  images?: string[]; 
+  
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -1,7 +1,7 @@
 // src/features/portfolio-preview/hooks/usePortfolioManifest.ts
 import { useQuery } from "@tanstack/react-query";
 import { fetchPortfolioManifest } from "../services/layoutService";
-import { ManifestData } from "../types/portoflio.types";
+import { ManifestData,Tab  } from "../types/portoflio.types";
 
 export function usePortfolioManifest(sessionId: string | null) {
   return useQuery<ManifestData>({

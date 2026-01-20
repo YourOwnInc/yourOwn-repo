@@ -3,34 +3,8 @@ import { prisma } from "../lib/prisma";
 // src/repositories/layout.repo.ts
 import { z } from "zod";
 
-// 1. Validation for individual placements (Experience + Pattern + Slot)
-export const PlacementSchema = z.object({
-  slotId: z.string().min(1, "Slot ID is required"),
-  experienceId: z.string().uuid("Invalid Experience UUID"),
-  patternId: z.string().min(1, "Pattern ID is required"),
-});
 
-// 2. Validation for individual slots
-export const SlotSchema = z.object({
-  id: z.string().min(1, "Slot ID is required"),
-  area: z.string().min(1, "Area is required"),
-});
 
-// 3. The "Sync" payload for a specific tab
-export const SyncLayoutSchema = z.object({
-  slots: z.array(SlotSchema),
-  placements: z.array(PlacementSchema),
-});
-
-// 4. Schema for creating a new tab/page
-export const CreateLayoutSchema = z.object({
-  layoutName: z.string()
-    .min(1)
-    .max(20)
-    .regex(/^[a-z0-9-]+$/, "Tab names must be lowercase, numbers, or hyphens"),
-});
-
-export type SyncLayoutInput = z.infer<typeof SyncLayoutSchema>;
 /**
  * Find the layout for a session, or create an empty one if it doesn't exist.
  * Returns layout + its items.
@@ -64,13 +38,19 @@ export async function findOrCreateLayoutForSession(sessionId: string, layoutId: 
     });
   }
 
-  console.log("slots in findOrcreate  Layout repo", layout.slots);
+  console.log("placement in findOrcreate  Layout repo", layout);
 
-  return {
+ return {
     id: layout.id,
     layoutName: layout.LayoutId,
     slots: layout.slots,
-    placements: layout.placements,
+    // Ensure the mapped placements include both ID types
+    placements: layout.placements.map(p => ({
+      slotId: p.slotId,
+      patternId: p.patternId,
+      experienceId: p.experienceId, // keep existing
+      profileId: p.profileId,       // ADD THIS LINE
+    })),
   };
 }
 
@@ -107,7 +87,7 @@ export async function getAllSessionTabs(sessionId: string) {
 export async function syncLayoutState(
   layoutId: string,
   slots: { id: string , area: string}[], 
-  placements: {slotId: string , experienceId: string, patternId: string}[]
+  placements: {slotId: string , profileId: string,  experienceId: string  , patternId: string }[]
   ) 
   {
   // use prisma transaction to sync layout state 
@@ -132,6 +112,7 @@ export async function syncLayoutState(
         layoutId,
         slotId: p.slotId,
         experienceId: p.experienceId,
+        profileId: p.profileId,
         patternId: p.patternId
       }))
     });

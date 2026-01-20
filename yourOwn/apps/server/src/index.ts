@@ -9,6 +9,7 @@ import experienceRoutes from "./routes/experience-entry.routes"
 import layoutRoutes from "./routes/layout.routes"
 import exportRoutes from "./routes/export.routes"
 import devRoutes from './routes/dev'
+import profileRoutes from './routes/profile.routes'
 
 //import ... from "./routes/..."
 
@@ -40,6 +41,7 @@ app.use('/api/sessions', sessionRoutes);
 app.use('/api/layouts', layoutRoutes);
 app.use('/api/experiences', experienceRoutes);
 app.use('/api/exports', exportRoutes);
+app.use('/api/profiles', profileRoutes);
 
 
 app.get('/api/health', (_req, res) => {

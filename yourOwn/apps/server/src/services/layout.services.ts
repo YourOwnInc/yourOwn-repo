@@ -9,6 +9,7 @@ import * as sessionRepo from "../repositories/session.repo";
 import * as experienceRepo from "../";
 import {prisma } from "../lib/prisma"
 
+
 type OwnerWhere = { userId: string };
 
 /**
@@ -54,22 +55,25 @@ export async function addNewTabPage(sessionId: string, layoutName: string) {
  * Optimized for single-page rendering.
  */
 export async function getHydratedLayout(sessionId: string, layoutName: string) {
-  // 1. Fetch layout with its slots and placements
   const layout = await layoutRepo.findOrCreateLayoutForSession(sessionId, layoutName);
 
-  console.log("layout obj in hydrateLyaout service ", layout );
+  // 1. Collect all unique IDs from placements
+  const experienceIds = [...new Set(layout.placements.map(p => p.experienceId).filter(Boolean))] as string[];
+  const profileIds = [...new Set(layout.placements.map(p => p.profileId).filter(Boolean))] as string[];
 
-  // 2. Extract unique experience IDs from the placements
-  const experienceIds = [...new Set(layout.placements.map(p => p.experienceId))];
+  // 2. Fetch both types in parallel
+  // Use destructuring [experiences, profiles] to keep the result flat
+  const [experiences, profiles] = await Promise.all([
+    prisma.experience.findMany({ where: { id: { in: experienceIds } } }),
+    prisma.profile.findMany({ where: { id: { in: profileIds } } }),
+  ]);
 
-  // 3. Fetch full experience objects for these IDs
-  // Assuming you have a batch fetch repo function
-  const experiences = await prisma.experience.findMany({
-    where: { id: { in: experienceIds } }
-  });
+  // 3. Add a "kind" property to Profiles if they don't have one in the DB
+  // This helps your Pattern components distinguish data types
+  const mappedProfiles = profiles.map(p => ({ ...p, kind: 'profile' }));
 
   return {
     ...layout,
-    experienceLibrary: experiences // The client uses this to look up content by ID
+    experienceLibrary: [...experiences, ...mappedProfiles], // Returns a single flat array
   };
 }

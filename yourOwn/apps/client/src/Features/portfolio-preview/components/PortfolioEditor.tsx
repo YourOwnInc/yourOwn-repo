@@ -3,15 +3,12 @@ import { useEffect } from "react";
 import { PortfolioRenderer } from "./PreviewRenderer";
 
 import { useSyncLayout } from "../hooks/useSyncLayout";
-import { PortfolioModel, Placement, HydratedLayoutDTO } from "../../../domain/types";
+import { Placement, HydratedLayoutData, PortfolioViewerProps } from "../types/portoflio.types";
 import { usePortfolioManifest } from "../hooks/usePortfolioManifest";
 import { useUser } from "../../../contexts/UserContext";
 
-interface PortfolioEditorProps {
-  initialData: HydratedLayoutDTO;
-}
 
-export const PortfolioEditor = ({ initialData }: PortfolioEditorProps) => {
+export const PortfolioEditor = ({ contentData, manifest }: PortfolioViewerProps) => {
 
 //   // Use the store to manage the 'Draft' state
 //   const { layout, experiences, setModel, upsertPlacement } = usePortfolioStore();

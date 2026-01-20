@@ -71,7 +71,7 @@ export default function ExeriencesPage({sessionId}: { sessionId: SessionId}) {
         {experiences.map((e) => (
           <li key={e.id} style={{ display: "flex", gap: 8, alignItems: "center" }}>
             <span style={{ flex: 1 }}>{e.title}</span>
-            <small>{e.kind ?? "-"}</small>
+            <small>{e.type ?? "-"}</small>
             <button onClick={() => { setEditing(e); setMode("edit"); }}>Edit</button>
             <button onClick={() => removeExperience(e.id)}>Delete</button>
           </li>
