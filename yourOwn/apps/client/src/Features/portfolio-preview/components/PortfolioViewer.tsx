@@ -1,17 +1,20 @@
 import { PortfolioRenderer } from "./PreviewRenderer";
 import { useHydratedPage } from "../hooks/useHydratedPage";
-import { PortfolioModel , HydratedLayoutDTO} from "../../../domain/types";
+import {  PortfolioViewerProps} from "../types/portoflio.types";
 
-interface PortfolioViewerProps {
-  data: HydratedLayoutDTO;
-}
+import { SplitPaneShell } from "../shells/SplitPaneShell";
+import { BaseShellProps } from "../types/shell.types";
+
 
 // features/portfolio-preview/components/PortfolioViewer.tsx
-export const PortfolioViewer = ({ data }: PortfolioViewerProps ) => {
+export const PortfolioViewer = ({ contentData, manifest }: PortfolioViewerProps ) => {
   
-console.log("data in viwer ", data );
-//   if (isLoading) return <SkeletonLoader />;
-  
+console.log("data in viwer ", contentData );
+
+  const shellProps: BaseShellProps = {
+    contentData,
+    manifest
+  };
   // Directly render the server data
-  return <PortfolioRenderer {...data} />;
+  return <SplitPaneShell {...shellProps} />;
 };

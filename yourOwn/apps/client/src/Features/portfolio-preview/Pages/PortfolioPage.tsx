@@ -5,68 +5,63 @@ import {  useHydratedPage } from "../hooks/useHydratedPage";
 import { usePortfolioManifest } from "../hooks/usePortfolioManifest";
 import {PortfolioViewer} from "../components/PortfolioViewer";
 import {PortfolioEditor} from "../components/PortfolioEditor";
-import { useUser } from "../../../contexts/UserContext";
+import { useUser } from "../../../core/auth/UserContext";
 import { PortfolioNav } from "../components/PortfolioNav";
 import { TabsList, TabsTrigger } from "../UI/tabs";
+import { BaseShellProps } from "../types/shell.types";
+import { SplitPaneShell } from "../shells/SplitPaneShell";
+import { PortfolioRenderer } from "../components/PreviewRenderer";
 
+// src/features/portfolio-preview/pages/PortfolioPage.tsx
+import { ArrowLeft, Edit3, Eye } from "lucide-react"; // Import icons
+import { Link } from "react-router-dom";
 
 export const PortfolioPage = () => {
-    /// find out best way to get layoutName. probally from the navigation
   const { LayoutName = "home" } = useParams();
   const [isEditMode, setIsEditMode] = useState(false);
   const { sessionId } = useUser();
-  
-  const navigate = useNavigate();
+
   const { data: manifest, isLoading: manifestLoading } = usePortfolioManifest(sessionId);
-  const { data: hydratedData, isLoading: layoutLoading } = useHydratedPage(LayoutName);
-
-  // Handle the "First Time/Empty" state if no hydrated data exists
-  const hasNoContent = !layoutLoading && !hydratedData;
-
-  console.log("hydrated Data in main page", hydratedData);
-
-
-//   // Find the UUID from the manifest tabs for syncing later
-//   const currentTab = manifest?.tabs.find(t => t.name === LayoutName);
-//   const layoutUuid = currentTab?.id;
-
-  if (manifestLoading || layoutLoading) return <div>Loading Portfolio...</div>;
-  if (!hydratedData) return <div>No layout found.</div>;
-  
-const handleAddNewPage = () => {
-    // Logic for adding a new tab to the manifest
-    console.log("Create new page logic here");
-  };
+  const { data: contentData, isLoading: layoutLoading } = useHydratedPage(LayoutName);
 
   if (manifestLoading || layoutLoading) return <div>Loading...</div>;
+  if (!contentData || !manifest) return <div>No layout found.</div>;
 
   return (
-    <div className="portfolio-container">
-     <header className="p-4 border-b flex items-center justify-between">
-        {/* The Page just passes the manifest and lets the Nav handle itself */}
-        {manifest && <PortfolioNav manifest={manifest} />}
-        
+    <div className="h-screen w-full flex flex-col overflow-hidden relative">
+      
+      {/* APP LAYER: Navigation Back & Mode Toggle */}
+      <div className="absolute top-4 left-4 z-[100] flex items-center gap-4">
+        {/* Back to Landing Icon */}
+        <Link 
+          to="/landing" 
+          className="p-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full hover:bg-white/20 transition-all text-white shadow-lg"
+          title="Back to Landing"
+        >
+          <ArrowLeft size={20} />
+        </Link>
+
+        {/* Edit/View Toggle - Minimalist style for your aesthetic */}
         <button 
           onClick={() => setIsEditMode(!isEditMode)}
-          className="text-sm px-3 py-1 bg-secondary rounded-md"
+          className="flex items-center gap-2 px-3 py-1.5 bg-black border border-white/20 rounded-full text-xs font-medium text-white hover:border-white/50 transition-all shadow-lg"
         >
-          {isEditMode ? "Preview" : "Edit"}
+          {isEditMode ? (
+            <><Eye size={14} /> View Mode</>
+          ) : (
+            <><Edit3 size={14} /> Edit Mode</>
+          )}
         </button>
-      </header>
+      </div>
 
-      <main className="flex-grow">
-        {hasNoContent ? (
-          <div className="flex flex-col items-center justify-center h-full p-20">
-            <h2 className="text-xl font-bold">New Page: {LayoutName}</h2>
-            <p>This page is empty. Start adding components!</p>
-            <button className="mt-4 bg-primary text-white p-2 rounded">Initialize Page</button>
-          </div>
-        ) : isEditMode ? (
-          <PortfolioEditor initialData={hydratedData} />
+      {/* RENDER LAYER: Shell Selection */}
+      <div className="flex-grow overflow-hidden">
+        {isEditMode ? (
+          <PortfolioEditor contentData={contentData} manifest={manifest}/>
         ) : (
-          <PortfolioViewer key={LayoutName} data={hydratedData} />
+          <PortfolioViewer contentData={contentData} manifest={manifest} />
         )}
-      </main>
+      </div>
     </div>
   );
 };

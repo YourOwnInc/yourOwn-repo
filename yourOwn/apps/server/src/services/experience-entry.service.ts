@@ -1,6 +1,6 @@
 // src/services/experience-entry.service.ts
 import * as repo from "../repositories/experience-entry.repo";
-
+import { ExperienceCreateBody } from "../schemas/experience.schema";
 /**
  * Exactly one of userId or sessionId must be provided by the caller (controller).
  */
@@ -12,15 +12,11 @@ function authenticate(o: Owner) {
   }
 }
 
-export type CreateExperienceInput = Owner & {
-  title: string;
-  summary?: string | null;
-  start?: Date | null;
-  end?: Date | null;
-  kind?: string | null; // map enums earlier; keep service generic
-};
+// Combined type: All fields from Schema + Owner context
+export type FullExperienceInput = ExperienceCreateBody & Owner;
 
-export async function createExperience(input: CreateExperienceInput) {
+
+export async function createExperience(input: FullExperienceInput) {
   authenticate(input);
   return repo.createExperience(input);
 }
@@ -35,17 +31,7 @@ export async function getExperienceOwned(id: string, owner: Owner) {
   return repo.getExperienceOwned(id, owner);
 }
 
-export async function updateExperienceOwned(
-  id: string,
-  owner: Owner,
-  patch: {
-    title?: string;
-    summary?: string | null;
-    start?: Date | null; // undefined = untouched; null = clear
-    end?: Date | null;
-    kind?: string | null;
-  }
-) {
+export async function updateExperienceOwned(id: string, owner: Owner, patch: Partial<ExperienceCreateBody>) {
   authenticate(owner);
   return repo.updateExperienceOwned(id, owner, patch);
 }
