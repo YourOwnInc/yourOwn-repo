@@ -5,7 +5,7 @@ import { PortfolioRenderer } from "./PreviewRenderer";
 import { useSyncLayout } from "../hooks/useSyncLayout";
 import { Placement, HydratedLayoutData, PortfolioViewerProps } from "../types/portoflio.types";
 import { usePortfolioManifest } from "../hooks/usePortfolioManifest";
-import { useUser } from "../../../contexts/UserContext";
+import { useUser } from "../../../core/auth/UserContext";
 
 
 export const PortfolioEditor = ({ contentData, manifest }: PortfolioViewerProps) => {

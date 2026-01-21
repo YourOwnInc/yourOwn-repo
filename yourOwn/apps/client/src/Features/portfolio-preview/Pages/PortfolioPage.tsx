@@ -5,7 +5,7 @@ import {  useHydratedPage } from "../hooks/useHydratedPage";
 import { usePortfolioManifest } from "../hooks/usePortfolioManifest";
 import {PortfolioViewer} from "../components/PortfolioViewer";
 import {PortfolioEditor} from "../components/PortfolioEditor";
-import { useUser } from "../../../contexts/UserContext";
+import { useUser } from "../../../core/auth/UserContext";
 import { PortfolioNav } from "../components/PortfolioNav";
 import { TabsList, TabsTrigger } from "../UI/tabs";
 import { BaseShellProps } from "../types/shell.types";
