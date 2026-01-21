@@ -1,4 +1,4 @@
-import { ExperienceEntry } from "../../../types";
+import { ExperienceEntry } from "../../../shared/types";
 export type Tab = {
   id: string;
   name: string;

@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "../UI/tabs";
 import  Plus  from "lucide-react";
-import { ManifestData } from "../../../domain/types";
+import { ManifestData } from "../../../shared/lib/types";
 
 interface PortfolioNavProps {
   manifest: ManifestData;
