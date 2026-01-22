@@ -8,7 +8,7 @@ export default function ExperienceHub() {
   const { mutate: addExp } = useAddExperience();
   const { mutate: removeExp } = useRemoveExperience();
 
-  const categories = ["project", "internship", "job", "volunteering"];
+  const categories = ["WORK",  "PROJECT"];
 
   const handleAddNew = () => {
     addExp({

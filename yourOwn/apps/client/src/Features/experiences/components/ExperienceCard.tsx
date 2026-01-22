@@ -16,6 +16,7 @@ export default function ExperienceCard({ experience, onEdit, onDelete }: Experie
           <h3 className="font-semibold text-gray-900 truncate pr-4">{experience.title}</h3>
           <span className="text-[10px] uppercase tracking-wider bg-gray-50 px-2 py-1 rounded text-gray-400">
             {experience.type ?? 'Other'}
+            
           </span>
         </div>
 
