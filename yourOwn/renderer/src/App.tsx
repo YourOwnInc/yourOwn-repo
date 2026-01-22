@@ -4,7 +4,7 @@ import {Route }  from 'react-router-dom';
 function AppContent() {
     
     return (
-        <Route path="/landing" element={<div>landing</div>} />
+        <Route path="/Dashboard" element={<div>Dashboard</div>} />
     )
 }
 

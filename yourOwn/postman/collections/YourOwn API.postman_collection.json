@@ -653,8 +653,8 @@
           "response": []
         },
         {
-          "name": "[sessions].[id].[layouts].[new tab]",
-          "id": "d3e81f53-4df0-4bc0-9dc2-c7803d2a5e78",
+          "name": "[adds new layout] Copy",
+          "id": "120447b4-9f60-48f3-a227-80bb55bdc1a3",
           "request": {
             "auth": {
               "type": "bearer",

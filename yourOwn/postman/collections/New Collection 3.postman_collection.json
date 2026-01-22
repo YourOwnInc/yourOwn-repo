@@ -1,0 +1,107 @@
+{
+  "info": {
+    "_postman_id": "9633a537-1bf8-455b-9bb1-dcea103ce268",
+    "name": "portfolio",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Layouts",
+      "item": [
+        {
+          "name": "[adds new layout]",
+          "id": "d3e81f53-4df0-4bc0-9dc2-c7803d2a5e78",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"layoutName\": \"home\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sessions/:sessionId/layouts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":sessionId",
+                "layouts"
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "a2b428b1-47a4-4d05-901e-239cf3851ea4"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[sync data to layout]",
+          "id": "49817ca5-bf73-41db-ab97-a768f5796f7b",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{current_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"slots\": [\r\n    { \"id\": \"identity\", \"area\": \"header\" },\r\n    { \"id\": \"navigation\", \"area\": \"main\" },\r\n    { \"id\": \"socials\", \"area\": \"footer\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"identity\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"ProfileIdentity\"\r\n    },\r\n    {\r\n        \"slotId\": \"navigation\",\r\n      \"patternId\": \"VerticalNav\"\r\n\r\n    },\r\n    {\r\n      \"slotId\": \"socials\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"social-link-card\"\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/layouts/:layoutId/sync",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "layouts",
+                ":layoutId",
+                "sync"
+              ],
+              "variable": [
+                {
+                  "key": "layoutId",
+                  "value": "6cfa2240-1fa7-4864-9964-9e6d0fc27d05"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "9951bc58-eb7f-4ebe-af37-1b9ff28f05b6"
+    }
+  ]
+}

@@ -32,11 +32,11 @@ export const PortfolioPage = () => {
       
       {/* APP LAYER: Navigation Back & Mode Toggle */}
       <div className="absolute top-4 left-4 z-[100] flex items-center gap-4">
-        {/* Back to Landing Icon */}
+        {/* Back to Dashboard Icon */}
         <Link 
-          to="/landing" 
+          to="/Dashboard" 
           className="p-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full hover:bg-white/20 transition-all text-white shadow-lg"
-          title="Back to Landing"
+          title="Back to Dashboard"
         >
           <ArrowLeft size={20} />
         </Link>

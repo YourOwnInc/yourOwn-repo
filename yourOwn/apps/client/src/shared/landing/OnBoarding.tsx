@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AnimatedText, AnimatedTextSequence } from '../../Features/landing/AnimatedText';
+import { AnimatedText, AnimatedTextSequence } from '../../Features/dashboard/AnimatedText';
 import { useUser } from '../../core/auth/UserContext';
 
 interface OnboardingProps {

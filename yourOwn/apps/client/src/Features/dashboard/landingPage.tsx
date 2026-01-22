@@ -4,14 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedText, AnimatedTextSequence } from './AnimatedText';
 import { useUser } from '../../core/auth/UserContext';
 import { sessionService } from '../../core/auth/sessionService';
-import  BuildingNav from "./buildingNav";
+import  BuildingNav from "./dashboardPage";
 
-type LandingStep = 'hero' | 'welcome' | 'name' | 'bio';
+type DashboardStep = 'hero' | 'welcome' | 'name' | 'bio';
 
 export default function Landing() {
   const navigate = useNavigate();
   const { user, setUser, setOnboardingComplete, setAuthToken, setSessionId } = useUser();
-  const [step, setStep] = useState<LandingStep>('hero');
+  const [step, setStep] = useState<DashboardStep>('hero');
   const [name, setName] = useState(user?.name || '');
   const [bio, setBio] = useState(user?.bio || '');
   const [heroComplete, setHeroComplete] = useState(false);
@@ -86,15 +86,11 @@ export default function Landing() {
       });
       setOnboardingComplete(true);
       setTimeout(() => {
-        navigate('/portfoliobuilder', { replace: true });
+        navigate('/Dashboard', { replace: true });
       }, 500);
     }
   };
 
-    if(user)
-  {
-    return <BuildingNav className="mt-10"/>
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-bl  from-[#F5EBCB] via-[#F9FAE3] to-[#92BFD0] text-white font-sans overflow-hidden">

@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 
-interface BuilderNavProps {
+interface DashboardProps {
   className?: string;
 }
 
-export default function BuilderNav({ className = "" }: BuilderNavProps) {
+export default function DashboardPage() {
   const navigate = useNavigate();
 
   const navItems = [
@@ -15,7 +15,7 @@ export default function BuilderNav({ className = "" }: BuilderNavProps) {
 
   return (
     <div className="flex items-center bg-white justify-center min-h-screen">
-      <div className={`flex flex-row items-center justify-center gap-20 ${className}`}>
+      <div className={`flex flex-row items-center justify-center gap-20 `}>
         {navItems.map((item) => (
           <button
             key={item.label}
