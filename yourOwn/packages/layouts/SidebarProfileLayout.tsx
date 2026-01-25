@@ -7,7 +7,7 @@ export const SidebarProfileLayout: React.FC<{ slots: Record<string, React.ReactN
       </section>
 
       {/* NEW: This slot acts as the "Anchor" where the Shell will inject the Nav */}
-      <div id="shell-nav-anchor" className="navigation-zone min-h-[200px] flex-grow py-4">
+      <div id="shell-nav-anchor" className="navigation-zone min-h-[200px] flex-grow py-8">
         {slots["navigation"]}
       </div>
 

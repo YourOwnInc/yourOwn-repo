@@ -2,7 +2,7 @@
 import React from "react";
 
 export const HomeLayoutV2: React.FC<{ slots: Record<string, React.ReactNode> }> = ({ slots }) => (
-  <div className="min-h-screen bg-[#c5e8c8] text-black selection:bg-cyan-500/30">
+  <div className="min-h-screen text-black ">
     {/* Global Grain/Noise Overlay for texture */}
     <div className="fixed inset-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
 

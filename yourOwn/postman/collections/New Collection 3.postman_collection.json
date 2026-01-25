@@ -9,6 +9,202 @@
       "name": "Layouts",
       "item": [
         {
+          "name": "about",
+          "item": [
+            {
+              "name": "[starts about layout]",
+              "id": "553ce8d7-f09b-41f8-922b-5a1c44574653",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{current_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"layoutName\": \"home\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/sessions/:sessionId/layouts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "sessions",
+                    ":sessionId",
+                    "layouts"
+                  ],
+                  "variable": [
+                    {
+                      "key": "sessionId",
+                      "value": "a2b428b1-47a4-4d05-901e-239cf3851ea4"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "[sync about data]",
+              "id": "3f190c65-6683-4046-8cbd-d281c653d501",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{current_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"slots\": [\r\n    { \"id\": \"identity\", \"area\": \"header\" },\r\n    { \"id\": \"navigation\", \"area\": \"main\" },\r\n    { \"id\": \"socials\", \"area\": \"footer\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"identity\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"ProfileIdentity\"\r\n    },\r\n    {\r\n        \"slotId\": \"navigation\",\r\n      \"patternId\": \"VerticalNav\"\r\n\r\n    },\r\n    {\r\n      \"slotId\": \"socials\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"social-link-card\"\r\n    }\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/layouts/:layoutId/sync",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "layouts",
+                    ":layoutId",
+                    "sync"
+                  ],
+                  "variable": [
+                    {
+                      "key": "layoutId",
+                      "value": "6cfa2240-1fa7-4864-9964-9e6d0fc27d05"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "id": "936b8d4e-58aa-46ab-85a7-a2edf69fb11f"
+        },
+        {
+          "name": "projects",
+          "item": [
+            {
+              "name": "[starts projects layout]",
+              "id": "2a7b0506-3c39-4373-8e41-efdab9f17f1e",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{current_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"layoutName\": \"home\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/sessions/:sessionId/layouts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "sessions",
+                    ":sessionId",
+                    "layouts"
+                  ],
+                  "variable": [
+                    {
+                      "key": "sessionId",
+                      "value": "a2b428b1-47a4-4d05-901e-239cf3851ea4"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "[sync project data]",
+              "id": "782c7b51-272e-4c36-8b12-84e3f5506270",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{current_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"slots\": [\r\n    { \"id\": \"identity\", \"area\": \"header\" },\r\n    { \"id\": \"navigation\", \"area\": \"main\" },\r\n    { \"id\": \"socials\", \"area\": \"footer\" }\r\n  ],\r\n  \"placements\": [\r\n    {\r\n      \"slotId\": \"identity\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"ProfileIdentity\"\r\n    },\r\n    {\r\n        \"slotId\": \"navigation\",\r\n      \"patternId\": \"VerticalNav\"\r\n\r\n    },\r\n    {\r\n      \"slotId\": \"socials\",\r\n      \"profileId\": \"943d0215-9fe5-4bc3-b510-3b31b1724404\",\r\n      \"patternId\": \"social-link-card\"\r\n    }\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/layouts/:layoutId/sync",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "layouts",
+                    ":layoutId",
+                    "sync"
+                  ],
+                  "variable": [
+                    {
+                      "key": "layoutId",
+                      "value": "6cfa2240-1fa7-4864-9964-9e6d0fc27d05"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "id": "2398950d-d993-4ab7-a9c2-06135c86ea80"
+        },
+        {
           "name": "[adds new layout]",
           "id": "d3e81f53-4df0-4bc0-9dc2-c7803d2a5e78",
           "request": {
@@ -102,6 +298,11 @@
         }
       ],
       "id": "9951bc58-eb7f-4ebe-af37-1b9ff28f05b6"
+    },
+    {
+      "name": "experiences",
+      "item": [],
+      "id": "2990e999-fc9d-4d13-8f81-91df90f2a40f"
     }
   ]
 }

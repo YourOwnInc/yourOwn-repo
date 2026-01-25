@@ -93,7 +93,6 @@ export async function createNewTab(req: Request, res: Response) {
   }
 }
 
-
 export async function getHydratedPage(req: Request, res: Response, next: NextFunction) {
   const authReq = req as AuthenticatedRequest;
   const { layoutName } = req.params; // e.g., /layouts/hydrate/projects
@@ -142,6 +141,7 @@ export async function removeLayout(req: Request, res: Response) {
 
 export async function getPreviewManifest(req: Request, res: Response, next: NextFunction) {
   const authReq = req as AuthenticatedRequest;
+  // gets session id from JWT token
   const { sessionId, role, userId } = authReq.user;
 
   try {

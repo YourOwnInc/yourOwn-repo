@@ -77,3 +77,24 @@ export async function getHydratedLayout(sessionId: string, layoutName: string) {
     experienceLibrary: [...experiences, ...mappedProfiles], // Returns a single flat array
   };
 }
+/**
+ * Fetches layoutIds and name of active layouts for session 
+ * takes in sessionId 
+ */
+export async function getManifestLayout(sessionId: string ) {
+  // layouts will have a lable to determine if is being used for the preview portfolio 
+  // TODO: change layout prisma schema to have this new type 
+
+  // fetches layouts associated with given session with filer of the new label 
+  // will give the layout objects 
+  // prisma.layout.findMany({ where: sessionId, })
+
+  // const object = {
+  //   tabs: {
+  //     id: 
+  //     name:
+  //   }
+  // }
+
+  // maps he layouts to only give the name and ids;
+}
