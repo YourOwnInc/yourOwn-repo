@@ -1,8 +1,9 @@
 // src/layouts/HomeLayout.tsx
 import React from "react";
 
-export const HomeLayoutV2: React.FC<{ slots: Record<string, React.ReactNode> }> = ({ slots }) => (
-  <div className="min-h-screen text-black ">
+export const HomeLayoutV2: React.FC<{ slots: Record<string, React.ReactNode> }> = ({ slots }) => {
+  return(
+  <div className="min-h-screen text-black  bg-[var(--portfolio-bg)]">
     {/* Global Grain/Noise Overlay for texture */}
     <div className="fixed inset-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
 
@@ -10,12 +11,12 @@ export const HomeLayoutV2: React.FC<{ slots: Record<string, React.ReactNode> }> 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
         
         {/* HERO SECTION: Taking prominence */}
-        <header className="lg:col-span-12 mb-12">
+        <header className="lg:col-span-12 mb-12 ">
           {slots["hero"]}
         </header>
 
         {/* PRIMARY CONTENT: The deep-dive projects */}
-        <section className="lg:col-span-8 space-y-16">
+        <section className="lg:col-span-8 space-y-16 ">
           <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-500 mb-8 flex items-center gap-4">
             <span className="h-px w-8 bg-slate-800"></span> Selected Architecture
           </h2>
@@ -41,4 +42,5 @@ export const HomeLayoutV2: React.FC<{ slots: Record<string, React.ReactNode> }> 
       </div>
     </footer>
   </div>
-);
+  );
+};

@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import starr from "./starr.svg"; // This usually imports the URL/path to the SVG
+import starr from "../../../../assets/starr.svg"; // This usually imports the URL/path to the SVG
 
 export const VerticalNav = ({ data }: { data: any }) => {
   const tabs = data?.tabs || [];

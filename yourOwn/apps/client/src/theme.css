@@ -3,10 +3,10 @@
   --portfolio-primary: #3b82f6;
   --portfolio-font-sans: 'Inter', sans-serif;
   --portfolio-radius: 0.5rem;
-  --portfolio-bg: #f4dfa2d8;
+  --portfolio-bg: #FCF3D9;
   --portfolio-button: #dfe323;
 
-  --nav-text-color: rgba(220, 249, 227, 0.832); /* Dimmed inactive text */
+  --nav-text-color: #ACC2A7; /* Dimmed inactive text */
   --nav-hover-color: #d7dfda;                 /* Hovered text */
   --nav-active-asset: #e8f7e7;                /* Color for your SVG/Dot */
 

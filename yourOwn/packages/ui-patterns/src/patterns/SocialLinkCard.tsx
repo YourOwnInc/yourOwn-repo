@@ -1,51 +1,59 @@
 // src/patterns/SocialLinkCard.tsx
 import { PatternProps } from "../interfaces";
-import { Github, Linkedin, Instagram, Link as LinkIcon } from "lucide-react"; // Using Lucide for modern icons
+// Removed Lucide imports as we are using custom SVGs now
+import gitHub from "../../../assets/github (1).svg";
+import insta from "../../../assets/insta.svg";
+import linkedIn from "../../../assets/linkedin.svg";
 
 export const SocialLinkCard = ({ data, className }: PatternProps) => {
-  // Mapping keys from your LinkedSchema to actual Icons
-  const iconMap: Record<string, any> = {
-    github: <Github size={18} />,
-    linkedin: <Linkedin size={18} />,
-    instagram: <Instagram size={18} />,
-    website: <LinkIcon size={18} />
+  // 1. Map schema keys to your imported SVG files
+  const svgMap: Record<string, string> = {
+    github: gitHub,
+    linkedin: linkedIn,
+    instagram: insta,
   };
 
+  // Define base color and hover color (could use theme variables here)
+  const iconColorClass = "text-red-400 hover:text-red-500"; 
+
   return (
-    <div className={`p-6 bg-slate-900/20 border border-slate-800 rounded-xl ${className ?? ""}`}>
-      <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-6">Connect</h4>
+    /* 2. Outer div added for future extensibility */
+    <div className={`social-links-wrapper w-full py-8 ${className ?? ""}`}>
       
-      <div className="flex flex-col gap-4">
+      {/* Main content area - centered row, borders removed */}
+      <div className="flex flex-row items-center justify-center gap-6">
         {data?.links && Object.entries(data.links).map(([key, url]) => {
-          if (!url) return null;
-          
-          return (
-            <a 
-              key={key} 
-              href={url as string} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center justify-between group text-slate-400 hover:text-cyan-400 transition-all duration-300"
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-slate-600 group-hover:text-cyan-500 transition-colors">
-                  {iconMap[key.toLowerCase()] || <LinkIcon size={18} />}
-                </span>
-                <span className="text-sm font-medium capitalize tracking-tight">{key}</span>
-              </div>
-              
-              {/* Subtle arrow that appears on hover */}
-              <span className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-cyan-600">
-                →
-              </span>
-            </a>
-          );
-        })}
+            if (!url || !svgMap[key.toLowerCase()]) return null;
+            
+            const svgSource = svgMap[key.toLowerCase()];
+
+            return (
+              <a 
+                key={key} 
+                href={url as string} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                // 3. Apply color classes here. The child div uses 'bg-current' to inherit this color.
+                className={`group transition-all duration-300 ${iconColorClass}`}
+                aria-label={key} // Accessibility label since text is hidden
+              >
+                {/* 4. CSS Mask Technique to color the imported SVG file */}
+                <div 
+                  className="w-8 h-8 bg-current transition-transform group-hover:-translate-y-1"
+                  style={{
+                    maskImage: `url(${svgSource})`,
+                    WebkitMaskImage: `url(${svgSource})`, // Safari support
+                    maskRepeat: 'no-repeat',
+                    maskPosition: 'center',
+                    maskSize: 'contain'
+                  }}
+                />
+              </a>
+            );
+          })}
       </div>
-      
-      <div className="mt-8 pt-4 border-t border-slate-800/50">
-        <small className="text-[8px] font-bold uppercase tracking-widest text-slate-700">Pattern: Social Connectivity</small>
-      </div>
+
+      {/* You can add more content here later inside the outer div */}
     </div>
   );
 };

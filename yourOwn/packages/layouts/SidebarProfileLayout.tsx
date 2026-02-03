@@ -11,7 +11,7 @@ export const SidebarProfileLayout: React.FC<{ slots: Record<string, React.ReactN
         {slots["navigation"]}
       </div>
 
-      <footer className="socials-zone border-t pt-4 flex justify-center gap-4">
+      <footer className="socials-zone border-t pt-4 flex justify-center gap-4 bg-[var()]">
         {slots["socials"]}
       </footer>
     </div>
