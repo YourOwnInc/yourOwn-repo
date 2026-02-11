@@ -1,16 +1,18 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import * as SC from "../controller/session.controller";
+import { migrateSession } from "../controller/migration.controller";
 import * as EC from "../controller/experience-entry.controller"
-import { requireAuth} from  "../middleware/auth"
+import { requireAuth } from "../middleware/auth"
 import * as LC from "../controller/layout.controller"
 import { lchown } from 'node:fs';
 
 
 const router = Router();
 
-router.post('/start',SC.startSession)
+router.post('/start', SC.startSession)
+router.post('/migrate', migrateSession)
 router.get('/:id', SC.getSession)
-router.get('/',SC.getAllSessions)
+router.get('/', SC.getAllSessions)
 
 router.post("/:sessionId/experiences", requireAuth, EC.createExperience);
 router.get("/:sessionId/experiences", requireAuth, EC.listExperiences);
