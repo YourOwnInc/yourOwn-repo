@@ -10,6 +10,16 @@ export const ExperienceTypeSchema = z.enum([
 const isoDate = z.string().datetime().optional().nullable()
   .transform(v => (v ? new Date(v) : null));
 
+export const ExperienceVariantCreateSchema = z.object({
+  label: z.string().default("Default Variation"),
+  summaryShort: z.string().trim().optional().nullable(),
+  summaryLong: z.string().trim().optional().nullable(),
+  problemStatement: z.string().trim().optional().nullable(),
+  solutionDetails: z.string().trim().optional().nullable(),
+  impactBullets: z.array(z.string()).default([]),
+  techStack: z.array(z.string()).default([]),
+});
+
 export const ExperienceCreateSchema = z.object({
   // CORE DATA
   title: z.string().min(1, "title is required").default("experience"),
@@ -22,14 +32,9 @@ export const ExperienceCreateSchema = z.object({
   roleTitle: z.string().optional().nullable(),
   organization: z.string().optional().nullable(),
   location: z.string().optional().nullable(),
-  summaryShort: z.string().trim().optional().nullable(),
-  summaryLong: z.string().trim().optional().nullable(),
-  problemStatement: z.string().trim().optional().nullable(),
-  solutionDetails: z.string().trim().optional().nullable(),
-  
-  // Arrays default to empty to avoid null pointer errors in the frontend
-  impactBullets: z.array(z.string()).default([]),
-  techStack: z.array(z.string()).default([]),
+
+  // VARIANTS (Nested Write)
+  variants: z.array(ExperienceVariantCreateSchema).default([]),
 
   // METADATA (JSON storage for links/extra bits)
   metadata: z.record(z.any(), z.any()).optional().default({}),
@@ -46,8 +51,7 @@ export const ExperienceManifestSchema = z.object({
   type: ExperienceTypeSchema,
   organization: z.string().optional().nullable(),
   roleTitle: z.string().optional().nullable(),
-  summaryShort: z.string().optional().nullable(),
-  techStack: z.array(z.string()),
+  variants: z.array(ExperienceVariantCreateSchema).default([]),
 });
 
 // Utility Types derived from the schemas

@@ -84,24 +84,14 @@ model Experience {
   endDate      DateTime?
   isCurrent    Boolean   @default(false)
 
-  // EXTENDED CONTENT (The "Kitchen Sink")
-  // These fields allow you to store all "ways of talking" in one place [cite: 14, 15]
   roleTitle        String?
   organization     String?
   location         String?
-  summaryShort     String?   @db.Text
-  summaryLong      String?   @db.Text
-  problemStatement String?   @db.Text
-  solutionDetails  String?   @db.Text
-  impactBullets    String[]  // Array of achievements/points
-  techStack        String[]  // Array of technologies used
   
   // RELATIONSHIPS
-  // Keeping narratives for future-proofing, though you'll use the flat fields for now 
-  narratives Narrative[]
+  variants ExperienceVariant[]
   sessionId String    @db.Uuid
   session   Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  placements Placement[]
 
   // 3. TYPE-SPECIFIC METADATA
   // Used for links (github, demo) or other arbitrary data 
@@ -111,20 +101,27 @@ model Experience {
   @@index([type])
 }
 
-model Narrative {
+model ExperienceVariant {
   id           String     @id @default(uuid()) @db.Uuid
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
   experienceId String     @db.Uuid
   experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
 
-  // PERSPECTIVE
-  kind         String     // e.g., "visual-story", "technical-deep-dive", "quick-bio"
-  slug         String?    // For clean URLs like /portfolio/my-project/technical
+  // Label for the editor UI (e.g. "Software Eng Focus", "Short PM version")
+  label            String    @default("Default Variation")
 
-  // CONTENT
-  headline     String?    // A punchy title for this specific narrative
-  bodyContent  String?    @db.Text
-  bulletPoints String[] 
-  tags         String[]   // Technologies, themes, or moods
+  // EXTENDED CONTENT (The "Talking Points")
+  summaryShort     String?   @db.Text
+  summaryLong      String?   @db.Text
+  problemStatement String?   @db.Text
+  solutionDetails  String?   @db.Text
+  impactBullets    String[]  
+  techStack        String[]  
+
+  // When placed in a layout, it points to this specific variation
+  placements Placement[]
 
   @@index([experienceId])
 }
@@ -170,13 +167,11 @@ model Placement {
   layout    Layout  @relation(fields: [layoutId], references: [id], onDelete: Cascade)
 
   // RELATIONAL LINK
-  experienceId String?     @db.Uuid
-  experience   Experience? @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  experienceVariantId String?     @db.Uuid
+  experienceVariant   ExperienceVariant? @relation(fields: [experienceVariantId], references: [id], onDelete: Cascade)
 
   profileId    String?     @db.Uuid
   profile      Profile?    @relation(fields: [profileId], references: [id], onDelete: Cascade)
-
-
 
   // HUMAN READABLE KEYS (What the user edits in JSON)
   slotId       String     // e.g., "header-slot"

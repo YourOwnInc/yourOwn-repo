@@ -16,13 +16,19 @@ const ofOwner = (o: Owner) => (o.userId ? { userId: o.userId } : { sessionId: o.
 
 export async function createExperience(input: FullExperienceInput) {
   // 1. Separate ownership from data
-  const { userId, sessionId, ...rest } = input;
+  const { userId, sessionId, variants, ...rest } = input;
 
   // 2. Prisma data object
   const data: any = {
-    ...rest, // This spreads title, type, startDate, impactBullets, etc.
+    ...rest,
     ...(userId ? { userId } : { session: { connect: { id: sessionId! } } })
   };
+
+  if (variants && variants.length > 0) {
+    data.variants = {
+      create: variants
+    };
+  }
 
   return prisma.experience.create({ data });
 }
@@ -42,23 +48,26 @@ export async function listExperiences(filter: Owner & { kind?: string | null }) 
 
   return prisma.experience.findMany({
     where,
+    include: { variants: true },
     orderBy: { createdAt: "desc" },
   });
 }
 
 export async function getExperienceOwned(id: string, owner: Owner) {
   return prisma.experience.findFirst({
+    where: { id, ...ofOwner(owner) } as any,
+    include: { variants: true },
   });
 }
 
 export async function updateExperienceOwned(
-  id: string, 
-  owner: Owner, 
+  id: string,
+  owner: Owner,
   patch: Partial<ExperienceCreateBody>
 ) {
 
-  
-return prisma.experience.update({
+
+  return prisma.experience.update({
     where: { id, ...ofOwner(owner) } as any,
     data: patch as any, // Spreading the patch directly
   });

@@ -1,0 +1,147 @@
+[
+  {
+    "title": "Orbital Mentorship Platform",
+    "type": "WORK",
+    "roleTitle": "DevOps Lead",
+    "organization": "Orbital Mentorship",
+    "startDate": "2024-11-01T00:00:00Z",
+    "endDate": null,
+    "isCurrent": true,
+    "variants": [
+      {
+        "label": "Technical Deep Dive",
+        "summaryShort": "Engineered a scalable Docker-based deployment system and observability tools.",
+        "summaryLong": "As DevOps Lead, I modernized the deployment infrastructure by transitioning to a containerized Docker architecture. I also developed custom observability pipelines to track API performance, drastically reducing network bottlenecks and optimizing data querying capabilities for heavy workloads.",
+        "problemStatement": "The platform faced inconsistent deployment environments and severe network bottlenecks that hindered performance and scalability.",
+        "solutionDetails": "I containerized the application using Docker, standardizing environments and reducing configuration time by 50%. I also built an API monitoring tool to pinpoint network issues and optimized backend querying.",
+        "impactBullets": [
+          "Standardized deployment environments, reducing configuration time by 50%.",
+          "Built an in-house API monitoring tool that cut per-page network requests from 20 to 1-2.",
+          "Architected a backend data management system to support high-performance CRUD operations for massive datasets."
+        ],
+        "techStack": ["Docker", "Python", "CI/CD", "Linux"]
+      },
+      {
+        "label": "Leadership Focus",
+        "summaryShort": "Led DevOps initiatives to streamline onboarding and stabilize platform infrastructure.",
+        "summaryLong": "I drove the technical roadmap for infrastructure reliability, implementing automated onboarding scripts that eliminated dependency errors for new engineers. By architecting scalable data strategies, I enabled the development team to ship features faster and more confidently.",
+        "problemStatement": "Engineering onboarding was slow due to dependency errors, and the system lacked a cohesive architecture for large-scale data handling.",
+        "solutionDetails": "I led the rollout of a containerized ecosystem and implemented systematic monitoring solutions to guide technical decision-making across the team.",
+        "impactBullets": [
+          "Eliminated local dependency errors for incoming engineers through automated onboarding scripts.",
+          "Guided architectural improvements that significantly improved system responsiveness and stability.",
+          "Empowered the engineering team with custom observability tools for continuous performance tracking."
+        ],
+        "techStack": ["Docker", "Team Leadership", "Automation"]
+      }
+    ]
+  },
+  {
+    "title": "Cloud Infrastructure Automation",
+    "type": "WORK",
+    "roleTitle": "Solutions Engineer Intern",
+    "organization": "Xtensible Solutions",
+    "startDate": "2024-04-01T00:00:00Z",
+    "endDate": "2024-08-01T00:00:00Z",
+    "isCurrent": false,
+    "variants": [
+      {
+        "label": "Software Engineering Focus",
+        "summaryShort": "Developed automation scripts and testing workflows for cloud deployments.",
+        "summaryLong": "During my internship, I focused on automating cloud instance management and quality assurance processes. I built Python-based tools to handle cloud snapshots and integrated automated API tests to catch regressions before deployment.",
+        "problemStatement": "Manual cloud deployments and localized testing processes were creating bottlenecks and increasing the risk of defects in production.",
+        "solutionDetails": "I engineered Python automation for cloud instance creation and GitHub integration, alongside a rigorous automated API testing workflow.",
+        "impactBullets": [
+          "Automated cloud instance creation and snapshot retrieval with Python scripts, directly reducing manual deployment time.",
+          "Integrated functional and regression API testing into the CI pipeline, immediately catching and preventing defects.",
+          "Enhanced QA feedback loops by systematically detailing and reporting system issues to engineering leadership."
+        ],
+        "techStack": ["Python", "AWS", "GitHub Actions", "API Testing"]
+      }
+    ]
+  },
+  {
+    "title": "Indigo Magazine Platform",
+    "type": "WORK",
+    "roleTitle": "Web Development Officer & Creative Director",
+    "organization": "Indigo Magazine",
+    "startDate": "2023-12-01T00:00:00Z",
+    "endDate": null,
+    "isCurrent": true,
+    "variants": [
+      {
+        "label": "Full-Stack Design",
+        "summaryShort": "Scaled a media platform and built an automated submission system for a growing user base.",
+        "summaryLong": "I spearheaded the technical transformation of the magazine's web presence. By migrating digital assets to a Cloudflare CDN and architecting an end-to-end article submission workflow, I drastically reduced manual developer interventions and established a highly scalable media platform.",
+        "problemStatement": "The static codebase couldn't handle the burgeoning media volume, and content updates required constant manual intervention from developers.",
+        "solutionDetails": "I deployed a Cloudflare CDN for media delivery and built automated internal tools for content uploads, empowering non-technical users to publish independently.",
+        "impactBullets": [
+          "Migrated media from a static codebase to a Cloudflare CDN, building an automated fetch-and-deploy workflow.",
+          "Designed an end-to-end submission system that empowered independent content uploads, vastly reducing developer overhead.",
+          "Optimized the platform to successfully handle traffic spikes, supporting an influx of 400+ new active users in a single month."
+        ],
+        "techStack": ["React", "Node.js", "Cloudflare CDN", "Box API"]
+      },
+      {
+        "label": "Product Focus",
+        "summaryShort": "Led product direction and technical execution to grow active readership by 400+ users.",
+        "summaryLong": "Acting as a bridge between creative vision and technical execution, I led cross-functional efforts to modernize the magazine's digital experience. I focused on removing friction for both our content creators and our readers, ensuring a seamless, high-performance web experience.",
+        "problemStatement": "The platform was outdated and difficult to manage, stunting user growth and frustrating content creators.",
+        "solutionDetails": "I drove the product roadmap by implementing independent uploading tools for creators and improving site reliability during high-traffic drops.",
+        "impactBullets": [
+          "Directed the digital strategy to align technical infrastructure with creative and editorial goals.",
+          "Collaborated cross-functionally to launch features that directly contributed to acquiring 400+ new monthly active users.",
+          "Streamlined creator workflows, allowing the editorial team to publish faster without technical blockers."
+        ],
+        "techStack": ["Product Strategy", "Cross-functional Leadership", "Web Development"]
+      }
+    ]
+  },
+  {
+    "title": "YourOwn",
+    "type": "PROJECT",
+    "roleTitle": "Team Lead & System Architect",
+    "organization": "YourOwn",
+    "startDate": "2025-01-01T00:00:00Z",
+    "endDate": null,
+    "isCurrent": true,
+    "variants": [
+      {
+        "label": "Architecture",
+        "summaryShort": "Architected the migration to an enterprise-grade, feature-based system.",
+        "summaryLong": "As the System Architect for a full-stack platform, I drove the complex migration from a monolithic file structure to a highly modular, feature-based architecture. I focused on robust data consistency and advanced server-side caching to guarantee maximum uptime for data-intensive portfolios.",
+        "problemStatement": "The existing monolithic codebase was becoming difficult to maintain, and heavy data loads were causing synchronization and performance issues.",
+        "solutionDetails": "I mapped out and executed a modular architectural overhaul, implementing sophisticated state synchronization and caching pipelines across the stack.",
+        "impactBullets": [
+          "Spearheaded a massive migration to an enterprise feature-based architecture, significantly improving system maintainability.",
+          "Engineered advanced server-side caching and state synchronization pipelines, optimizing load times for heavy data loads.",
+          "Guided architectural decisions across front-end and back-end integration, successfully guaranteeing 100% data consistency for dynamic UIs."
+        ],
+        "techStack": ["TypeScript", "React", "Node.js", "System Architecture", "Caching"]
+      }
+    ]
+  },
+  {
+    "title": "Corporate Liaison Initiatives",
+    "type": "ORGANIZATION",
+    "roleTitle": "Corporate Liaison",
+    "organization": "Society of Hispanic Professional Engineers",
+    "startDate": "2023-10-01T00:00:00Z",
+    "endDate": "2024-04-01T00:00:00Z",
+    "isCurrent": false,
+    "variants": [
+      {
+        "label": "Community Impact",
+        "summaryShort": "Secured corporate funding and coordinated professional networking events.",
+        "summaryLong": "In my role as Corporate Liaison, I bridged the gap between student members and industry professionals. I actively pitched to corporate partners to secure funding and planned professional development events that resulted in tangible career opportunities for students.",
+        "problemStatement": null,
+        "solutionDetails": null,
+        "impactBullets": [
+          "Secured $300 in initial corporate partnership funding to directly support student-led engineering initiatives.",
+          "Orchestrated and hosted targeted professional engagement events, significantly expanding member access to networking."
+        ],
+        "techStack": ["Public Speaking", "Event Coordination", "Partnership Building"]
+      }
+    ]
+  }
+]
