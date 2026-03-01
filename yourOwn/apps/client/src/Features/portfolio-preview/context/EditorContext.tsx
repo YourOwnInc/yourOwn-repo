@@ -3,6 +3,7 @@ import React, { createContext, useContext } from 'react';
 interface EditorContextType {
     isEditing: boolean;
     onAddTab?: () => void;
+    onDeleteTab?: (tabName: string) => void;
     onAddExperience?: (slotId: string) => void;
 }
 

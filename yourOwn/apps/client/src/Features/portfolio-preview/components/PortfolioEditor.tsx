@@ -5,6 +5,7 @@ import { PortfolioViewer } from "./PortfolioViewer";
 import { AddTabModal } from "./AddTabModal";
 import { AddExperienceModal } from "./AddExperienceModal";
 import { useCreateTab } from "../hooks/useCreateTab";
+import { useDeleteTab } from "../hooks/useDeleteTab";
 
 import { useSyncLayout } from "../hooks/useSyncLayout";
 import { Placement, HydratedLayoutData, PortfolioViewerProps } from "../types/portoflio.types";
@@ -20,36 +21,17 @@ export const PortfolioEditor = ({ contentData, manifest }: PortfolioViewerProps)
   const [activeSlotId, setActiveSlotId] = useState<string | null>(null);
 
   const createTabMutation = useCreateTab(sessionId);
-
-  //   // Use the store to manage the 'Draft' state
-  //   const { layout, experiences, setModel, upsertPlacement } = usePortfolioStore();
-  //   const layoutId = initialData.layout.id;
-  //   const syncMutation = useSyncLayout(layoutId);
-
-  //   // 1. Initialize the store with server data on mount
-  //   useEffect(() => {
-  //     if (initialData) {
-  //       // Assuming setModel handles the mapping of PortfolioModel to store state
-  //       setModel(initialData);
-  //     }
-  //   }, [initialData, setModel]);
-
-  //   // 2. Handle layout changes (e.g., changing a pattern or swapping an experience)
-  //   const onHandleChange = (newPlacement: Placement) => {
-  //     upsertPlacement(newPlacement); // Local update (Instant UI feedback)
-
-  //     // Optional: Sync to DB. In a stable editor, you might want a 'Save' button 
-  //     // instead of syncing on every single change to reduce API load.
-  //     if (layout) {
-  //         syncMutation.mutate({ ...layout, placements: [...layout.placements, newPlacement] });
-  //     }
-  //   };
-
-  //   // Guard: Don't render if the store hasn't initialized yet
-  //   if (!layout) return <div>Initializing Editor...</div>;
+  const deleteTabMutation = useDeleteTab();
 
   const handleAddTab = () => {
     setIsAddTabOpen(true);
+  };
+
+  const handleDeleteTab = (tabName: string) => {
+    console.log("Deleting tab:", tabName);
+    if (confirm(`Are you sure you want to delete the ${tabName} page? Your experiences will not be deleted.`)) {
+      deleteTabMutation.mutate({ layoutName: tabName });
+    }
   };
 
   const handleAddExperience = (slotId: string) => {
@@ -90,7 +72,7 @@ export const PortfolioEditor = ({ contentData, manifest }: PortfolioViewerProps)
   };
 
   return (
-    <EditorProvider value={{ isEditing: true, onAddTab: handleAddTab, onAddExperience: handleAddExperience }}>
+    <EditorProvider value={{ isEditing: true, onAddTab: handleAddTab, onDeleteTab: handleDeleteTab, onAddExperience: handleAddExperience }}>
       <div className="editor-container relative h-full w-full border-2 border-dashed border-blue-400">
         <div className="editor-badge absolute top-0 right-0 z-50 bg-blue-500 text-white px-2 py-1 text-xs">
           EDIT MODE
@@ -99,6 +81,7 @@ export const PortfolioEditor = ({ contentData, manifest }: PortfolioViewerProps)
         {/* We render Viewer inside EditorProvider so UI patterns access Editor state */}
         <PortfolioViewer contentData={contentData} manifest={manifest} />
 
+        {/*popup to add a new tab  */}
         <AddTabModal
           isOpen={isAddTabOpen}
           onClose={() => setIsAddTabOpen(false)}

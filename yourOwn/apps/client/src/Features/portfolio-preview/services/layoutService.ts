@@ -82,3 +82,24 @@ export async function createTab(sessionId: string, payload: { layoutName: string
   return res.json();
 }
 
+/**
+ * Deletes a layout/tab without destroying associated experiences.
+ */
+export async function deleteTab(payload: { layoutName: string }) {
+  const authHeader = getAuthHeader();
+  const res = await fetch(`${BASE}/layouts/delete`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authHeader
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) throw new Error("Failed to delete tab");
+
+  // Status 204 No Content is expected, return empty or true
+  if (res.status === 204) return true;
+  return res.json();
+}
+

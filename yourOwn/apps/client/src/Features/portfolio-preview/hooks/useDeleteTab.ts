@@ -1,20 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createTab } from "../services/layoutService";
+import { deleteTab } from "../services/layoutService";
 
-export function useCreateTab(sessionId: string | null) {
+export function useDeleteTab() {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: (payload: { layoutName: string }) => {
-            if (!sessionId) throw new Error("No session ID");
-            return createTab(sessionId, payload);
+            return deleteTab(payload);
         },
         onSuccess: () => {
-            // Refresh the manifest so the new tab appears in the navigation
+            // Refresh the manifest to immediately remove the tab from the UI
             queryClient.invalidateQueries({ queryKey: ['portfolio', 'manifest'] });
         },
         onError: (error) => {
-            console.error("Failed to create tab:", error);
+            console.error("Failed to delete tab:", error);
         }
     });
 }
