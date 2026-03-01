@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs-extra";
 import { fileURLToPath } from "url";
 import { getExportJob, updateExportJob } from "./export.store";
-// import { generatePortfolioData, insertPatterns, zipPortfolio } from "./exports.service";
+import { generatePortfolioData, insertPatterns, zipPortfolio } from "./exports.service";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -19,7 +19,7 @@ const TEMPLATE_DIR = (() => {
   // 2. Deployment-friendly detection
   // process.cwd() is the root of your project where the 'node' command was run
   const root = process.cwd();
-  
+
   const candidates = [
     path.join(root, "renderer"),                    // Standard local dev
     path.join(root, "apps", "renderer"),             // Monorepo layout
@@ -87,6 +87,6 @@ export async function processExportJob(exportId: string) {
     });
   } finally {
     // Cleanup workspace to keep disk clean
-    await fs.remove(workspaceDir).catch(() => {});
+    await fs.remove(workspaceDir).catch(() => { });
   }
 }

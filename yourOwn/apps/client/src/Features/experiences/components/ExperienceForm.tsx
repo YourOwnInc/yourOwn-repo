@@ -18,7 +18,7 @@ export default function ExperienceForm({
   const [summary, setSummary] = useState(initial?.summary ?? "");
   const [start, setStart] = useState(initial?.start ?? "");
   const [end, setEnd] = useState(initial?.end ?? "");
-  const [type, setType] = useState<FormPayload["type"]>(initial?.type ?? "project");
+  const [type, setType] = useState<FormPayload["type"]>(initial?.type ?? "PROJECT");
 
   return (
     <form
@@ -26,12 +26,13 @@ export default function ExperienceForm({
         e.preventDefault();
 
 
-        await onSubmit({ 
-          title, 
-          summary, 
-          start: start ? new Date(start).toISOString() : undefined  , 
-          end: end ? new Date(end).toISOString() : undefined, 
-          type});
+        await onSubmit({
+          title,
+          summary,
+          start: start ? new Date(start).toISOString() : undefined,
+          end: end ? new Date(end).toISOString() : undefined,
+          type
+        });
       }}
     >
       <div><label>Title <input value={title} onChange={(e) => setTitle(e.target.value)} required /></label></div>
@@ -43,10 +44,12 @@ export default function ExperienceForm({
       <div>
         <label>type{" "}
           <select value={type} onChange={(e) => setType(e.target.value as any)}>
-            <option value="project">Project</option>
-            <option value="internship">Internship</option>
-            <option value="job">Job</option>
-            <option value="volunteering">Volunteering</option>
+            <option value="PROJECT">Project</option>
+            <option value="WORK">Work</option>
+            <option value="VOLUNTEER">Volunteer</option>
+            <option value="ORGANIZATION">Organization</option>
+            <option value="EVENT">Event</option>
+            <option value="COLLECTION">Collection</option>
           </select>
         </label>
       </div>

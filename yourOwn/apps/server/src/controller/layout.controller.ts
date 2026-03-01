@@ -10,7 +10,7 @@ import { AuthenticatedRequest } from "../middleware/auth";
 import { SyncLayoutSchema } from "../schemas/layout.schema";
 import { verifyLayoutOwnership, verifyLayoutNameOwnership } from "../services/layout.auth.service";
 import { error } from "node:console";
-import {prisma } from "../lib/prisma"
+import { prisma } from "../lib/prisma"
 
 /*
  inserts new layout data to db and returns it
@@ -19,9 +19,9 @@ export async function sync(req: Request, res: Response) {
 
   //fetch info from api request
   const authReq = req as AuthenticatedRequest;
-  const {layoutId} = req.params;
-  
-  try{
+  const { layoutId } = req.params;
+
+  try {
 
     // Auth check 
     // catches erros when not validated
@@ -33,27 +33,27 @@ export async function sync(req: Request, res: Response) {
     console.log("results ", result)
     // returns format error 
     if (!result.success) {
-      return res.status(400).json({error: result.error.format()})
+      return res.status(400).json({ error: result.error.format() })
     }
 
 
-  // fetch data from params and body 
-  const { slots, placements } = result.data;
- 
-  // calls repo to sync data 
-  const updated = await layoutRepo.syncLayoutState(layoutId, slots, placements as { slotId: string; profileId: string; experienceId: string; patternId: string }[]);
-  // returns updated info 
-  return res.json(updated);
-}
-catch(err: any){
-if (err.message === "NOT_FOUND") return res.status(404).json({ error: "Layout not found" });
- if (err.message === "FORBIDDEN") return res.status(403).json({ error: "Access denied" });
-}
+    // fetch data from params and body 
+    const { slots, placements } = result.data;
+
+    // calls repo to sync data 
+    const updated = await layoutRepo.syncLayoutState(layoutId, slots, placements as { slotId: string; profileId: string; experienceId: string; patternId: string }[]);
+    // returns updated info 
+    return res.json(updated);
+  }
+  catch (err: any) {
+    if (err.message === "NOT_FOUND") return res.status(404).json({ error: "Layout not found" });
+    if (err.message === "FORBIDDEN") return res.status(403).json({ error: "Access denied" });
+  }
 }
 
 export async function createNewTab(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
-  const { role, sessionId,userId } = authReq.user;
+  const { role, sessionId, userId } = authReq.user;
 
   const { layoutName } = req.body; // Ensure this is validated by Zod
   const targetSessionId = req.params.sessionId || sessionId;
@@ -61,7 +61,7 @@ export async function createNewTab(req: Request, res: Response) {
   try {
 
 
-// 2. Ownership Guard: Ensure the user actually owns the session they are targeting
+    // 2. Ownership Guard: Ensure the user actually owns the session they are targeting
     const session = await prisma.session.findUnique({
       where: { id: targetSessionId },
       select: { claimedByUserId: true }
@@ -75,10 +75,10 @@ export async function createNewTab(req: Request, res: Response) {
     if (role === 'USER' && session.claimedByUserId !== userId) {
       return res.status(403).json({ error: "You do not own this session" });
     }
-    
+
     // If Guest, ensure they aren't trying to access a different session
     if (role === 'GUEST' && targetSessionId !== sessionId) {
-       return res.status(403).json({ error: "Access denied" });
+      return res.status(403).json({ error: "Access denied" });
     }
 
     // 3. Logic: Proceed to create the new tab
@@ -89,7 +89,7 @@ export async function createNewTab(req: Request, res: Response) {
     if (err.message === "TAB_ALREADY_EXISTS") {
       return res.status(409).json({ error: "A tab with this name already exists" });
     }
-    
+
   }
 }
 
@@ -102,11 +102,11 @@ export async function getHydratedPage(req: Request, res: Response, next: NextFun
     // This helper should resolve the layout to get the correct sessionId
     const verifiedLayout = await verifyLayoutNameOwnership(layoutName, authReq.user);
 
-    
+
 
     // 2. Call the service to get Layout + Slots + Placements + Experience objects
     const hydratedData = await layoutService.getHydratedLayout(
-      verifiedLayout.sessionId, 
+      verifiedLayout.sessionId,
       layoutName
     );
 
@@ -119,7 +119,7 @@ export async function getHydratedPage(req: Request, res: Response, next: NextFun
 
 export async function removeLayout(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
-  const { layoutName } = req.body; 
+  const { layoutName } = req.body;
 
   try {
     // 1. Verify ownership and get the actual DB record simultaneously
@@ -135,7 +135,7 @@ export async function removeLayout(req: Request, res: Response) {
       return res.status(403).json({ error: "You do not own this layout" });
     }
   }
-   
+
 }
 
 
@@ -149,13 +149,16 @@ export async function getPreviewManifest(req: Request, res: Response, next: Next
     // This uses the session identity established in your auth middleware
     const sessionData = await prisma.session.findUnique({
       where: { id: sessionId },
-      include: { 
+      include: {
         profile: true,
         // We only fetch the ID and Name of layouts to keep the manifest light
         layouts: {
           select: {
             id: true,
             LayoutId: true,
+          },
+          where: {
+            label: "page"
           }
         }
       }

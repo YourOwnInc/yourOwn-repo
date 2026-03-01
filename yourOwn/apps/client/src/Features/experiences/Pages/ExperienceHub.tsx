@@ -8,13 +8,11 @@ export default function ExperienceHub() {
   const { mutate: addExp } = useAddExperience();
   const { mutate: removeExp } = useRemoveExperience();
 
-  const categories = ["WORK",  "PROJECT"];
-
   const handleAddNew = () => {
     addExp({
-      title: "Portfolio MVP",
-      summary: "Built with TanStack Query",
-      type: "internship",
+      title: "New Experience",
+      summary: "Add your details here",
+      type: "WORK",
       start: new Date().toISOString(),
       end: new Date().toISOString(),
     });
@@ -22,18 +20,23 @@ export default function ExperienceHub() {
 
   // if (isLoading) return <div className="p-8">Loading Hub...</div>;
 
+  const primaryCategories = ["WORK", "PROJECT", "VOLUNTEER", "ORGANIZATION", "EVENT", "COLLECTION"];
+
+  // Dynamically identify any experiences that don't fit the primary categories (if any)
+  const uncategorized = experiences.filter((e: any) => !primaryCategories.includes(e.type));
+
   return (
     <div className="p-10 space-y-16 bg-gray-50 min-h-screen">
       <header className="flex justify-between items-end">
-        
+
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Experience Hub</h1>
-          <p className="text-gray-500"></p>
-          
+          <p className="text-gray-500">Manage your professional journey</p>
+
         </div>
 
-        
-        <button 
+
+        <button
           className="bg-black text-white px-6 py-2 rounded-lg font-medium"
           onClick={handleAddNew}
         >
@@ -41,28 +44,26 @@ export default function ExperienceHub() {
         </button>
 
       </header>
-        
 
-      {categories.map((cat) => {
+
+      {primaryCategories.map((cat) => {
         const filtered = experiences.filter((e: any) => e.type === cat);
         if (filtered.length === 0) return null;
 
         return (
           <section key={cat}>
             <div className="flex items-center justify-between mb-4">
-                          <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">
-              {cat}s
-            </h2 >
-        
+              <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">
+                {cat}s
+              </h2>
             </div>
-
 
             <div className="flex gap-6 overflow-x-auto pb-6">
               {filtered.map((exp: any) => (
-                <ExperienceCard 
-                  key={exp.id} 
-                  experience={exp} 
-                  onDelete={() => removeExp(exp.id)} 
+                <ExperienceCard
+                  key={exp.id}
+                  experience={exp}
+                  onDelete={() => removeExp(exp.id)}
                 />
               ))}
             </div>
@@ -70,8 +71,27 @@ export default function ExperienceHub() {
         );
       })}
 
-<div className="fixed bottom-8  centered w-full flex justify-center mb-4">
-      <p className="text-gray-500 "> <SocialDock /> </p> 
+      {uncategorized.length > 0 && (
+        <section key="misc">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">
+              MISC
+            </h2>
+          </div>
+          <div className="flex gap-6 overflow-x-auto pb-6">
+            {uncategorized.map((exp: any) => (
+              <ExperienceCard
+                key={exp.id}
+                experience={exp}
+                onDelete={() => removeExp(exp.id)}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div className="fixed bottom-8  centered w-full flex justify-center mb-4">
+        <p className="text-gray-500 "> <SocialDock /> </p>
       </div>
 
     </div>

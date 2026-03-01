@@ -1,36 +1,44 @@
-export type SessionId = string ;
+export type SessionId = string;
 export type SlotId = string;
 export type ExperienceId = string;
-export type PatternId =  "exp.card.v1" | "exp.row.v1"; // extend later
+export type PatternId = "exp.card.v1" | "exp.row.v1"; // extend later
+
+export type ExperienceType =
+  | "WORK"
+  | "PROJECT"
+  | "EVENT"
+  | "ORGANIZATION"
+  | "COLLECTION"
+  | "VOLUNTEER";
 
 export type ExperienceDTO = {
-    id: ExperienceId;
-    title: string;
-    summary?: string;
-    type?: string;
-    start?: string; // ISO
-    end?: string;   // ISO
+  id: ExperienceId;
+  title: string;
+  summary?: string;
+  type: ExperienceType;
+  start?: string; // ISO
+  end?: string;   // ISO
 }
 
 export type Slot = {
-    id: SlotId;
-    area: string;
+  id: SlotId;
+  area: string;
 
 }
 
-export type Placement = 
-| {
+export type Placement =
+  | {
     slotId: string;
     experienceId: ExperienceId;
     profileId: string;
     patternId: string;
     type: "pattern"
-}
-|{
+  }
+  | {
     slotId: string;
-    layoutId:   string;
+    layoutId: string;
     type: "layout"
-};
+  };
 
 
 // Layout model stored by server
@@ -71,7 +79,7 @@ export type HydratedLayoutDTO = {
   layoutName: string;     // e.g., "home"
   slots: Slot[];
   placements: Placement[];
-  experienceLibrary: ExperienceDTO[]; 
+  experienceLibrary: ExperienceDTO[];
   theme?: string;
 };
 

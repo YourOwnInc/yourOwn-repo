@@ -153,6 +153,7 @@ model Layout {
   session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   LayoutId  String   @default  ("home")
+  label     String   @default  ("page")
 
   slots Slot[]
   placements Placement[]

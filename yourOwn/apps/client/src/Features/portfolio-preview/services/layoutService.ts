@@ -64,3 +64,21 @@ export async function syncLayout(layoutId: string, payload: { slots: any[], plac
   if (!res.ok) throw new Error("Syncing layout failed");
   return res.json();
 }
+
+/**
+ * Creates a new tab page layout.
+ */
+export async function createTab(sessionId: string, payload: { layoutName: string }) {
+  const authHeader = getAuthHeader();
+  const res = await fetch(`${BASE}/layouts/${sessionId}/newTab`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authHeader
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error("Creating tab failed");
+  return res.json();
+}
+
