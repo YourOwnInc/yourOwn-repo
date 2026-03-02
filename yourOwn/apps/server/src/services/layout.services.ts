@@ -7,7 +7,7 @@ import {
 import * as layoutRepo from "../repositories/layout.repo";
 import * as sessionRepo from "../repositories/session.repo";
 import * as experienceRepo from "../";
-import {prisma } from "../lib/prisma"
+import { prisma } from "../lib/prisma"
 
 
 type OwnerWhere = { userId: string };
@@ -19,7 +19,7 @@ type OwnerWhere = { userId: string };
 export async function initializeSessionLayout(sessionId: string) {
   // Ensure the primary "home" layout exists
   const layout = await layoutRepo.findOrCreateLayoutForSession(sessionId, "home");
-  
+
   if (!layout) {
     throw new Error("FAILED_TO_INITIALIZE_LAYOUT");
   }
@@ -33,11 +33,11 @@ export async function initializeSessionLayout(sessionId: string) {
 export async function addNewTabPage(sessionId: string, layoutName: string) {
 
   //Business Rule: Check if tab name exisits in layout registry. Cannot have unique tab
-  
+
   // Business Rule: Check if user already has a tab with this name
   const existingTabs = await layoutRepo.getAllSessionTabs(sessionId);
   const exists = existingTabs.some(t => t.LayoutId === layoutName);
-  
+
   if (exists) {
     const err = new Error("TAB_ALREADY_EXISTS");
     (err as any).code = 409;
@@ -57,14 +57,17 @@ export async function addNewTabPage(sessionId: string, layoutName: string) {
 export async function getHydratedLayout(sessionId: string, layoutName: string) {
   const layout = await layoutRepo.findOrCreateLayoutForSession(sessionId, layoutName);
 
-  // 1. Collect all unique IDs from placements
-  const experienceIds = [...new Set(layout.placements.map(p => p.experienceId).filter(Boolean))] as string[];
+  // 1. Fetch ALL experiences for this session so the user can select from them in Edit Mode
+  // We also still need to fetch specific profiles if they are placed in the layout
   const profileIds = [...new Set(layout.placements.map(p => p.profileId).filter(Boolean))] as string[];
 
   // 2. Fetch both types in parallel
   // Use destructuring [experiences, profiles] to keep the result flat
   const [experiences, profiles] = await Promise.all([
-    prisma.experience.findMany({ where: { id: { in: experienceIds } } }),
+    prisma.experience.findMany({
+      where: { sessionId: sessionId },
+      include: { variants: true } // Crucial: Include variants so the modal can drill down
+    }),
     prisma.profile.findMany({ where: { id: { in: profileIds } } }),
   ]);
 
@@ -81,7 +84,7 @@ export async function getHydratedLayout(sessionId: string, layoutName: string) {
  * Fetches layoutIds and name of active layouts for session 
  * takes in sessionId 
  */
-export async function getManifestLayout(sessionId: string ) {
+export async function getManifestLayout(sessionId: string) {
   // layouts will have a lable to determine if is being used for the preview portfolio 
   // TODO: change layout prisma schema to have this new type 
 

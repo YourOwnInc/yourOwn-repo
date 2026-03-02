@@ -19,6 +19,7 @@ export type HydratedLayoutData = {
   layoutName: string;
   slots: Array<{
     id: string;
+    clientSlotId: string;
     area: string;
   }>;
   placements: Placement[];
@@ -30,6 +31,7 @@ export type PortfolioRendererData = {
   layoutName: string;
   slots: Array<{
     id: string;
+    clientSlotId: string; // Resolves TS error in PreviewRenderer
     area: string;
   }>;
   placements: Placement[];

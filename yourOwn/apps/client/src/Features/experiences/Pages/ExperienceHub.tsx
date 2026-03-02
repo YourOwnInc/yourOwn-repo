@@ -90,9 +90,6 @@ export default function ExperienceHub() {
         </section>
       )}
 
-      <div className="fixed bottom-8  centered w-full flex justify-center mb-4">
-        <p className="text-gray-500 "> <SocialDock /> </p>
-      </div>
 
     </div>
   );

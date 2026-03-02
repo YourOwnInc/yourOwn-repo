@@ -19,7 +19,12 @@
           "Built an in-house API monitoring tool that cut per-page network requests from 20 to 1-2.",
           "Architected a backend data management system to support high-performance CRUD operations for massive datasets."
         ],
-        "techStack": ["Docker", "Python", "CI/CD", "Linux"]
+        "techStack": [
+          "Docker",
+          "Python",
+          "CI/CD",
+          "Linux"
+        ]
       },
       {
         "label": "Leadership Focus",
@@ -32,7 +37,11 @@
           "Guided architectural improvements that significantly improved system responsiveness and stability.",
           "Empowered the engineering team with custom observability tools for continuous performance tracking."
         ],
-        "techStack": ["Docker", "Team Leadership", "Automation"]
+        "techStack": [
+          "Docker",
+          "Team Leadership",
+          "Automation"
+        ]
       }
     ]
   },
@@ -56,12 +65,17 @@
           "Integrated functional and regression API testing into the CI pipeline, immediately catching and preventing defects.",
           "Enhanced QA feedback loops by systematically detailing and reporting system issues to engineering leadership."
         ],
-        "techStack": ["Python", "AWS", "GitHub Actions", "API Testing"]
+        "techStack": [
+          "Python",
+          "AWS",
+          "GitHub Actions",
+          "API Testing"
+        ]
       }
     ]
   },
   {
-    "title": "Indigo Magazine Platform",
+    "title": "Indigo Magazine Collective",
     "type": "WORK",
     "roleTitle": "Web Development Officer & Creative Director",
     "organization": "Indigo Magazine",
@@ -80,7 +94,12 @@
           "Designed an end-to-end submission system that empowered independent content uploads, vastly reducing developer overhead.",
           "Optimized the platform to successfully handle traffic spikes, supporting an influx of 400+ new active users in a single month."
         ],
-        "techStack": ["React", "Node.js", "Cloudflare CDN", "Box API"]
+        "techStack": [
+          "React",
+          "Node.js",
+          "Cloudflare CDN",
+          "Box API"
+        ]
       },
       {
         "label": "Product Focus",
@@ -93,7 +112,11 @@
           "Collaborated cross-functionally to launch features that directly contributed to acquiring 400+ new monthly active users.",
           "Streamlined creator workflows, allowing the editorial team to publish faster without technical blockers."
         ],
-        "techStack": ["Product Strategy", "Cross-functional Leadership", "Web Development"]
+        "techStack": [
+          "Product Strategy",
+          "Cross-functional Leadership",
+          "Web Development"
+        ]
       }
     ]
   },
@@ -117,7 +140,13 @@
           "Engineered advanced server-side caching and state synchronization pipelines, optimizing load times for heavy data loads.",
           "Guided architectural decisions across front-end and back-end integration, successfully guaranteeing 100% data consistency for dynamic UIs."
         ],
-        "techStack": ["TypeScript", "React", "Node.js", "System Architecture", "Caching"]
+        "techStack": [
+          "TypeScript",
+          "React",
+          "Node.js",
+          "System Architecture",
+          "Caching"
+        ]
       }
     ]
   },
@@ -140,7 +169,11 @@
           "Secured $300 in initial corporate partnership funding to directly support student-led engineering initiatives.",
           "Orchestrated and hosted targeted professional engagement events, significantly expanding member access to networking."
         ],
-        "techStack": ["Public Speaking", "Event Coordination", "Partnership Building"]
+        "techStack": [
+          "Public Speaking",
+          "Event Coordination",
+          "Partnership Building"
+        ]
       }
     ]
   }

@@ -1,6 +1,6 @@
- import { ExperienceDTO, SessionId } from "../../../shared/lib/types";
- 
- 
+import { ExperienceDTO, SessionId } from "../../../shared/lib/types";
+
+
 const BASE = "http://localhost:5000/api";
 
 function getAuthHeader() {
@@ -42,7 +42,7 @@ export async function listExperiences(sessionId: SessionId | null) {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: authHeader 
+      Authorization: authHeader
     }
   });
   if (!res.ok) throw new Error("listExperiences failed");
@@ -53,7 +53,7 @@ export async function listExperiences(sessionId: SessionId | null) {
 // Optional MVP+1
 export async function updateExperience(sessionId: SessionId, id: string, payload: Partial<ExperienceDTO>): Promise<ExperienceDTO> {
   const authHeader = getAuthHeader();
-  const res = await fetch(`${BASE}/sessions/${sessionId}/experience/${id}`, {
+  const res = await fetch(`${BASE}/sessions/${sessionId}/experiences/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json", Authorization: authHeader },
     body: JSON.stringify(payload),
@@ -64,9 +64,9 @@ export async function updateExperience(sessionId: SessionId, id: string, payload
 
 export async function deleteExperience(sessionId: SessionId, id: string): Promise<void> {
   const authHeader = getAuthHeader();
-  const res = await fetch(`${BASE}/sessions/${sessionId}/experience/${id}`, {
+  const res = await fetch(`${BASE}/sessions/${sessionId}/experiences/${id}`, {
     method: "DELETE",
-    headers: { Authorization: authHeader }
+    headers: { "Content-Type": "application/json", Authorization: authHeader }
   });
   if (!res.ok) throw new Error("deleteExperience failed");
 }

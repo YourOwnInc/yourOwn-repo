@@ -75,6 +75,7 @@ export async function updateExperienceOwned(
 
 export async function deleteExperienceOwned(id: string, owner: Owner) {
   const { count } = await prisma.experience.deleteMany({
+    where: { id, ...ofOwner(owner) } as any,
   });
   return count > 0;
 }

@@ -49,14 +49,14 @@ export const PortfolioEditor = ({ contentData, manifest }: PortfolioViewerProps)
   // Find original layout structure from contentData
   const syncMutation = useSyncLayout(contentData.id);
 
-  const handleExperienceSubmit = (data: { slotId: string; experienceId: string; patternId: string }) => {
+  const handleExperienceSubmit = (data: any) => {
     console.log("Saving placement", data);
 
     // Construct the payload to send to the sync endpoint
     // It requires all existing slots and all existing placements + the new one
     const newPlacement = {
       slotId: data.slotId,
-      experienceId: data.experienceId,
+      experienceVariantId: data.experienceVariantId, // Updated logic
       patternId: data.patternId,
       profileId: "" // typically unused for experiences, used for identity
     };
