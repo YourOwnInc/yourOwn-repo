@@ -10,8 +10,10 @@ export type ManifestData = {
 
 export type Placement = {
   slotId: string;
-  experienceId: string;
+  experienceVariantId?: string;
+  profileId?: string;
   patternId: string;
+  metadata?: Record<string, any>;
 };
 
 export type HydratedLayoutData = {

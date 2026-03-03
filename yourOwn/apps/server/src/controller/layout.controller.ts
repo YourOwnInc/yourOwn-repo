@@ -41,7 +41,7 @@ export async function sync(req: Request, res: Response) {
     const { slots, placements } = result.data;
 
     // calls repo to sync data 
-    const updated = await layoutRepo.syncLayoutState(layoutId, slots, placements as { slotId: string; profileId: string; experienceId: string; patternId: string }[]);
+    const updated = await layoutRepo.syncLayoutState(layoutId, slots, placements as { slotId: string; profileId?: string | null; experienceVariantId?: string | null; patternId: string; metadata?: any | null }[]);
     // returns updated info 
     return res.json(updated);
   }
@@ -55,7 +55,7 @@ export async function createNewTab(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
   const { role, sessionId, userId } = authReq.user;
 
-  const { layoutName } = req.body; // Ensure this is validated by Zod
+  const { layoutName, slots } = req.body; // Ensure this is validated by Zod
   const targetSessionId = req.params.sessionId || sessionId;
 
   try {
@@ -82,7 +82,7 @@ export async function createNewTab(req: Request, res: Response) {
     }
 
     // 3. Logic: Proceed to create the new tab
-    const newTab = await layoutService.addNewTabPage(targetSessionId, layoutName);
+    const newTab = await layoutService.addNewTabPage(targetSessionId, layoutName, slots);
     return res.status(201).json(newTab);
 
   } catch (err: any) {

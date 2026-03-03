@@ -5,7 +5,7 @@ export function useCreateTab(sessionId: string | null) {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (payload: { layoutName: string }) => {
+        mutationFn: (payload: { layoutName: string; template?: string; slots?: any[] }) => {
             if (!sessionId) throw new Error("No session ID");
             return createTab(sessionId, payload);
         },

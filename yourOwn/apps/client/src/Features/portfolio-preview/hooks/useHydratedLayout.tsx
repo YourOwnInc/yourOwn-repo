@@ -18,7 +18,14 @@ export const useHydratedLayout = (
     // 1. First, handle all explicit placements from your JSON
     const flatLibrary = experienceLibrary?.flat(Infinity) || [];
     placements?.forEach((p) => {
-      const data = flatLibrary.find((e) => e.id === p.experienceId || e.id === p.profileId);
+      let data = undefined;
+
+      if (p.metadata?.collectionType === "WORK" || p.patternId === "timeline") {
+        data = flatLibrary.filter((e) => e.type?.toLowerCase() === 'work');
+      } else {
+        data = flatLibrary.find((e) => e.id === p.experienceVariantId || e.id === p.profileId || e.variants?.some((v: any) => v.id === p.experienceVariantId));
+      }
+
       const Pattern = PATTERN_REGISTRY[p.patternId];
       if (data && Pattern) {
         map[p.slotId] = React.createElement(Pattern, { data });

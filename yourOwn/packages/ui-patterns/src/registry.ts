@@ -1,26 +1,27 @@
 import { HeroBasic } from "./patterns/hero-basic";
 import { GenericCard } from "./patterns/generic-card";
 import { DefaultPattern } from "./patterns/deafult";
-import { JobSummary} from "./patterns/job-summary";
-import {ProjectCard} from "../src/patterns/projects/ProjectCard"
-import { ProjectGrid} from "../src/patterns/projects/ProjectGrid"
+import { JobSummary } from "./patterns/job-summary";
+import { ProjectCard } from "../src/patterns/projects/ProjectCard"
+import { ProjectGrid } from "../src/patterns/projects/ProjectGrid"
 
-import {ProfileHero} from "../src/patterns/homes/ProfileHero"
-import {ExperienceCard} from "../src/patterns/homes/ExperienceCard"
+import { ProfileHero } from "../src/patterns/homes/ProfileHero"
+import { ExperienceCard } from "../src/patterns/homes/ExperienceCard"
+import { Timeline } from "../src/patterns/homes/Timeline"
 
-import {NarrativeCard} from "../src/patterns/homes/NarrativeCard"
-import {ProfessionalHero} from "../src/patterns/homes/ProfessionalHero"
-import { ProfileIdentity} from "../src/patterns/homes/ProfileIdentity"
-import { VerticalNav} from "../src/patterns/homes/VerticalNav"
+import { NarrativeCard } from "../src/patterns/homes/NarrativeCard"
+import { ProfessionalHero } from "../src/patterns/homes/ProfessionalHero"
+import { ProfileIdentity } from "../src/patterns/homes/ProfileIdentity"
+import { VerticalNav } from "../src/patterns/homes/VerticalNav"
 
-import {SocialLinkCard} from "../src/patterns/SocialLinkCard"
+import { SocialLinkCard } from "../src/patterns/SocialLinkCard"
 
 
 
 export const PATTERN_REGISTRY: Record<string, any> = {
     'hero-basic': HeroBasic,
     'generic-card': GenericCard,
-    'default': DefaultPattern, 
+    'default': DefaultPattern,
     'project-card': ProjectCard,
     'project-grid': ProjectGrid,
     "profile-hero": ProfileHero,
@@ -29,6 +30,7 @@ export const PATTERN_REGISTRY: Record<string, any> = {
     "hero": ProfessionalHero,
     "social-link-card": SocialLinkCard,
     "ProfileIdentity": ProfileIdentity,
-    "navigation":VerticalNav
-    
+    "navigation": VerticalNav,
+    "timeline": Timeline
+
 }

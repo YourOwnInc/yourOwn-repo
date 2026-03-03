@@ -30,7 +30,7 @@ export async function initializeSessionLayout(sessionId: string) {
  * Logic for creating a new tab/page.
  * Service layer enforces unique naming or limits.
  */
-export async function addNewTabPage(sessionId: string, layoutName: string) {
+export async function addNewTabPage(sessionId: string, layoutName: string, slots?: { clientSlotId: string, area: string }[]) {
 
   //Business Rule: Check if tab name exisits in layout registry. Cannot have unique tab
 
@@ -45,7 +45,7 @@ export async function addNewTabPage(sessionId: string, layoutName: string) {
   }
 
   // Use repo to create the new layout
-  return await layoutRepo.createNewLayout(sessionId, layoutName);
+  return await layoutRepo.createNewLayout(sessionId, layoutName, slots);
 }
 
 // src/services/layout.services.ts

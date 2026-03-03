@@ -9,11 +9,11 @@ import { z } from "zod";
  * Find the layout for a session, or create an empty one if it doesn't exist.
  * Returns layout + its items.
  */
-export async function findOrCreateLayoutForSession(sessionId: string, layoutId: string ) {
+export async function findOrCreateLayoutForSession(sessionId: string, layoutId: string) {
   let layout = await prisma.layout.findUnique({
     where: {
       sessionId_LayoutId: {
-        sessionId, 
+        sessionId,
         LayoutId: layoutId
       }
     },
@@ -40,7 +40,7 @@ export async function findOrCreateLayoutForSession(sessionId: string, layoutId: 
 
   console.log("placement in findOrcreate  Layout repo", layout);
 
- return {
+  return {
     id: layout.id,
     layoutName: layout.LayoutId,
     slots: layout.slots,
@@ -48,8 +48,9 @@ export async function findOrCreateLayoutForSession(sessionId: string, layoutId: 
     placements: layout.placements.map(p => ({
       slotId: p.slotId,
       patternId: p.patternId,
-      experienceId: p.experienceId, // keep existing
+      experienceVariantId: p.experienceVariantId, // keep existing
       profileId: p.profileId,       // ADD THIS LINE
+      metadata: p.metadata,
     })),
   };
 }
@@ -57,11 +58,21 @@ export async function findOrCreateLayoutForSession(sessionId: string, layoutId: 
 /**
  * Creates a new layout (tab) for an existing session.
  */
-export async function createNewLayout(sessionId: string, layoutName: string ) {
+export async function createNewLayout(sessionId: string, layoutName: string, slots?: { clientSlotId: string, area: string }[]) {
+
+  console.log("slots in createNewLayout repo", slots);
+  console.log("layoutName in createNewLayout repo", layoutName);
+  console.log("sessionId in createNewLayout repo", sessionId);
   return await prisma.layout.create({
     data: {
       sessionId: sessionId,
-      LayoutId: layoutName
+      LayoutId: layoutName,
+      slots: slots && slots.length > 0 ? {
+        create: slots.map(s => ({
+          clientSlotId: s.clientSlotId,
+          area: s.area
+        }))
+      } : undefined
     },
     include: {
       slots: true,
@@ -86,13 +97,12 @@ export async function getAllSessionTabs(sessionId: string) {
 // Creates an item and associates it with a layout with given id
 export async function syncLayoutState(
   layoutId: string,
-  slots: { id: string , area: string}[], 
-  placements: {slotId: string , profileId: string,  experienceId: string  , patternId: string }[]
-  ) 
-  {
+  slots: { id: string, area: string }[],
+  placements: { slotId: string, profileId?: string | null, experienceVariantId?: string | null, patternId: string, metadata?: any | null }[]
+) {
   // use prisma transaction to sync layout state 
   const updatedLayout = await prisma.$transaction(async (tx) => {
- // 1. Clear existing rows for this layout
+    // 1. Clear existing rows for this layout
     // Cascading deletes in your schema will handle this cleanly
     await tx.slot.deleteMany({ where: { layoutId } });
     await tx.placement.deleteMany({ where: { layoutId } });
@@ -105,15 +115,19 @@ export async function syncLayoutState(
         area: s.area
       }))
     });
+    console.log("layoutId in syncLayoutState repo", layoutId);
+    console.log("slots in syncLayoutState repo", slots);
+    console.log("placements in syncLayoutState repo", placements);
 
     // 3. Create the new "Array" of Placements
     await tx.placement.createMany({
       data: placements.map(p => ({
         layoutId,
         slotId: p.slotId,
-        experienceId: p.experienceId,
+        experienceVariantId: p.experienceVariantId,
         profileId: p.profileId,
-        patternId: p.patternId
+        patternId: p.patternId,
+        metadata: p.metadata ?? null,
       }))
     });
 

@@ -1,19 +1,19 @@
-import {z} from "zod";
+import { z } from "zod";
 
 
 // what an item in a layout should have 
-export const layoutItemInputSchema =  z.object({
-    experienceId: z.string().uuid(),
-    position: z.number().int().nonnegative(),
-    patternId: z.string().min(1).optional().nullable(),
-    patternProps: z.record(z.any(), z.unknown()).optional().nullable(),
+export const layoutItemInputSchema = z.object({
+  experienceId: z.string().uuid(),
+  position: z.number().int().nonnegative(),
+  patternId: z.string().min(1).optional().nullable(),
+  patternProps: z.record(z.any(), z.unknown()).optional().nullable(),
 });
 
 // Same schema as InputSchema - just updates it 
 export const updateLayoutScheme = z.object({
-    items: z.array(layoutItemInputSchema).min(1)
+  items: z.array(layoutItemInputSchema).min(1)
 
-    
+
 })
 
 export const PlacementSchema = z.object({
@@ -21,8 +21,10 @@ export const PlacementSchema = z.object({
   slotId: z.string(),
   patternId: z.string(),
   // Support multiple entity types
-  experienceId: z.string().optional().nullable(),
+  experienceVariantId: z.string().optional().nullable(),
   profileId: z.string().optional().nullable(),
+  // Configuration for complex patterns like collections
+  metadata: z.record(z.string(), z.any()).optional().nullable(),
   // Add others as needed: educationId, projectId, etc.
 });
 
@@ -44,6 +46,10 @@ export const CreateLayoutSchema = z.object({
     .min(1)
     .max(20)
     .regex(/^[a-z0-9-]+$/, "Tab names must be lowercase, numbers, or hyphens"),
+  slots: z.array(z.object({
+    clientSlotId: z.string(),
+    area: z.string(),
+  })).optional(),
 });
 
 export type SyncLayoutInput = z.infer<typeof SyncLayoutSchema>;

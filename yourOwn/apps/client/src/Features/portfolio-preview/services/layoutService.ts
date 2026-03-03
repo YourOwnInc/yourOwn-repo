@@ -68,7 +68,7 @@ export async function syncLayout(layoutId: string, payload: { slots: any[], plac
 /**
  * Creates a new tab page layout.
  */
-export async function createTab(sessionId: string, payload: { layoutName: string }) {
+export async function createTab(sessionId: string, payload: { layoutName: string; template?: string; slots?: any[] }) {
   const authHeader = getAuthHeader();
   const res = await fetch(`${BASE}/layouts/${sessionId}/newTab`, {
     method: "POST",

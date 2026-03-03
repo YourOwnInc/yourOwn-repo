@@ -4,7 +4,7 @@ import { LAYOUT_REGISTRY } from "../../../../../../packages/layouts/layoutRegist
 interface AddTabModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSubmit: (data: { layoutName: string; template: string }) => void;
+    onSubmit: (data: { layoutName: string; template: string; slots?: any[] }) => void;
     isLoading?: boolean;
 }
 
@@ -20,7 +20,10 @@ export const AddTabModal = ({ isOpen, onClose, onSubmit, isLoading }: AddTabModa
 
         // Convert to URL-friendly lowercase name
         const formatName = tabName.trim().toLowerCase().replace(/\s+/g, "-");
-        onSubmit({ layoutName: formatName, template: selectedTemplate });
+        const templateConfig = LAYOUT_REGISTRY[selectedTemplate];
+        const slotsToCreate = templateConfig?.config?.slots || [];
+
+        onSubmit({ layoutName: formatName, template: selectedTemplate, slots: slotsToCreate });
     };
 
     const layoutKeys = Object.keys(LAYOUT_REGISTRY).filter(k => k !== "profile-sidebar");

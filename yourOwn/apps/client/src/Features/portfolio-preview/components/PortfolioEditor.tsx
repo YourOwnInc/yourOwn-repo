@@ -11,6 +11,7 @@ import { useSyncLayout } from "../hooks/useSyncLayout";
 import { Placement, HydratedLayoutData, PortfolioViewerProps } from "../types/portoflio.types";
 import { usePortfolioManifest } from "../hooks/usePortfolioManifest";
 import { useUser } from "../../../core/auth/UserContext";
+import { LAYOUT_REGISTRY } from "../../../../../../packages/layouts/layoutRegistry";
 
 
 import { EditorProvider } from "../context/EditorContext";
@@ -38,7 +39,7 @@ export const PortfolioEditor = ({ contentData, manifest }: PortfolioViewerProps)
     setActiveSlotId(slotId);
   }
 
-  const handleModalSubmit = (data: { layoutName: string; template: string }) => {
+  const handleModalSubmit = (data: { layoutName: string; template: string; slots?: any[] }) => {
     createTabMutation.mutate(data, {
       onSuccess: () => {
         setIsAddTabOpen(false);
@@ -58,11 +59,17 @@ export const PortfolioEditor = ({ contentData, manifest }: PortfolioViewerProps)
       slotId: data.slotId,
       experienceVariantId: data.experienceVariantId, // Updated logic
       patternId: data.patternId,
-      profileId: "" // typically unused for experiences, used for identity
+      profileId: null // typically unused for experiences, used for identity
     };
 
+    const templateConfig = LAYOUT_REGISTRY[contentData.layoutName] || LAYOUT_REGISTRY["home"];
+    const targetSlots = templateConfig?.config?.slots?.map((s: any) => ({
+      id: s.clientSlotId,
+      area: s.area
+    })) || contentData.slots;
+
     syncMutation.mutate({
-      slots: contentData.slots,
+      slots: targetSlots,
       placements: [...contentData.placements, newPlacement]
     }, {
       onSuccess: () => {

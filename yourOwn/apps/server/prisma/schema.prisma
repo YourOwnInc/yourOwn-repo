@@ -173,6 +173,9 @@ model Placement {
   profileId    String?     @db.Uuid
   profile      Profile?    @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
+  // GENERIC DATA / CONFIGURATION SETUP
+  metadata     Json?
+
   // HUMAN READABLE KEYS (What the user edits in JSON)
   slotId       String     // e.g., "header-slot"
   patternId    String     // e.g., "hero-banner"
